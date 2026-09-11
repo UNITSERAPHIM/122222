@@ -1,0 +1,2242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Зелёный Шум · киберпанк-бар</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0a0f0a; color:#b0ffb0; font-family:'Share Tech Mono',monospace;
+    line-height:1.6; padding:20px; min-height:100vh;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); }
+.container { max-width:1300px; margin:0 auto; }
+.header { border:2px solid #2b5e2b; padding:20px 30px; margin-bottom:40px;
+    display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center;
+    background:#0e140e; box-shadow:0 0 20px rgba(0,255,0,0.08); position:relative; }
+.header::after { content:"// ЗЕЛЁНЫЙ ШУМ // v.1.0"; position:absolute; bottom:-12px; right:30px;
+    background:#0a0f0a; padding:0 12px; font-size:10px; color:#3a7a3a; letter-spacing:2px; }
+.logo h1 { font-family:'Press Start 2P',monospace; font-size:1.8rem; color:#8aff8a;
+    text-shadow:0 0 10px #00aa00,0 0 30px #003300; letter-spacing:4px; }
+.logo span { display:block; font-size:0.7rem; color:#5a9a5a; letter-spacing:6px; margin-top:6px; }
+.nav a { color:#7acc7a; text-decoration:none; margin-left:20px; font-size:0.82rem;
+    letter-spacing:1px; border-bottom:2px solid transparent; transition:0.2s; padding-bottom:2px; cursor:pointer; }
+.nav a:hover { color:#ccffcc; border-bottom-color:#5fdf5f; }
+.main-content.hidden { display:none; }
+section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; }
+.section-title { font-family:'Press Start 2P',monospace; font-size:1.15rem; color:#8aff8a;
+    margin-bottom:22px; letter-spacing:2px; display:flex; align-items:center; gap:14px; }
+.section-title::before { content:"▸"; color:#3a8a3a; font-size:1.6rem; }
+.grid-2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:30px; }
+.card { background:#101a10; border:1px solid #2a5a2a; padding:22px 20px; transition:0.3s; }
+.card:hover { border-color:#5fdf5f; box-shadow:0 0 30px rgba(0,255,0,0.08); transform:translateY(-3px); }
+.card h3 { color:#b8ffb8; font-size:1rem; margin-bottom:8px; letter-spacing:1px; }
+.card p { color:#8aaa8a; font-size:0.85rem; }
+.wall { display:flex; flex-wrap:wrap; gap:12px; padding:20px 0; }
+.wall-tile { background:#0f1a0f; border:1px solid #1f4a1f; padding:14px 20px; font-size:0.8rem;
+    color:#7fb07f; cursor:pointer; transition:0.3s; font-family:'Share Tech Mono',monospace;
+    letter-spacing:1px; flex:1 0 auto; max-width:180px; text-align:center; animation:pulse 3s ease-in-out infinite; }
+.wall-tile:nth-child(1){animation-delay:0s;} .wall-tile:nth-child(2){animation-delay:.6s;}
+.wall-tile:nth-child(3){animation-delay:1.2s;} .wall-tile:nth-child(4){animation-delay:1.8s;}
+.wall-tile:nth-child(5){animation-delay:2.4s;} .wall-tile:nth-child(6){animation-delay:3s;}
+@keyframes pulse { 0%{background:#0f1a0f;box-shadow:0 0 5px rgba(0,255,0,0.05);}
+    50%{background:#142814;box-shadow:0 0 20px rgba(0,255,0,0.15);}
+    100%{background:#0f1a0f;box-shadow:0 0 5px rgba(0,255,0,0.05);} }
+.wall-tile:hover { background:#1a2f1a !important; border-color:#5fdf5f; color:#ccffcc;
+    animation-play-state:paused; transform:scale(1.05); }
+.wall-tile.active { background:#1f3f1f !important; border-color:#7aff7a; color:#ccffcc; }
+#wallStatus { color:#5f8f5f; font-size:0.85rem; margin-top:6px; }
+.radio-box { background:#0b120b; border:1px solid #295229; padding:20px; max-width:760px; }
+.radio-box iframe { width:100%; height:420px; border:0; display:block; }
+.radio-note { color:#7aaa7a; font-size:0.85rem; margin-bottom:12px; }
+.three-container { background:#060b06; border:1px solid #234523; height:340px;
+    display:flex; align-items:center; justify-content:center; color:#3f7a3f; cursor:pointer; transition:0.3s; }
+.three-container:hover { border-color:#5fdf5f; }
+.three-container .coming { background:#0f1a0f; padding:18px 34px; border:1px dashed #2f6a2f; text-align:center; }
+.cocktail-builder { display:flex; flex-wrap:wrap; gap:30px; }
+.builder-options { display:flex; flex-wrap:wrap; gap:10px; }
+.builder-options button { background:#0f1a0f; border:1px solid #2a5a2a; color:#9adf9a;
+    padding:10px 18px; font-family:'Share Tech Mono',monospace; cursor:pointer; transition:0.2s; font-size:0.8rem; }
+.builder-options button:hover { background:#1a2f1a; border-color:#5fdf5f; color:#ccffcc; }
+.builder-options button.selected { background:#1a3a1a; border-color:#7aff7a; box-shadow:0 0 15px rgba(0,255,0,0.15); }
+.builder-result { background:#0b120b; border:1px solid #2a5a2a; padding:20px 25px; min-width:260px; flex:1; }
+.builder-result .name { color:#b0ffb0; font-size:1.15rem; font-family:'Press Start 2P',monospace; line-height:1.4; }
+.builder-actions { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+.btn-primary { background:#1a3a1a; border:1px solid #3a7a3a; color:#b0ffb0; padding:10px 24px;
+    font-family:'Share Tech Mono',monospace; cursor:pointer; transition:0.2s; letter-spacing:1px; }
+.btn-primary:hover { background:#2a5a2a; border-color:#5fdf5f; box-shadow:0 0 20px rgba(0,255,0,0.2); }
+.btn-secondary { background:#0f1a0f; border:1px solid #2a5a2a; color:#7aaa7a; padding:10px 18px;
+    font-family:'Share Tech Mono',monospace; cursor:pointer; transition:0.2s; }
+.btn-secondary:hover { background:#1a2f1a; border-color:#4f9f4f; color:#b0ffb0; }
+.story-card { background:#0b120b; border-left:4px solid #2f7a2f; padding:16px 20px; margin-bottom:16px; transition:0.2s; }
+.story-card:hover { border-left-color:#5fdf5f; padding-left:24px; }
+.story-card h4 { color:#b8ffb8; margin-bottom:4px; }
+.story-card small { color:#4f7a4f; font-size:0.7rem; }
+.calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; max-width:520px; }
+.cal-day { background:#0b130b; border:1px solid #1f4a1f; padding:10px 4px; text-align:center;
+    font-size:0.75rem; color:#7aaa7a; cursor:pointer; transition:0.15s; }
+.cal-day:hover { background:#142814; border-color:#4fbf4f; color:#ccffcc; }
+.cal-day.event { border-color:#5fdf5f; color:#b0ffb0; box-shadow:inset 0 0 12px rgba(0,255,0,0.05); }
+#eventInfo { margin-top:16px; color:#7aaa7a; font-size:0.85rem; }
+.secret-area { background:#0b120b; border:2px solid #1f4a1f; padding:20px 28px; max-width:480px; }
+.secret-area input { background:#0a0f0a; border:1px solid #2a5a2a; color:#b0ffb0;
+    padding:10px 14px; font-family:'Share Tech Mono',monospace; width:70%; outline:none; transition:0.2s; }
+.secret-area input:focus { border-color:#5fdf5f; box-shadow:0 0 15px rgba(0,255,0,0.1); }
+.secret-area button { background:#1a3a1a; border:1px solid #2f6a2f; color:#b0ffb0;
+    padding:10px 20px; font-family:'Share Tech Mono',monospace; cursor:pointer; transition:0.2s; }
+.secret-area button:hover { background:#2a5a2a; border-color:#5fdf5f; }
+#secretMessage { margin-top:14px; color:#5f8f5f; font-size:0.8rem; }
+.noise-meter { background:#0b120b; border:1px solid #2a5a2a; padding:14px 24px;
+    display:flex; align-items:center; gap:30px; flex-wrap:wrap; }
+.meter-bar { width:200px; height:14px; background:#0f1a0f; border:1px solid #2a5a2a; }
+.meter-fill { height:100%; width:67%; background:#3fbf3f; box-shadow:0 0 20px #00aa33; transition:0.3s; }
+.blog-card { background:#0b120b; border-left:4px solid #2f7a2f; padding:18px 22px; max-width:700px; }
+.blog-card h3 { color:#b8ffb8; margin-bottom:6px; }
+.birthday-card { background:#0b120b; border-left:4px solid #5fdf5f; padding:18px 22px; max-width:520px; }
+.footer { border-top:2px solid #1f3f1f; padding:30px 10px 16px; margin-top:40px; font-size:0.7rem;
+    color:#3a6a3a; display:flex; justify-content:space-between; flex-wrap:wrap; letter-spacing:1px; }
+
+/* CABINET */
+.cabinet-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:#000;
+    z-index:1000; display:none; flex-direction:column; color:#b0ffb0;
+    font-family:'Share Tech Mono',monospace; overflow:hidden; }
+.cabinet-overlay.active { display:flex; }
+.cabinet-header { padding:16px 30px; border-bottom:1px solid #1f4f1f;
+    display:flex; justify-content:space-between; align-items:center;
+    z-index:10; background:rgba(0,0,0,0.9); position:relative; }
+.cabinet-header::after { content:""; position:absolute; bottom:-1px; left:0; width:100%; height:1px;
+    background:linear-gradient(90deg, transparent, #5fdf5f, transparent); animation:headerScan 3s linear infinite; }
+@keyframes headerScan { 0%{transform:translateX(-100%);opacity:0;} 50%{opacity:1;} 100%{transform:translateX(100%);opacity:0;} }
+.cabinet-title { font-family:'Press Start 2P',monospace; font-size:0.9rem; color:#8aff8a;
+    text-shadow:0 0 10px #00aa00; letter-spacing:2px; }
+.cabinet-user { color:#5f8f5f; font-size:0.75rem; letter-spacing:2px; }
+.cabinet-close { background:none; border:1px solid #2f5f2f; color:#7acc7a;
+    padding:6px 16px; font-family:'Share Tech Mono',monospace; cursor:pointer; transition:0.2s; font-size:0.75rem; }
+.cabinet-close:hover { background:#1a3a1a; border-color:#5fdf5f; color:#ccffcc; }
+.cabinet-body { flex:1; position:relative; overflow:hidden; }
+.cabinet-body::before { content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, rgba(0,255,0,0.02) 0px, rgba(0,255,0,0.02) 1px, transparent 1px, transparent 3px);
+    pointer-events:none; z-index:1; }
+#networkCanvas { position:absolute; top:0; left:0; width:100%; height:100%; display:block; z-index:2; pointer-events:none; }
+.network-nodes { position:absolute; inset:0; z-index:5; }
+.node { position:absolute; transform:translate(-50%,-50%); width:105px; height:105px;
+    border-radius:50%; background:radial-gradient(circle at 30% 30%, rgba(30,90,30,0.4), rgba(5,15,5,0.95));
+    border:2px solid #2a5a2a; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:#b0ffb0; font-family:'Share Tech Mono',monospace; font-size:0.7rem;
+    text-align:center; padding:10px; cursor:pointer; transition:all 0.35s cubic-bezier(0.4,0,0.2,1);
+    user-select:none; line-height:1.2; }
+.node::before { content:""; position:absolute; inset:6px; border-radius:50%;
+    border:1px dashed rgba(90,220,90,0.15); animation:rotateRing 20s linear infinite; }
+@keyframes rotateRing { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+.node:hover { transform:translate(-50%,-50%) scale(1.1); border-color:#7aff7a; color:#ccffcc;
+    box-shadow:0 0 40px rgba(0,255,0,0.35); z-index:6; }
+.node.active { border-color:#7aff7a; background:radial-gradient(circle at 30% 30%, rgba(60,160,60,0.55), rgba(5,25,5,0.98));
+    box-shadow:0 0 50px rgba(0,255,0,0.5); }
+.node .node-icon { font-size:1.1rem; margin-bottom:3px; }
+.node .node-label { font-size:0.6rem; letter-spacing:1px; font-weight:bold; }
+.node .node-sub { font-size:0.52rem; color:#5f8f5f; margin-top:2px; }
+.node-center { width:180px; height:180px; border:3px solid #5fdf5f;
+    background:radial-gradient(circle at 30% 30%, rgba(50,140,50,0.55), rgba(5,20,5,0.98));
+    box-shadow:0 0 40px rgba(0,255,0,0.2); animation:centerPulse 3s ease-in-out infinite; }
+.node-center::before { border-color:rgba(90,220,90,0.25); animation-duration:15s; }
+.node-center .node-icon { font-size:2rem; }
+.node-center .node-label { font-family:'Press Start 2P',monospace; font-size:0.75rem;
+    letter-spacing:2px; color:#b0ffb0; }
+.node-center .node-sub { font-size:0.62rem; color:#7acc7a; margin-top:6px; }
+@keyframes centerPulse { 0%,100%{box-shadow:0 0 40px rgba(0,255,0,0.2);} 50%{box-shadow:0 0 70px rgba(0,255,0,0.4);} }
+.node-club { border-color:#7a1f1f !important;
+    background:radial-gradient(circle at 30% 30%, rgba(120,20,20,0.5), rgba(20,5,5,0.95)) !important; }
+.node-club::before { border-color:rgba(220,60,60,0.25) !important; }
+.node-club:hover { border-color:#ff5f5f !important;
+    box-shadow:0 0 50px rgba(255,0,0,0.4) !important; color:#ffcccc !important; }
+.node-club .node-label { color:#ffb0b0 !important; }
+.node-club .node-sub { color:#df5f5f !important; }
+.side-panel { position:absolute; top:0; right:0; width:440px; max-width:92vw; height:100%;
+    background:rgba(5,12,5,0.98); border-left:1px solid #2a5a2a;
+    transform:translateX(105%); transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    z-index:30; display:flex; flex-direction:column; box-shadow:-15px 0 40px rgba(0,0,0,0.6); }
+.side-panel.open { transform:translateX(0); }
+.side-panel::before { content:""; position:absolute; top:0; left:0; width:2px; height:100%;
+    background:linear-gradient(180deg, transparent, #5fdf5f, transparent); animation:panelLine 4s linear infinite; }
+@keyframes panelLine { 0%{transform:translateY(-100%);} 100%{transform:translateY(100%);} }
+.panel-header { padding:20px 24px; border-bottom:1px solid #1f4f1f;
+    display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.5); }
+.panel-header h3 { font-family:'Press Start 2P',monospace; font-size:0.85rem;
+    color:#8aff8a; letter-spacing:1px; }
+.panel-close { background:none; border:1px solid #2f5f2f; color:#7acc7a;
+    width:30px; height:30px; cursor:pointer; transition:0.2s; font-family:'Share Tech Mono',monospace;
+    display:flex; align-items:center; justify-content:center; }
+.panel-close:hover { background:#1a3a1a; border-color:#5fdf5f; color:#ccffcc; }
+.panel-body { flex:1; overflow-y:auto; padding:22px 24px; animation:fadeSlideIn 0.45s ease; }
+@keyframes fadeSlideIn { from{opacity:0;transform:translateX(15px);} to{opacity:1;transform:translateX(0);} }
+.panel-body::-webkit-scrollbar { width:6px; }
+.panel-body::-webkit-scrollbar-track { background:#0a0f0a; }
+.panel-body::-webkit-scrollbar-thumb { background:#2a5a2a; border-radius:3px; }
+.panel-body::-webkit-scrollbar-thumb:hover { background:#5fdf5f; }
+.panel-section { margin-bottom:20px; }
+.panel-label { color:#5f8f5f; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+.panel-value { color:#b0ffb0; font-size:1rem; }
+.panel-value-big { color:#8aff8a; font-size:1.5rem; font-family:'Press Start 2P',monospace; letter-spacing:1px; }
+.panel-tabs { display:flex; flex-wrap:wrap; margin-bottom:20px; border-bottom:1px solid #1f4f1f; }
+.panel-tabs button { flex:1; min-width:60px; background:none; border:none; color:#5f8f5f;
+    padding:10px 2px; font-family:'Share Tech Mono',monospace; font-size:0.68rem;
+    letter-spacing:1px; cursor:pointer; transition:0.25s; border-bottom:2px solid transparent; margin-bottom:-1px; }
+.panel-tabs button:hover { color:#9adf9a; }
+.panel-tabs button.active { color:#8aff8a; border-bottom-color:#5fdf5f; }
+.tab-content { display:none; animation:fadeSlideIn 0.35s ease; }
+.tab-content.active { display:block; }
+.panel-input { width:100%; padding:11px 14px; background:#0a0f0a; border:1px solid #2a5a2a;
+    color:#b0ffb0; font-family:'Share Tech Mono',monospace; font-size:0.85rem;
+    margin-bottom:10px; outline:none; transition:0.25s; border-radius:2px; }
+.panel-input:focus { border-color:#5fdf5f; box-shadow:0 0 15px rgba(0,255,0,0.15); background:#0d140d; }
+.panel-input::placeholder { color:#3a6a3a; }
+.panel-btn { width:100%; padding:12px 16px; background:#1a3a1a; border:1px solid #3a7a3a;
+    color:#b0ffb0; font-family:'Share Tech Mono',monospace; font-size:0.8rem;
+    cursor:pointer; transition:all 0.25s cubic-bezier(0.4,0,0.2,1); letter-spacing:1px; margin-bottom:8px;
+    border-radius:2px; }
+.panel-btn:hover { background:#2a5a2a; border-color:#5fdf5f; color:#ccffcc;
+    box-shadow:0 0 22px rgba(0,255,0,0.2); transform:translateY(-1px); }
+.panel-btn:active { transform:translateY(0); }
+.panel-btn.secondary { background:#0f1a0f; border-color:#2a5a2a; color:#7aaa7a; }
+.panel-btn.secondary:hover { background:#1a2f1a; border-color:#4f9f4f; color:#b0ffb0; }
+.panel-btn:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+.panel-note { font-size:0.7rem; color:#4f7a4f; line-height:1.6;
+    padding:10px 12px; background:rgba(10,20,10,0.5); border-left:2px solid #2a5a2a; margin-top:10px; border-radius:2px; }
+.balance-card { background:linear-gradient(135deg, rgba(30,80,30,0.4), rgba(5,15,5,0.9));
+    border:1px solid #3a7a3a; padding:18px; margin-bottom:16px; position:relative; overflow:hidden;
+    border-radius:4px; transition:0.3s; }
+.balance-card:hover { border-color:#5fdf5f; box-shadow:0 0 25px rgba(0,255,0,0.08); }
+.balance-card::after { content:""; position:absolute; top:-50%; right:-30%; width:150px; height:150px;
+    border-radius:50%; background:radial-gradient(circle, rgba(0,255,0,0.1), transparent 70%);
+    animation:glowPulse 4s ease-in-out infinite; }
+@keyframes glowPulse { 0%,100%{opacity:0.5;} 50%{opacity:1;transform:scale(1.15);} }
+.token-icon { display:inline-block; width:22px; height:22px; border-radius:50%;
+    background:linear-gradient(135deg, #26a17b, #0d6a4a); color:#fff; text-align:center;
+    line-height:22px; font-size:0.75rem; margin-right:8px; vertical-align:middle; }
+.green-token-icon { display:inline-block; width:22px; height:22px; border-radius:50%;
+    background:linear-gradient(135deg, #4fdf4f, #0d6a0d); color:#000; text-align:center;
+    line-height:22px; font-size:0.75rem; font-weight:bold; margin-right:8px; vertical-align:middle; }
+.crypto-list { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.crypto-option { background:#0a140a; border:1px solid #2a5a2a; padding:10px;
+    cursor:pointer; text-align:center; font-size:0.72rem; transition:0.25s; border-radius:3px; }
+.crypto-option:hover { border-color:#5fdf5f; background:#1a2f1a; transform:translateY(-2px); }
+.crypto-option.active { border-color:#7aff7a; background:#1a3a1a; box-shadow:0 0 15px rgba(0,255,0,0.15); }
+.crypto-option .coin { font-size:0.9rem; display:block; margin-bottom:4px; color:#8aff8a; font-weight:bold; }
+.crypto-option .coin-sub { color:#5f8f5f; font-size:0.6rem; }
+.crypto-details { background:#050a05; border:1px solid #2a5a2a; padding:14px; margin:10px 0;
+    border-radius:3px; animation:fadeSlideIn 0.35s ease; }
+.crypto-address { font-family:'Share Tech Mono',monospace; color:#8aff8a; font-size:0.7rem;
+    word-break:break-all; padding:8px 10px; background:#0a0f0a; border:1px dashed #2a5a2a;
+    margin:8px 0; cursor:pointer; transition:0.25s; border-radius:2px; }
+.crypto-address:hover { border-color:#5fdf5f; background:#1a2f1a; }
+.steam-connect-box { background:#0a140a; border:2px dashed #2a5a2a; padding:20px;
+    text-align:center; margin-bottom:14px; border-radius:4px; transition:0.3s; }
+.steam-connect-box.connected { border-style:solid; border-color:#5fdf5f;
+    box-shadow:0 0 20px rgba(0,255,0,0.1); }
+.steam-status { font-size:0.75rem; color:#8aff8a; margin-bottom:10px; letter-spacing:1px; }
+.steam-status.off { color:#7aaa7a; }
+.steam-inventory { max-height:340px; overflow-y:auto; margin-bottom:14px;
+    border:1px solid #2a5a2a; background:#050a05; padding:6px; border-radius:3px; }
+.steam-inventory::-webkit-scrollbar { width:6px; }
+.steam-inventory::-webkit-scrollbar-thumb { background:#2a5a2a; border-radius:3px; }
+.inv-item { display:flex; align-items:center; gap:10px; padding:8px 10px; margin-bottom:4px;
+    background:#0a140a; border:1px solid #1f4a1f; cursor:pointer; transition:0.25s; font-size:0.72rem;
+    border-radius:3px; }
+.inv-item:hover { border-color:#5fdf5f; background:#1a2f1a; transform:translateX(3px); }
+.inv-item.selected { border-color:#7aff7a; background:#1a3a1a; box-shadow:0 0 12px rgba(0,255,0,0.15); }
+.inv-item .inv-icon { width:40px; height:40px; background:#0f1a0f; border:1px solid #2a5a2a;
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; border-radius:2px; }
+.inv-item .inv-info { flex:1; min-width:0; }
+.inv-item .inv-name { color:#b0ffb0; font-size:0.72rem; font-weight:bold;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.inv-item .inv-price { color:#5f8f5f; font-size:0.65rem; }
+.inv-item .inv-check { color:#5fdf5f; font-size:0.9rem; opacity:0; transition:0.2s; }
+.inv-item.selected .inv-check { opacity:1; }
+.commission-box { background:#0a140a; border:1px solid #3a5a2a; padding:12px;
+    margin-bottom:12px; font-size:0.72rem; border-radius:3px; animation:fadeSlideIn 0.3s ease; }
+.commission-row { display:flex; justify-content:space-between; padding:3px 0; color:#8aaa8a; }
+.commission-row.total { color:#8aff8a; font-weight:bold; border-top:1px dashed #2a5a2a;
+    margin-top:6px; padding-top:6px; font-size:0.85rem; }
+.commission-row .fee { color:#df9f4f; }
+.trade-link-box { margin-top:10px; padding:10px; background:#050a05; border:1px solid #2a5a2a;
+    border-radius:3px; }
+.qr-placeholder { background:#fff; width:200px; height:200px; margin:14px auto;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:4px; }
+.qr-placeholder .qr-icon { font-size:3rem; color:#0a0f0a; }
+.qr-placeholder .qr-text { color:#0a0f0a; font-size:0.7rem; font-family:'Share Tech Mono',monospace; margin-top:6px; }
+.mm-connected { display:inline-block; padding:2px 8px; background:#1a3a1a; border:1px solid #5fdf5f;
+    border-radius:2px; font-size:0.65rem; color:#8aff8a; }
+.currency-toggle { display:flex; gap:6px; margin-bottom:12px; }
+.currency-btn { flex:1; padding:8px; background:#0a140a; border:1px solid #2a5a2a;
+    color:#7aaa7a; font-family:'Share Tech Mono',monospace; font-size:0.72rem;
+    cursor:pointer; letter-spacing:1px; transition:0.25s; border-radius:3px; }
+.currency-btn:hover { border-color:#5fdf5f; color:#ccffcc; }
+.currency-btn.active { background:#1a3a1a; border-color:#7aff7a; color:#8aff8a;
+    box-shadow:0 0 15px rgba(0,255,0,0.15); }
+.roulette-tiers { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:14px; }
+.tier-btn { padding:8px 4px; background:#0a140a; border:1px solid #2a5a2a;
+    color:#7aaa7a; font-family:'Share Tech Mono',monospace; font-size:0.72rem;
+    cursor:pointer; letter-spacing:1px; transition:0.25s; border-radius:3px; }
+.tier-btn:hover { background:#1a2f1a; border-color:#5fdf5f; color:#ccffcc; }
+.tier-btn.active { background:#1a3a1a; border-color:#7aff7a; color:#8aff8a;
+    box-shadow:0 0 15px rgba(0,255,0,0.2); }
+.tape-wrapper { position:relative; margin-bottom:14px; }
+.tape-viewport { overflow:hidden; position:relative;
+    border:2px solid #2a5a2a; background:#050a05; border-radius:4px;
+    box-shadow:inset 0 0 30px rgba(0,0,0,0.8); }
+.tape-viewport::before, .tape-viewport::after {
+    content:""; position:absolute; top:0; bottom:0; width:40px; z-index:5; pointer-events:none; }
+.tape-viewport::before { left:0; background:linear-gradient(90deg, rgba(0,0,0,0.85), transparent); }
+.tape-viewport::after { right:0; background:linear-gradient(270deg, rgba(0,0,0,0.85), transparent); }
+.tape-strip { display:flex; will-change:transform; }
+.tape-seg { flex:0 0 110px; height:110px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:4px; padding:8px; text-align:center;
+    border-right:1px solid rgba(42,90,42,0.6);
+    border-top:3px solid var(--seg-color, #5fdf5f);
+    background:#0a0f0a; color:#b0ffb0; font-family:'Share Tech Mono',monospace; }
+.tape-seg .ts-icon { font-size:1.6rem; }
+.tape-seg .ts-name { font-size:0.6rem; letter-spacing:1px; font-weight:bold; color:#8aff8a; line-height:1.2; }
+.tape-pointer { position:absolute; top:-2px; left:50%; transform:translateX(-50%);
+    width:2px; height:calc(100% + 4px); background:#8aff8a; z-index:8;
+    box-shadow:0 0 15px #5fdf5f; pointer-events:none; }
+.tape-pointer::before { content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+    border-left:9px solid transparent; border-right:9px solid transparent; border-top:11px solid #8aff8a; }
+.tape-pointer::after { content:""; position:absolute; bottom:-8px; left:50%; transform:translateX(-50%);
+    border-left:9px solid transparent; border-right:9px solid transparent; border-bottom:11px solid #8aff8a; }
+.prize-list { font-size:0.7rem; }
+.prize-row { display:flex; justify-content:space-between; padding:4px 0;
+    border-bottom:1px dashed rgba(42,90,42,0.4); color:#8aaa8a; }
+.prize-row .pname { color:#b0ffb0; }
+.prize-row .pchance { color:#5f8f5f; }
+.prize-win { text-align:center; padding:14px; margin-top:12px; border:2px solid #5fdf5f;
+    background:rgba(30,80,30,0.4); color:#8aff8a; font-family:'Press Start 2P',monospace;
+    font-size:0.85rem; letter-spacing:1px; animation:winPulse 1s ease-in-out infinite; border-radius:3px; }
+@keyframes winPulse { 0%,100%{box-shadow:0 0 20px rgba(0,255,0,0.3);} 50%{box-shadow:0 0 40px rgba(0,255,0,0.6);} }
+.id-card { background:linear-gradient(135deg, rgba(20,60,20,0.5), rgba(5,15,5,0.9));
+    border:1px solid #3a7a3a; padding:16px; margin-bottom:14px; position:relative; overflow:hidden;
+    border-radius:3px; }
+.id-card::before { content:""; position:absolute; top:0; left:-100%; width:100%; height:100%;
+    background:linear-gradient(90deg, transparent, rgba(0,255,0,0.06), transparent);
+    animation:idShine 4s ease-in-out infinite; }
+@keyframes idShine { 0%{left:-100%;} 100%{left:100%;} }
+.id-label { color:#5f8f5f; font-size:0.65rem; letter-spacing:3px; margin-bottom:6px; }
+.id-value { font-family:'Press Start 2P',monospace; color:#8aff8a; font-size:0.75rem;
+    letter-spacing:1px; word-break:break-all; }
+.saby-panel { background:linear-gradient(135deg, rgba(20,50,20,0.5), rgba(5,15,5,0.9));
+    border:1px solid #3a7a3a; padding:14px; margin-bottom:14px; border-radius:3px; }
+.saby-logo { font-family:'Press Start 2P',monospace; font-size:0.8rem; color:#8aff8a;
+    letter-spacing:2px; margin-bottom:8px; }
+.saby-status { display:flex; align-items:center; gap:8px; font-size:0.72rem; color:#7aaa7a; margin-bottom:8px; }
+.saby-dot { width:8px; height:8px; border-radius:50%; background:#df9f4f;
+    box-shadow:0 0 8px #df9f4f; animation:blink 1.5s ease-in-out infinite; }
+.saby-dot.online { background:#5fdf5f; box-shadow:0 0 8px #5fdf5f; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+.saby-info { font-size:0.7rem; color:#5f8f5f; line-height:1.6; }
+.auth-form { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    background:rgba(10,15,10,0.97); border:2px solid #2a5a2a;
+    padding:34px 32px; max-width:400px; width:90%; z-index:30;
+    box-shadow:0 0 60px rgba(0,255,0,0.08); animation:fadeSlideIn 0.5s ease;
+    max-height:92vh; overflow-y:auto; border-radius:4px; }
+.auth-form::before { content:"// SECURE AUTH"; position:absolute; top:-9px; left:20px;
+    background:#0a0f0a; padding:0 8px; font-size:0.65rem; color:#3a7a3a; letter-spacing:2px; }
+.auth-form h2 { font-family:'Press Start 2P',monospace; font-size:1.05rem;
+    margin-bottom:20px; text-align:center; color:#8aff8a; }
+.auth-form input { display:block; width:100%; padding:11px 14px; margin:10px 0;
+    background:#0a0f0a; border:1px solid #2a5a2a; color:#b0ffb0;
+    font-family:'Share Tech Mono',monospace; font-size:0.85rem; outline:none; transition:0.25s; border-radius:3px; }
+.auth-form input:focus { border-color:#5fdf5f; box-shadow:0 0 15px rgba(0,255,0,0.1); }
+.auth-form button { width:100%; padding:12px; background:#1a3a1a; border:1px solid #3a7a3a;
+    color:#b0ffb0; font-family:'Share Tech Mono',monospace; cursor:pointer;
+    transition:0.25s; margin-top:6px; font-size:0.85rem; letter-spacing:1px; border-radius:3px; }
+.auth-form button:hover { background:#2a5a2a; border-color:#5fdf5f; box-shadow:0 0 20px rgba(0,255,0,0.15); }
+.auth-form .switch-link { text-align:center; margin-top:14px; color:#5a8a5a;
+    cursor:pointer; font-size:0.8rem; transition:0.2s; }
+.auth-form .switch-link:hover { color:#8aff8a; }
+.auth-form .error-msg { color:#bf5f5f; font-size:0.8rem; margin-top:8px; text-align:center; min-height:1.2em; }
+.auth-form .hint { color:#4f7a4f; font-size:0.7rem; text-align:center; margin-top:12px; letter-spacing:1px; }
+.social-auth { display:flex; gap:8px; margin-top:12px; }
+.social-btn { flex:1; padding:10px; background:#0a0f0a; border:1px solid #2a5a2a;
+    cursor:pointer; transition:0.25s; font-family:'Share Tech Mono',monospace;
+    color:#9adf9a; font-size:0.7rem; display:flex; flex-direction:column;
+    align-items:center; gap:4px; letter-spacing:1px; border-radius:3px; }
+.social-btn:hover { background:#1a2f1a; border-color:#5fdf5f; color:#ccffcc; transform:translateY(-2px); }
+.social-btn .sb-icon { font-size:1.2rem; }
+.divider-or { display:flex; align-items:center; gap:10px; margin:14px 0; color:#3a6a3a; font-size:0.7rem; }
+.divider-or::before, .divider-or::after { content:""; flex:1; height:1px; background:#1f4f1f; }
+.hack-overlay, .blocked-overlay { position:fixed; top:0; left:0; width:100%; height:100%;
+    background:#000; z-index:2000; display:none; align-items:center; justify-content:center;
+    flex-direction:column; }
+.hack-overlay.active { display:flex; animation:hackFlash 0.4s ease 4; }
+.hack-overlay h1 { font-family:'Press Start 2P',monospace; font-size:4rem; color:#00ff00;
+    text-shadow:0 0 40px #00ff00, 0 0 80px #00aa00; animation:glitch 1.2s infinite; text-align:center; }
+.hack-overlay p { color:#3a7a3a; margin-top:20px; letter-spacing:4px; }
+@keyframes hackFlash { 0%{background:#000;} 50%{background:#0a2a0a;} 100%{background:#000;} }
+@keyframes glitch { 0%{transform:translate(0);} 20%{transform:translate(-4px,2px);} 40%{transform:translate(4px,-2px);}
+    60%{transform:translate(-2px,4px);} 80%{transform:translate(2px,-4px);} 100%{transform:translate(0);} }
+.blocked-overlay.active { display:flex; animation:blockedFlash 0.4s ease 4; }
+.blocked-overlay h1 { font-family:'Press Start 2P',monospace; font-size:3rem; color:#ff2222;
+    text-shadow:0 0 40px #ff0000; text-align:center; padding:0 20px;
+    animation:blockedShake 0.6s infinite; letter-spacing:3px; line-height:1.4; }
+.blocked-overlay p { color:#7a3a3a; margin-top:20px; letter-spacing:4px; }
+@keyframes blockedFlash { 0%{background:#000;} 50%{background:#2a0a0a;} 100%{background:#000;} }
+@keyframes blockedShake { 0%,100%{transform:translate(0);} 25%{transform:translate(-4px,1px);}
+    50%{transform:translate(4px,-1px);} 75%{transform:translate(-2px,2px);} }
+.club-modal { position:fixed; inset:0; background:rgba(0,0,0,0.96); z-index:2100;
+    display:none; align-items:center; justify-content:center; padding:20px; }
+.club-modal.active { display:flex; animation:fadeIn 0.4s ease; }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+.club-box { background:#0a0f0a; border:2px solid #5fdf5f; padding:30px 34px; max-width:560px;
+    width:100%; max-height:92vh; overflow-y:auto; box-shadow:0 0 80px rgba(0,255,0,0.15);
+    animation:clubBoxIn 0.5s cubic-bezier(0.4,0,0.2,1); border-radius:4px; }
+@keyframes clubBoxIn { from{opacity:0;transform:translateY(30px) scale(0.95);} to{opacity:1;transform:translateY(0) scale(1);} }
+.club-box h2 { font-family:'Press Start 2P',monospace; font-size:1.1rem; color:#8aff8a;
+    text-align:center; margin-bottom:20px; letter-spacing:2px; text-shadow:0 0 15px #00aa00; }
+.club-box p { color:#b0ffb0; font-size:0.85rem; margin-bottom:12px; line-height:1.7; }
+.club-box .rules { background:#050a05; border:1px solid #2a5a2a; padding:16px; margin:14px 0;
+    font-size:0.78rem; color:#8aaa8a; line-height:1.8; border-radius:3px; }
+.club-box .rules li { list-style:none; padding:4px 0; border-bottom:1px dashed rgba(42,90,42,0.3); }
+.club-box .rules li::before { content:"▸ "; color:#5fdf5f; }
+.club-btn-row { display:flex; gap:10px; margin-top:20px; }
+.club-btn-yes { flex:1; padding:14px; background:#1a3a1a; border:2px solid #3a7a3a;
+    color:#b0ffb0; font-family:'Share Tech Mono',monospace; font-size:0.9rem;
+    cursor:pointer; transition:all 0.3s cubic-bezier(0.4,0,0.2,1); letter-spacing:2px; border-radius:3px; }
+.club-btn-yes:hover { background:#2a5a2a; border-color:#5fdf5f; box-shadow:0 0 30px rgba(0,255,0,0.3); }
+.club-btn-join { width:100%; padding:16px; background:#1a0a0a; border:2px solid #7a2a2a;
+    color:#df9f9f; font-family:'Press Start 2P',monospace; font-size:0.85rem;
+    cursor:pointer; transition:all 0.35s cubic-bezier(0.4,0,0.2,1); letter-spacing:3px;
+    margin-top:20px; border-radius:3px; }
+.club-btn-join:hover { background:#8a1f1f; border-color:#ff2020; color:#ffffff;
+    box-shadow:0 0 50px rgba(255,0,0,0.6), inset 0 0 20px rgba(255,0,0,0.2);
+    text-shadow:0 0 10px #ff0000; animation:joinPulse 0.8s ease-in-out infinite; }
+@keyframes joinPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.03);} }
+.blood-overlay { position:fixed; inset:0; z-index:2200; display:none;
+    background:#000; overflow:hidden; }
+.blood-overlay.active { display:block; animation:flashRed 0.3s ease 6; }
+@keyframes flashRed { 0%{background:#000;} 50%{background:#3a0000;} 100%{background:#000;} }
+.blood-splat { position:absolute; border-radius:50%;
+    background:radial-gradient(circle, #8a0000 0%, #4a0000 40%, transparent 70%);
+    opacity:0; animation:splatGrow 1.2s ease forwards; pointer-events:none; }
+@keyframes splatGrow { 0%{transform:scale(0);opacity:0;} 20%{opacity:1;} 100%{transform:scale(1);opacity:0.85;} }
+.blood-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    font-family:'Press Start 2P',monospace; font-size:2rem; color:#ff2020;
+    text-shadow:0 0 40px #ff0000, 0 0 80px #8a0000;
+    z-index:2210; text-align:center; letter-spacing:4px; line-height:1.6;
+    animation:bloodTextIn 0.6s ease; }
+@keyframes bloodTextIn { from{opacity:0;transform:translate(-50%,-50%) scale(0.5);}
+    to{opacity:1;transform:translate(-50%,-50%) scale(1);} }
+.dialog-overlay { position:fixed; inset:0; z-index:2250; display:none;
+    background:rgba(0,0,0,0.94); align-items:flex-end; justify-content:center; padding:40px; }
+.dialog-overlay.active { display:flex; animation:fadeIn 0.3s ease; }
+.dialog-box { background:#0a0f0a; border:3px solid #df2020; padding:22px 30px;
+    max-width:640px; width:100%; box-shadow:0 0 60px rgba(255,0,0,0.4); border-radius:4px;
+    display:flex; align-items:center; gap:20px; animation:dialogIn 0.5s cubic-bezier(0.4,0,0.2,1); }
+@keyframes dialogIn { from{opacity:0;transform:translateY(40px);} to{opacity:1;transform:translateY(0);} }
+.head { width:80px; height:80px; border-radius:50%;
+    background:radial-gradient(circle at 40% 30%, #c8a878, #4a3020);
+    position:relative; flex-shrink:0; animation:headBob 1.2s ease-in-out infinite;
+    box-shadow:0 0 20px rgba(200,100,100,0.3); }
+@keyframes headBob { 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-4px) rotate(2deg);} }
+.head::before, .head::after { content:""; position:absolute; top:32px; width:10px; height:10px;
+    border-radius:50%; background:#1a0a0a; animation:eyeBlink 3s ease-in-out infinite; }
+.head::before { left:22px; } .head::after { right:22px; }
+@keyframes eyeBlink { 0%,90%,100%{transform:scaleY(1);} 95%{transform:scaleY(0.1);} }
+.head .mouth { position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+    width:24px; height:6px; background:#1a0a0a; border-radius:0 0 12px 12px;
+    animation:mouthTalk 0.4s ease-in-out infinite; }
+@keyframes mouthTalk { 0%,100%{height:6px;} 50%{height:14px;} }
+.dialog-text { flex:1; color:#b0ffb0; font-size:0.85rem; line-height:1.6; }
+.dialog-text .speaker { color:#ff5f5f; font-family:'Press Start 2P',monospace;
+    font-size:0.7rem; display:block; margin-bottom:6px; letter-spacing:1px; }
+.club-events-list { display:flex; flex-direction:column; gap:10px; }
+.club-event-card { background:linear-gradient(135deg, rgba(80,15,15,0.4), rgba(15,5,5,0.9));
+    border:1px solid #7a2a2a; padding:14px 16px; border-radius:3px; transition:0.3s; }
+.club-event-card:hover { border-color:#df5f5f; box-shadow:0 0 20px rgba(255,0,0,0.15); transform:translateX(4px); }
+.club-event-card h4 { color:#ffb0b0; font-size:0.85rem; margin-bottom:6px;
+    font-family:'Press Start 2P',monospace; letter-spacing:1px; }
+.club-event-card p { color:#c88a8a; font-size:0.75rem; }
+.club-event-card .date { color:#7a3a3a; font-size:0.65rem; letter-spacing:2px; margin-top:6px; }
+.club-badge { display:inline-block; padding:3px 10px; background:#7a1f1f; color:#ffb0b0;
+    font-size:0.6rem; letter-spacing:2px; border-radius:2px; margin-bottom:10px;
+    animation:badgePulse 2s ease-in-out infinite; }
+@keyframes badgePulse { 0%,100%{box-shadow:0 0 10px rgba(255,0,0,0.3);} 50%{box-shadow:0 0 20px rgba(255,0,0,0.6);} }
+.toast { position:fixed; bottom:30px; right:30px; background:rgba(10,20,10,0.98);
+    border:1px solid #5fdf5f; color:#b0ffb0; padding:14px 22px; z-index:3000;
+    font-family:'Share Tech Mono',monospace; font-size:0.8rem;
+    box-shadow:0 0 30px rgba(0,255,0,0.25); animation:toastIn 0.35s ease;
+    max-width:320px; letter-spacing:1px; border-radius:3px; }
+@keyframes toastIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+@media (max-width:900px) {
+    .node { width:82px; height:82px; }
+    .node .node-icon { font-size:0.85rem; }
+    .node .node-label { font-size:0.5rem; }
+    .node-center { width:135px; height:135px; }
+    .node-center .node-icon { font-size:1.3rem; }
+    .side-panel { width:100%; max-width:100vw; }
+    .crypto-list { grid-template-columns:1fr; }
+    .roulette-tiers { grid-template-columns:repeat(2,1fr); }
+    .radio-box iframe { height:300px; }
+    .hack-overlay h1 { font-size:2.2rem; }
+    .blocked-overlay h1 { font-size:1.6rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="logo"><h1>ЗЕЛЁНЫЙ ШУМ</h1><span>CYBERPUNK · BAR · SAINT-P</span></div>
+        <nav class="nav">
+            <a href="#wall">стена</a>
+            <a href="#radio">radio</a>
+            <a href="#tour">3D-тур</a>
+            <a href="#cocktail">коктейль</a>
+            <a href="#stories">истории</a>
+            <a href="#calendar">события</a>
+            <a href="#secret">секрет</a>
+            <a id="cabinetTrigger" style="border-bottom:2px solid #5fdf5f; padding-bottom:2px;">🔓 Личный кабинет</a>
+        </nav>
+    </header>
+
+    <div class="main-content" id="mainContent">
+        <section id="wall">
+            <h2 class="section-title">ИНТЕРАКТИВНАЯ СТЕНА</h2>
+            <p style="margin-bottom:16px;color:#7aaa7a;font-size:0.9rem;">Кликай по плиткам — стена оживает. Каждая — триггер события.</p>
+            <div class="wall" id="wallContainer">
+                <div class="wall-tile">▸ ВИНИЛ</div>
+                <div class="wall-tile">▸ ЛАЗЕР</div>
+                <div class="wall-tile">▸ ДЫМ</div>
+                <div class="wall-tile">▸ НЕОН</div>
+                <div class="wall-tile">▸ ШУМ</div>
+                <div class="wall-tile">▸ ТЕНЬ</div>
+            </div>
+            <div id="wallStatus">статус: ожидание</div>
+        </section>
+
+        <section id="radio">
+            <h2 class="section-title">ВЕБ-РАДИО · BANDCAMP</h2>
+            <p class="radio-note">Прямой эфир с альбома <em>UNIT:SERAPHIM 2 – THE PATIENT</em> от Pavel Lazarev</p>
+            <div class="radio-box">
+                <iframe src="https://bandcamp.com/EmbeddedPlayer/album=2239565531/size=large/bgcol=0a0f0a/linkcol=5fdf5f/tracklist=true/transparent=true/" seamless>
+                    <a href="https://pavellazarev.bandcamp.com/album/unit-seraphim-2-the-patient">UNIT:SERAPHIM 2 - THE PATIENT by Pavel Lazarev</a>
+                </iframe>
+            </div>
+        </section>
+
+        <section id="tour">
+            <h2 class="section-title">3D-ТУР ПО БАРУ</h2>
+            <div class="three-container" id="threeContainer">
+                <div class="coming">⚡ 3D-СЦЕНА ЗАГРУЖАЕТСЯ...<br><span style="font-size:0.65rem;color:#3f6f3f;">(подключи Three.js + модель бара)</span></div>
+            </div>
+        </section>
+
+        <section id="cocktail">
+            <h2 class="section-title">СОБЕРИ СВОЙ КОКТЕЙЛЬ</h2>
+            <div class="cocktail-builder">
+                <div>
+                    <div class="builder-options" id="cocktailOptions">
+                        <button data-ingredient="джин">🍸 джин</button>
+                        <button data-ingredient="текила">🌵 текила</button>
+                        <button data-ingredient="ром">🥃 ром</button>
+                        <button data-ingredient="водка">❄️ водка</button>
+                        <button data-ingredient="ликёр">🍒 ликёр</button>
+                        <button data-ingredient="тоник">💧 тоник</button>
+                    </div>
+                </div>
+                <div class="builder-result" id="cocktailResult">
+                    <div class="name">⚡ ВЫБЕРИ ИНГРЕДИЕНТ</div>
+                    <div style="color:#5f8f5f;font-size:0.8rem;margin-top:8px;" id="cocktailDesc">нажми на ингредиенты выше</div>
+                    <div class="builder-actions">
+                        <button class="btn-primary" id="mixBtn">⚡ СМЕШАТЬ</button>
+                        <button class="btn-secondary" id="resetCocktail">✕ СБРОС</button>
+                    </div>
+                    <button class="btn-primary" id="orderCocktailBtn" style="width:100%;margin-top:10px;background:#2a1a0a;border-color:#7a5a2a;color:#dfb06f;display:none;">
+                        🛎 ЗАКАЗАТЬ ЭТОТ КОКТЕЙЛЬ
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="stories">
+            <h2 class="section-title">ИСТОРИИ КОКТЕЙЛЕЙ</h2>
+            <div class="story-card">
+                <h4>🍸 «Зелёный Шум»</h4>
+                <p style="color:#8aaa8a;font-size:0.85rem;">Джин, базилик, лайм и немного спрайта. Рождён в дождливый вечер 1998-го.</p>
+                <small>легенда бара</small>
+            </div>
+            <div class="story-card">
+                <h4>🌿 «Кибер-мохито»</h4>
+                <p style="color:#8aaa8a;font-size:0.85rem;">Ром, мята, лайм, сахарный сироп и газировка. Впервые подан в 2077 году.</p>
+                <small>футуристический ретро</small>
+            </div>
+            <div class="story-card">
+                <h4>⚡ «Неоновый всполох»</h4>
+                <p style="color:#8aaa8a;font-size:0.85rem;">Водка, ликёр Blue Curacao, тоник и сок лайма. Светится под ультрафиолетом.</p>
+                <small>хит вечеринок</small>
+            </div>
+        </section>
+
+        <section id="calendar">
+            <h2 class="section-title">КАЛЕНДАРЬ СОБЫТИЙ</h2>
+            <div class="calendar-grid" id="calendarGrid"></div>
+            <div id="eventInfo">кликни на день с событием</div>
+        </section>
+
+        <section id="secret">
+            <h2 class="section-title">СЕКРЕТНЫЙ РАЗДЕЛ</h2>
+            <div class="secret-area">
+                <p style="color:#6a9a6a;font-size:0.8rem;margin-bottom:12px;">введи пароль для входа в закрытый клуб</p>
+                <input type="text" id="secretInput" placeholder="••••••••" />
+                <button id="secretBtn">⏎ ВОЙТИ</button>
+                <div id="secretMessage">подсказка: попробуй <em>1111</em></div>
+            </div>
+        </section>
+
+        <section id="noise">
+            <h2 class="section-title">ШУМОМЕР ЗАЛА</h2>
+            <div class="noise-meter">
+                <span style="color:#8aaa8a;">уровень шума</span>
+                <div class="meter-bar"><div class="meter-fill" id="noiseFill" style="width:67%;"></div></div>
+                <span id="noiseLabel" style="color:#b0ffb0;">67 %</span>
+                <button class="btn-secondary" id="noiseRefresh">↻ обновить</button>
+            </div>
+        </section>
+
+        <section id="events">
+            <h2 class="section-title">ЛЕНТА МЕРОПРИЯТИЙ</h2>
+            <div class="grid-2">
+                <div class="card"><h3>▸ 12.09 · НЕОНОВАЯ НОЧЬ</h3><p>Сет от Pavel Lazarev + визуальный арт. Вход свободный.</p></div>
+                <div class="card"><h3>▸ 19.09 · КИБЕР-ДЕГУСТАЦИЯ</h3><p>5 новых коктейлей, голосование за лучший. Начало в 21:00.</p></div>
+                <div class="card"><h3>▸ 26.09 · ТЁМНЫЙ КИНОСЕАНС</h3><p>«Бегущий по лезвию» на проекторе. Попкорн и пиво.</p></div>
+            </div>
+        </section>
+
+        <section id="blog">
+            <h2 class="section-title">БЛОГ · КУЛЬТУРА ПИТИЯ</h2>
+            <div class="blog-card">
+                <h3>🍃 ПОЧЕМУ МЯТА — ЭТО КИБЕРПАНК?</h3>
+                <p style="color:#8aaa8a;font-size:0.85rem;margin-top:8px;">
+                    Свежесть, контраст, лёгкая горечь. В «Зелёном Шуме» мята стала символом
+                    сопротивления слащавым коктейлям. В этом материале — история от первого бармена.
+                </p>
+                <small style="color:#4f7a4f;">читать полностью →</small>
+            </div>
+        </section>
+
+        <section id="birthday">
+            <h2 class="section-title">ИМЕНИННИКАМ</h2>
+            <div class="birthday-card">
+                <h3 style="color:#b8ffb8;margin-bottom:8px;">🎂 КОКТЕЙЛЬ В ПОДАРОК</h3>
+                <p style="color:#8aaa8a;font-size:0.85rem;">
+                    В день рождения — любой коктейль из карты за счёт заведения.
+                    Предъяви паспорт бармену и получи «Зелёный Шум» в подарок.
+                </p>
+                <p style="color:#4f7a4f;font-size:0.75rem;margin-top:8px;">* при предварительном бронировании стола</p>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <span>ЗЕЛЁНЫЙ ШУМ · 1995–2026</span>
+            <span># cyberpunk · # bar · # saint-p</span>
+            <span>сделано на <span style="color:#4f8f4f;">⚡</span> в нулевых</span>
+        </footer>
+    </div>
+</div>
+
+<!-- CABINET -->
+<div class="cabinet-overlay" id="cabinetOverlay">
+    <div class="cabinet-header">
+        <span class="cabinet-title">⚡ СЕТЬ · ЗЕЛЁНЫЙ ШУМ</span>
+        <span class="cabinet-user" id="cabinetUserLabel">— НЕ АВТОРИЗОВАН —</span>
+        <button class="cabinet-close" id="cabinetClose">✕ ЗАКРЫТЬ</button>
+    </div>
+    <div class="cabinet-body" id="cabinetBody">
+        <canvas id="networkCanvas"></canvas>
+        <div class="network-nodes" id="networkNodes" style="display:none;"></div>
+
+        <div class="auth-form" id="authForm">
+            <h2 id="authTitle">ВХОД</h2>
+            <input type="text" id="authLogin" placeholder="логин" autocomplete="off" />
+            <input type="password" id="authPassword" placeholder="пароль" autocomplete="off" />
+            <div id="authExtra" style="display:none;">
+                <input type="password" id="authPassword2" placeholder="повторите пароль" autocomplete="off" />
+            </div>
+            <button id="authSubmit">ВОЙТИ</button>
+            <div class="switch-link" id="authSwitch">Нет аккаунта? Зарегистрироваться</div>
+            <div class="error-msg" id="authError"></div>
+            <div class="divider-or">ИЛИ ЧЕРЕЗ</div>
+            <div class="social-auth">
+                <button class="social-btn" data-provider="tg"><span class="sb-icon">✈</span><span>TELEGRAM</span></button>
+                <button class="social-btn" data-provider="steam"><span class="sb-icon">⚙</span><span>STEAM</span></button>
+                <button class="social-btn" data-provider="google"><span class="sb-icon">G</span><span>GOOGLE</span></button>
+            </div>
+            <div class="hint">Тестовый вход: Pavel / 1488</div>
+        </div>
+
+        <div class="side-panel" id="sidePanel">
+            <div class="panel-header">
+                <h3 id="panelTitle">РАЗДЕЛ</h3>
+                <button class="panel-close" id="panelClose">✕</button>
+            </div>
+            <div class="panel-body" id="panelBody"></div>
+        </div>
+    </div>
+</div>
+
+<div class="hack-overlay" id="hackOverlay"><h1>ПОГАШЕНО</h1><p>▪ ▫ ▪ ▫ ▪ ▫ ▪ ▫ ▪</p></div>
+<div class="blocked-overlay" id="blockedOverlay"><h1>ДОСТУП<br>ЗАБЛОКИРОВАН</h1><p>▪ ▫ ▪ ▫ ▪ ▫ ▪ ▫ ▪</p></div>
+<div class="club-modal" id="clubModal"><div class="club-box" id="clubBox"></div></div>
+<div class="blood-overlay" id="bloodOverlay"></div>
+<div class="dialog-overlay" id="dialogOverlay">
+    <div class="dialog-box">
+        <div class="head"><div class="mouth"></div></div>
+        <div class="dialog-text">
+            <span class="speaker" id="dialogSpeaker">СИСТЕМА</span>
+            <span id="dialogMsg">...</span>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    'use strict';
+
+    function showToast(msg, color) {
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.textContent = msg;
+        if (color) t.style.borderColor = color;
+        document.body.appendChild(t);
+        setTimeout(() => { t.style.opacity = '0'; t.style.transition = '0.3s'; }, 2800);
+        setTimeout(() => t.remove(), 3200);
+    }
+
+    function getPersonalId(login) {
+        let hash = 0;
+        for (let i = 0; i < login.length; i++) { hash = ((hash << 5) - hash) + login.charCodeAt(i); hash |= 0; }
+        const hex = Math.abs(hash).toString(16).toUpperCase().padStart(8, '0');
+        return `#${login.toUpperCase().slice(0,6)}-${hex.slice(0,4)}-${hex.slice(4,8)}`;
+    }
+
+    function saveUser() {
+        if (!currentUser) return;
+        localStorage.setItem('greenNoiseUser', JSON.stringify(currentUser));
+        const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
+        if (users[currentUser.login]) {
+            Object.assign(users[currentUser.login], {
+                bonus: currentUser.bonus, usdt: currentUser.usdt, grn: currentUser.grn,
+                promoUsed: currentUser.promoUsed, wins: currentUser.wins || [],
+                testBonusGiven: currentUser.testBonusGiven,
+                steamLinked: currentUser.steamLinked, steamInventory: currentUser.steamInventory,
+                steamTradeLink: currentUser.steamTradeLink,
+                clubMember: currentUser.clubMember,
+                metaMaskAddress: currentUser.metaMaskAddress
+            });
+            localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
+        }
+    }
+
+    try {
+        const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
+        if (!users.Pavel) {
+            users.Pavel = { password:'1488', bonus:100, usdt:500, grn:0, promoUsed:false, wins:[], clubMember:false };
+            localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
+        }
+    } catch(e) {}
+
+    // ===== ГЛАВНАЯ =====
+    document.querySelectorAll('.wall-tile').forEach(tile => {
+        tile.addEventListener('click', function() {
+            document.querySelectorAll('.wall-tile').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            const status = document.getElementById('wallStatus');
+            status.textContent = `статус: активирован «${this.textContent.trim().replace('▸ ','')}»`;
+            status.style.color = '#8aff8a';
+        });
+    });
+
+    const cocktailBtns = document.querySelectorAll('#cocktailOptions button');
+    const resultName = document.querySelector('#cocktailResult .name');
+    const resultDesc = document.getElementById('cocktailDesc');
+    const orderBtn = document.getElementById('orderCocktailBtn');
+    let selected = [];
+    cocktailBtns.forEach(b => b.addEventListener('click', function() {
+        const ing = this.dataset.ingredient;
+        if (selected.includes(ing)) { selected = selected.filter(i => i !== ing); this.classList.remove('selected'); }
+        else { selected.push(ing); this.classList.add('selected'); }
+        resultName.textContent = selected.length ? `🍸 ${selected.join(' + ')}` : '⚡ ВЫБЕРИ ИНГРЕДИЕНТ';
+        resultDesc.textContent = selected.length ? `смесь: ${selected.length} компонент(ов)` : 'нажми на ингредиенты выше';
+        orderBtn.style.display = selected.length >= 2 ? 'block' : 'none';
+    }));
+    document.getElementById('mixBtn').addEventListener('click', function() {
+        if (!selected.length) { resultDesc.textContent = '❌ добавь хотя бы один ингредиент!'; resultDesc.style.color = '#bf5f5f'; return; }
+        resultName.textContent = `🍸 ${selected.join(' + ')}`;
+        resultDesc.textContent = '✨ коктейль смешан! Нажми «Заказать»'; resultDesc.style.color = '#8aff8a';
+        orderBtn.style.display = 'block';
+    });
+    document.getElementById('resetCocktail').addEventListener('click', function() {
+        selected = [];
+        cocktailBtns.forEach(b => b.classList.remove('selected'));
+        resultName.textContent = '⚡ ВЫБЕРИ ИНГРЕДИЕНТ';
+        resultDesc.textContent = 'нажми на ингредиенты выше'; resultDesc.style.color = '#5f8f5f';
+        orderBtn.style.display = 'none';
+    });
+    orderBtn.addEventListener('click', function() {
+        showToast('🛎 Заказ отправлен бармену!', '#8aff8a');
+        orderBtn.textContent = '✅ ЗАКАЗ ПРИНЯТ';
+        setTimeout(() => { orderBtn.textContent = '🛎 ЗАКАЗАТЬ ЭТОТ КОКТЕЙЛЬ'; }, 2500);
+    });
+
+    const calendarGrid = document.getElementById('calendarGrid');
+    const eventInfo = document.getElementById('eventInfo');
+    const daysInMonth = new Date(2026, 9, 0).getDate();
+    const firstDay = new Date(2026, 8, 1).getDay();
+    const events = {5:'🎧 Pavel Lazarev · live',12:'🌿 дегустация',19:'🎬 киновечер',26:'⚡ вечеринка',30:'🍸 закрытый клуб'};
+    for (let i = 0; i < firstDay; i++) {
+        const e = document.createElement('div'); e.className = 'cal-day';
+        e.style.opacity = '0.2'; e.textContent = '·'; calendarGrid.appendChild(e);
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'cal-day';
+        if (events[d]) { dayDiv.classList.add('event'); dayDiv.textContent = `${d} ✦`; }
+        else dayDiv.textContent = d;
+        dayDiv.addEventListener('click', function() {
+            eventInfo.innerHTML = events[d] ? `📌 ${d}.09 · ${events[d]}` : `📅 ${d}.09 — событий нет`;
+            eventInfo.style.color = events[d] ? '#8aff8a' : '#5f8f5f';
+        });
+        calendarGrid.appendChild(dayDiv);
+    }
+
+    const noiseFill = document.getElementById('noiseFill');
+    const noiseLabel = document.getElementById('noiseLabel');
+    function updateNoise() {
+        const val = Math.floor(Math.random() * 40) + 30;
+        noiseFill.style.width = val + '%';
+        noiseLabel.textContent = val + ' %';
+    }
+    document.getElementById('noiseRefresh').addEventListener('click', updateNoise);
+    updateNoise();
+
+    document.getElementById('threeContainer').addEventListener('click', function() {
+        this.innerHTML = '<div class="coming">⚡ 3D-СЦЕНА ЗАГРУЖАЕТСЯ...<br><span style="font-size:0.65rem;color:#3f6f3f;">(Three.js + модель бара)</span></div>';
+    });
+
+    // СЕКРЕТ
+    const secretInput = document.getElementById('secretInput');
+    const secretMsg = document.getElementById('secretMessage');
+    document.getElementById('secretBtn').addEventListener('click', function() {
+        const pwd = secretInput.value.trim();
+        if (pwd === '1111') { startClubFlow(); secretInput.value = ''; }
+        else if (pwd.toLowerCase() === 'шум' || pwd.toLowerCase() === 'shum') {
+            secretMsg.innerHTML = '✅ Пароль верный, но для клуба нужен другой код.';
+            secretMsg.style.color = '#8aff8a';
+        } else {
+            secretMsg.innerHTML = '❌ неверный пароль'; secretMsg.style.color = '#bf5f5f';
+        }
+    });
+    secretInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('secretBtn').click(); });
+
+    // CLUB FLOW
+    const clubModal = document.getElementById('clubModal');
+    const clubBox = document.getElementById('clubBox');
+    const bloodOverlay = document.getElementById('bloodOverlay');
+    const dialogOverlay = document.getElementById('dialogOverlay');
+
+    function startClubFlow() {
+        const hackOverlay = document.getElementById('hackOverlay');
+        hackOverlay.classList.add('active');
+        setTimeout(() => { hackOverlay.classList.remove('active'); setTimeout(showClubConfirm, 400); }, 3200);
+    }
+
+    function showClubConfirm() {
+        clubBox.innerHTML = `
+            <h2>⚠ ВНИМАНИЕ</h2>
+            <p style="text-align:center;font-size:1rem;color:#b0ffb0;">
+                Вы готовы стать частью <strong style="color:#ff5f5f;">закрытого клуба</strong>?
+            </p>
+            <p style="text-align:center;color:#8aaa8a;font-size:0.8rem;">
+                Это не шутка. Доступ к закрытым событиям бара, спецпредложениям и закрытым дропам.
+            </p>
+            <div class="club-btn-row">
+                <button class="club-btn-yes" id="clubYes">ДА</button>
+                <button class="btn-secondary" style="flex:1;" id="clubNo">НЕТ</button>
+            </div>
+        `;
+        clubModal.classList.add('active');
+        document.getElementById('clubYes').addEventListener('click', () => showClubRules());
+        document.getElementById('clubNo').addEventListener('click', () => {
+            clubModal.classList.remove('active');
+            showToast('Отказано', '#bf5f5f');
+        });
+    }
+
+    function showClubRules() {
+        clubBox.innerHTML = `
+            <h2>📜 ПРАВИЛА КЛУБА</h2>
+            <p style="font-size:0.85rem;">Первое правило бойцовского клуба — не говорить о бойцовском клубе.</p>
+            <ul class="rules">
+                <li>Второе правило бойцовского клуба — не говорить о бойцовском клубе.</li>
+                <li>Если кто-то кричит «стоп» — драка окончена.</li>
+                <li>Драка идёт столько, сколько нужно.</li>
+                <li>В драке участвуют только двое.</li>
+                <li>Одна драка за раз.</li>
+                <li>Драться без рубашки и обуви.</li>
+                <li>Драка длится до тех пор, пока не решат бойцы.</li>
+                <li>Если ты новичок — ты должен драться.</li>
+            </ul>
+            <button class="club-btn-join" id="clubJoin">СТАТЬ ЧАСТЬЮ КЛУБА</button>
+        `;
+        document.getElementById('clubJoin').addEventListener('click', () => startHotlineMiami());
+    }
+
+    function startHotlineMiami() {
+        clubModal.classList.remove('active');
+        bloodOverlay.innerHTML = '';
+        bloodOverlay.classList.add('active');
+        for (let i = 0; i < 20; i++) {
+            const splat = document.createElement('div');
+            splat.className = 'blood-splat';
+            const size = 80 + Math.random() * 300;
+            splat.style.width = size + 'px'; splat.style.height = size + 'px';
+            splat.style.left = (Math.random() * 100) + '%';
+            splat.style.top = (Math.random() * 100) + '%';
+            splat.style.animationDelay = (Math.random() * 0.8) + 's';
+            bloodOverlay.appendChild(splat);
+        }
+        const bloodText = document.createElement('div');
+        bloodText.className = 'blood-text';
+        bloodText.innerHTML = 'ДОБРО<br>ПОЖАЛОВАТЬ<br>В КЛУБ';
+        bloodOverlay.appendChild(bloodText);
+        setTimeout(() => {
+            bloodOverlay.classList.remove('active');
+            bloodOverlay.innerHTML = '';
+            startDialogs();
+        }, 3400);
+    }
+
+    const dialogs = [
+        { speaker:'БАРМЕН', msg:'Ты уверен, что хочешь туда войти, парень?' },
+        { speaker:'ГОСТЬ', msg:'Да. Я готов.' },
+        { speaker:'БАРМЕН', msg:'Хорошо. Тогда запомни: то, что здесь происходит — остаётся здесь.' },
+        { speaker:'СИСТЕМА', msg:'Регистрация участника клуба... подтверждено.' },
+        { speaker:'СИСТЕМА', msg:'Доступ к закрытым событиям открыт. Добро пожаловать в семью.' }
+    ];
+
+    function startDialogs() {
+        let idx = 0;
+        dialogOverlay.classList.add('active');
+        const speakerEl = document.getElementById('dialogSpeaker');
+        const msgEl = document.getElementById('dialogMsg');
+        function showNext() {
+            if (idx >= dialogs.length) {
+                dialogOverlay.classList.remove('active');
+                completeClubRegistration();
+                return;
+            }
+            speakerEl.textContent = '// ' + dialogs[idx].speaker;
+            msgEl.textContent = dialogs[idx].msg;
+            idx++;
+            setTimeout(showNext, 2200);
+        }
+        showNext();
+    }
+
+    function completeClubRegistration() {
+        if (currentUser) {
+            currentUser.clubMember = true;
+            saveUser();
+            rebuildNodes();
+            showToast('🩸 ДОБРО ПОЖАЛОВАТЬ В КЛУБ', '#ff5f5f');
+        } else {
+            localStorage.setItem('clubPending', '1');
+            showToast('🩸 Войди в кабинет для активации клуба', '#ff5f5f');
+        }
+    }
+
+    // ===== КАБИНЕТ =====
+    const overlay = document.getElementById('cabinetOverlay');
+    const cabinetTrigger = document.getElementById('cabinetTrigger');
+    const cabinetClose = document.getElementById('cabinetClose');
+    const mainContent = document.getElementById('mainContent');
+    const canvas = document.getElementById('networkCanvas');
+    const ctx = canvas.getContext('2d');
+    const nodesContainer = document.getElementById('networkNodes');
+    const authForm = document.getElementById('authForm');
+    const sidePanel = document.getElementById('sidePanel');
+    const panelTitle = document.getElementById('panelTitle');
+    const panelBody = document.getElementById('panelBody');
+    const panelClose = document.getElementById('panelClose');
+    const cabinetUserLabel = document.getElementById('cabinetUserLabel');
+
+    let currentUser = null;
+    let activeNode = null;
+    let animationId = null;
+    let dashOffset = 0;
+    let spinning = false;
+    let currentTier = 100;
+    let currentCurrency = 'rub';
+
+    // КУРСЫ
+    const GRN_USDT_RATE = 1;      // 1 GREENCOIN = 1 USDT
+    const USDT_RUB_RATE = 92;      // мок-курс USDT/RUB
+    const BNB_USDT_RATE = 570;     // 1 BNB ≈ 570 USDT
+    const COMMISSION = 7.5;        // 7.5%
+    const STEAM_MARKET_FEE = 0.87; // Steam держит ~13% при продаже, робот ориентируется на реальную цену площадки
+
+    const BASE_PRIZES = [
+        { id:'shots',   name:'СЕТ ШОТОВ',    icon:'🥃', weight:5,  color:'#c41f1f' },
+        { id:'hookah',  name:'КАЛЬЯН',       icon:'💨', weight:1,  color:'#c46a1f' },
+        { id:'b1',      name:'10 БОНУСОВ',   icon:'🎯', weight:60, color:'#1f7a3a', bonus:10 },
+        { id:'b2',      name:'20 БОНУСОВ',   icon:'🎯', weight:50, color:'#1f6a5a', bonus:20 },
+        { id:'b3',      name:'50 БОНУСОВ',   icon:'🎯', weight:30, color:'#1f4a9a', bonus:50 },
+        { id:'b4',      name:'100 БОНУСОВ',  icon:'💎', weight:10, color:'#7a1f9a', bonus:100 },
+        { id:'redbull', name:'RED BULL 0.25',icon:'🥤', weight:8,  color:'#1f2a9a' },
+        { id:'coffee',  name:'АМЕРИКАНО',    icon:'☕', weight:10, color:'#5a3a1f' },
+    ];
+    const TOTAL_WEIGHT = BASE_PRIZES.reduce((s,p) => s + p.weight, 0);
+
+    function getPrizesForMult(mult) {
+        return BASE_PRIZES.map(p => {
+            if (p.bonus) return { ...p, name: `${p.bonus * mult} БОНУСОВ`, bonus: p.bonus * mult };
+            if (p.id === 'shots') return { ...p, name: mult > 1 ? `${mult}× СЕТ ШОТОВ` : 'СЕТ ШОТОВ' };
+            if (p.id === 'hookah') return { ...p, name: mult > 1 ? 'КАЛЬЯН ПРЕМИУМ' : 'КАЛЬЯН' };
+            if (p.id === 'redbull') return { ...p, name: mult > 1 ? `${mult}× RED BULL` : 'RED BULL 0.25' };
+            if (p.id === 'coffee') return { ...p, name: mult > 1 ? `${mult}× АМЕРИКАНО` : 'АМЕРИКАНО' };
+            return { ...p };
+        });
+    }
+
+    // STEAM ИНВЕНТАРЬ — цены в USD (актуальная рыночная стоимость)
+    const MOCK_STEAM_INVENTORY = [
+        { id:'ak_redline',    name:'AK-47 | Redline',              wear:'Field-Tested', usd:15.50,  icon:'🔫', rarity:'Засекреченное', rarityColor:'#eb4b4b' },
+        { id:'awp_wildfire',  name:'AWP | Wildfire',               wear:'Minimal Wear', usd:95.00,  icon:'🎯', rarity:'Тайное',         rarityColor:'#eb4b4b' },
+        { id:'m4_neo',        name:'M4A4 | Neo-Noir',              wear:'Factory New',  usd:28.40,  icon:'🔫', rarity:'Тайное',         rarityColor:'#eb4b4b' },
+        { id:'karambit_dopp', name:'★ Karambit | Doppler',         wear:'Factory New',  usd:950.00, icon:'🗡', rarity:'★ Особое',        rarityColor:'#8650ac' },
+        { id:'usp_kill',      name:'USP-S | Kill Confirmed',       wear:'Field-Tested', usd:42.10,  icon:'🔫', rarity:'Тайное',         rarityColor:'#eb4b4b' },
+        { id:'glock_fade',    name:'Glock-18 | Fade',              wear:'Factory New',  usd:480.00, icon:'🔫', rarity:'Запрещённое',    rarityColor:'#8847ff' },
+        { id:'butterfly_sl',  name:'★ Butterfly Knife | Slaughter',wear:'Minimal Wear', usd:1400.00,icon:'🗡', rarity:'★ Особое',        rarityColor:'#8650ac' },
+        { id:'deagle_print',  name:'Desert Eagle | Printstream',   wear:'Minimal Wear', usd:65.80,  icon:'🔫', rarity:'Тайное',         rarityColor:'#eb4b4b' },
+        { id:'ak_firesnak',   name:'AK-47 | Fire Serpent',         wear:'Field-Tested', usd:750.00, icon:'🔫', rarity:'Тайное',         rarityColor:'#eb4b4b' },
+        { id:'m4a1_print',    name:'M4A1-S | Printstream',         wear:'Factory New',  usd:115.00, icon:'🔫', rarity:'Тайное',         rarityColor:'#eb4b4b' },
+    ];
+
+    const BASE_NODES = [
+        { id:'wallet',   icon:'💰', label:'КОШЕЛЕК',   sub:'USDT · GRN',    x:50,   y:12 },
+        { id:'bonus',    icon:'🎯', label:'БОНУСЫ',    sub:'SABY CRM',      x:74,   y:21 },
+        { id:'map',      icon:'🍸', label:'КАРТА',     sub:'коктейлей',     x:87,   y:43 },
+        { id:'builder',  icon:'⚡', label:'СОБРАТЬ',   sub:'коктейль',      x:83,   y:69 },
+        { id:'calendar', icon:'📅', label:'КАЛЕНДАРЬ', sub:'событий',       x:63,   y:86 },
+        { id:'player',   icon:'🎧', label:'ПЛЕЕР',     sub:'bandcamp',      x:37,   y:86 },
+        { id:'roulette', icon:'🎰', label:'РУЛЕТКА',   sub:'₽ · GRN',       x:17,   y:69 },
+        { id:'secret',   icon:'🔑', label:'СЕКРЕТ',    sub:'промокоды',     x:13,   y:43 },
+        { id:'promo',    icon:'🎁', label:'ПРОМО',     sub:'акции',         x:26,   y:21 },
+    ];
+    const CLUB_NODE = { id:'club_events', icon:'🩸', label:'КЛУБ', sub:'участники', x:50, y:88 };
+    let NODES = [...BASE_NODES];
+    const CENTER = { id:'profile', icon:'👤', label:'ВАШИ ДАННЫЕ', sub:'центр', x:50, y:50 };
+
+    function openCabinet() {
+        overlay.classList.add('active');
+        mainContent.classList.add('hidden');
+        document.body.style.overflow = 'hidden';
+        const saved = localStorage.getItem('greenNoiseUser');
+        if (saved) {
+            currentUser = JSON.parse(saved);
+            if (currentUser.usdt === undefined) currentUser.usdt = 0;
+            if (currentUser.grn === undefined) currentUser.grn = 0;
+            if (!currentUser.wins) currentUser.wins = [];
+            if (!currentUser.steamInventory) currentUser.steamInventory = [];
+            if (localStorage.getItem('clubPending') === '1' && !currentUser.clubMember) {
+                currentUser.clubMember = true;
+                localStorage.removeItem('clubPending');
+                saveUser();
+                setTimeout(() => showToast('🩸 Клуб активирован!', '#ff5f5f'), 800);
+            }
+            cabinetUserLabel.textContent = `// ${currentUser.login.toUpperCase()}`;
+            authForm.style.display = 'none';
+            nodesContainer.style.display = 'block';
+            rebuildNodes();
+            resizeCanvas();
+            startAnimation();
+        } else {
+            authForm.style.display = 'block';
+            nodesContainer.style.display = 'none';
+            sidePanel.classList.remove('open');
+            cabinetUserLabel.textContent = '— НЕ АВТОРИЗОВАН —';
+        }
+    }
+    function closeCabinet() {
+        overlay.classList.remove('active');
+        mainContent.classList.remove('hidden');
+        document.body.style.overflow = '';
+        sidePanel.classList.remove('open');
+        if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+    }
+    cabinetTrigger.addEventListener('click', openCabinet);
+    cabinetClose.addEventListener('click', closeCabinet);
+    panelClose.addEventListener('click', function() {
+        sidePanel.classList.remove('open');
+        if (activeNode) activeNode.classList.remove('active');
+        activeNode = null;
+    });
+
+    // AUTH
+    let isLogin = true;
+    const authTitle = document.getElementById('authTitle');
+    const authLogin = document.getElementById('authLogin');
+    const authPassword = document.getElementById('authPassword');
+    const authPassword2 = document.getElementById('authPassword2');
+    const authExtra = document.getElementById('authExtra');
+    const authSubmit = document.getElementById('authSubmit');
+    const authSwitch = document.getElementById('authSwitch');
+    const authError = document.getElementById('authError');
+
+    authSwitch.addEventListener('click', function() {
+        isLogin = !isLogin;
+        if (isLogin) {
+            authTitle.textContent = 'ВХОД'; authExtra.style.display = 'none';
+            authSubmit.textContent = 'ВОЙТИ';
+            authSwitch.textContent = 'Нет аккаунта? Зарегистрироваться';
+        } else {
+            authTitle.textContent = 'РЕГИСТРАЦИЯ'; authExtra.style.display = 'block';
+            authSubmit.textContent = 'ЗАРЕГИСТРИРОВАТЬСЯ';
+            authSwitch.textContent = 'Уже есть аккаунт? Войти';
+        }
+        authError.textContent = '';
+    });
+
+    function loginAs(login, userData) {
+        if (!userData.testBonusGiven) {
+            userData.usdt = (userData.usdt || 0) + 1000;
+            userData.testBonusGiven = true;
+            const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
+            if (users[login]) {
+                users[login].usdt = userData.usdt;
+                users[login].testBonusGiven = true;
+                localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
+            }
+            setTimeout(() => showToast('🎁 +1000 ₮ · тестовый бонус', '#8aff8a'), 400);
+        }
+        currentUser = {
+            login, bonus: userData.bonus || 0, usdt: userData.usdt || 0, grn: userData.grn || 0,
+            promoUsed: userData.promoUsed || false, wins: userData.wins || [],
+            testBonusGiven: userData.testBonusGiven || false,
+            steamLinked: userData.steamLinked || false,
+            steamInventory: userData.steamInventory || [],
+            steamTradeLink: userData.steamTradeLink || '',
+            clubMember: userData.clubMember || false,
+            metaMaskAddress: userData.metaMaskAddress || ''
+        };
+        if (localStorage.getItem('clubPending') === '1' && !currentUser.clubMember) {
+            currentUser.clubMember = true;
+            localStorage.removeItem('clubPending');
+        }
+        saveUser();
+        cabinetUserLabel.textContent = `// ${login.toUpperCase()}`;
+        authForm.style.display = 'none';
+        nodesContainer.style.display = 'block';
+        rebuildNodes();
+        resizeCanvas();
+        startAnimation();
+    }
+
+    function doAuth() {
+        const login = authLogin.value.trim();
+        const pass = authPassword.value.trim();
+        if (!login || !pass) { authError.textContent = 'Заполните все поля'; return; }
+        try {
+            const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
+            if (!isLogin) {
+                if (pass !== authPassword2.value.trim()) { authError.textContent = 'Пароли не совпадают'; return; }
+                if (users[login]) { authError.textContent = 'Логин занят'; return; }
+                users[login] = { password:pass, bonus:0, usdt:0, grn:0, promoUsed:false, wins:[], clubMember:false };
+                localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
+                loginAs(login, users[login]);
+            } else {
+                if (!users[login] || users[login].password !== pass) {
+                    authError.textContent = 'Неверный логин или пароль'; return;
+                }
+                loginAs(login, users[login]);
+            }
+        } catch(e) { console.error(e); authError.textContent = 'Ошибка: см. консоль'; }
+    }
+    authSubmit.addEventListener('click', doAuth);
+    [authLogin, authPassword, authPassword2].forEach(el =>
+        el.addEventListener('keydown', e => { if (e.key === 'Enter') doAuth(); })
+    );
+
+    document.querySelectorAll('.social-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const provider = this.dataset.provider;
+            const providerName = { tg:'Telegram', steam:'Steam', google:'Google' }[provider];
+            showToast(`⏳ Подключение к ${providerName}...`, '#5fdf5f');
+            setTimeout(() => {
+                const login = `${provider}_guest`;
+                const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
+                if (!users[login]) {
+                    users[login] = { password:'social_'+Date.now(), bonus:50, usdt:100, grn:0, promoUsed:false, wins:[], clubMember:false };
+                    localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
+                }
+                loginAs(login, users[login]);
+                showToast(`✅ Вход через ${providerName}`, '#8aff8a');
+            }, 1400);
+        });
+    });
+
+    function rebuildNodes() {
+        NODES = [...BASE_NODES];
+        if (currentUser && currentUser.clubMember) NODES.push(CLUB_NODE);
+        buildNodes();
+    }
+
+    function buildNodes() {
+        nodesContainer.innerHTML = '';
+        const centerEl = document.createElement('div');
+        centerEl.className = 'node node-center';
+        centerEl.style.left = CENTER.x + '%';
+        centerEl.style.top = CENTER.y + '%';
+        centerEl.dataset.node = CENTER.id;
+        centerEl.innerHTML = `<div class="node-icon">${CENTER.icon}</div><div class="node-label">${CENTER.label}</div><div class="node-sub">// ${currentUser.login}</div>`;
+        centerEl.addEventListener('click', () => openPanel(CENTER));
+        nodesContainer.appendChild(centerEl);
+
+        NODES.forEach(n => {
+            const el = document.createElement('div');
+            el.className = 'node' + (n.id === 'club_events' ? ' node-club' : '');
+            el.style.left = n.x + '%';
+            el.style.top = n.y + '%';
+            el.dataset.node = n.id;
+            el.innerHTML = `<div class="node-icon">${n.icon}</div><div class="node-label">${n.label}</div><div class="node-sub">${n.sub}</div>`;
+            el.addEventListener('click', () => openPanel(n));
+            nodesContainer.appendChild(el);
+        });
+    }
+
+    function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width; canvas.height = rect.height;
+    }
+    window.addEventListener('resize', () => { if (overlay.classList.contains('active')) resizeCanvas(); });
+
+    function drawLines() {
+        const w = canvas.width, h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        const cx = w * CENTER.x / 100, cy = h * CENTER.y / 100;
+        NODES.forEach((n, idx) => {
+            const x = w * n.x / 100, y = h * n.y / 100;
+            const isClub = n.id === 'club_events';
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y);
+            ctx.strokeStyle = isClub ? 'rgba(220, 60, 60, 0.25)' : 'rgba(90, 220, 90, 0.18)';
+            ctx.lineWidth = 1; ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y);
+            ctx.strokeStyle = isClub ? 'rgba(255, 100, 100, 0.7)' : 'rgba(120, 255, 120, 0.6)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 12]); ctx.lineDashOffset = -dashOffset; ctx.stroke(); ctx.setLineDash([]);
+            const t = (Date.now() / 2000 + idx / NODES.length) % 1;
+            const px = cx + (x - cx) * t, py = cy + (y - cy) * t;
+            ctx.beginPath(); ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = isClub ? 'rgba(255, 150, 150, 0.9)' : 'rgba(180, 255, 180, 0.9)';
+            ctx.shadowColor = isClub ? '#ff5f5f' : '#5fdf5f'; ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0;
+        });
+    }
+
+    function startAnimation() {
+        if (animationId) cancelAnimationFrame(animationId);
+        function loop() {
+            dashOffset += 0.4; if (dashOffset > 1000) dashOffset = 0;
+            drawLines();
+            animationId = requestAnimationFrame(loop);
+        }
+        loop();
+    }
+
+    function openPanel(node) {
+        document.querySelectorAll('.node').forEach(n => n.classList.remove('active'));
+        const el = document.querySelector(`.node[data-node="${node.id}"]`);
+        if (el) el.classList.add('active');
+        activeNode = el;
+        panelTitle.textContent = node.icon + ' ' + node.label;
+        panelBody.innerHTML = getPanelContent(node.id);
+        panelBody.style.animation = 'none';
+        void panelBody.offsetWidth;
+        panelBody.style.animation = 'fadeSlideIn 0.45s ease';
+        sidePanel.classList.add('open');
+        setTimeout(() => attachPanelHandlers(node.id), 50);
+    }
+
+    function getPanelContent(id) {
+        switch (id) {
+            case 'profile':
+                return `
+                    <div class="id-card">
+                        <div class="id-label">// ПЕРСОНАЛЬНЫЙ ID</div>
+                        <div class="id-value">${getPersonalId(currentUser.login)}</div>
+                    </div>
+                    ${currentUser.clubMember ? '<div class="club-badge">🩸 УЧАСТНИК КЛУБА</div>' : ''}
+                    <div class="panel-section"><div class="panel-label">// Логин</div><div class="panel-value">${currentUser.login}</div></div>
+                    <div class="panel-section"><div class="panel-label">// Бонусный баланс</div><div class="panel-value panel-value-big">${currentUser.bonus}</div></div>
+                    <div class="panel-section"><div class="panel-label">// USDT баланс</div><div class="panel-value panel-value-big">${(currentUser.usdt||0).toFixed(2)}</div></div>
+                    <div class="panel-section"><div class="panel-label">// GREENCOIN</div><div class="panel-value panel-value-big">${(currentUser.grn||0).toFixed(2)} GRN</div></div>
+                    ${currentUser.metaMaskAddress ? `<div class="panel-section"><div class="panel-label">// MetaMask</div><div class="panel-value" style="font-family:monospace;font-size:0.75rem;color:#8aff8a;">${currentUser.metaMaskAddress.slice(0,10)}...${currentUser.metaMaskAddress.slice(-6)}</div></div>` : ''}
+                    <div class="panel-note">Выход из аккаунта не предусмотрен. Ты здесь навсегда. 🩸</div>
+                `;
+
+            case 'club_events':
+                return `
+                    <div class="club-badge">🩸 ТОЛЬКО ДЛЯ УЧАСТНИКОВ</div>
+                    <div class="panel-section"><div class="panel-label">// СОБЫТИЯ УЧАСТНИКОВ КЛУБА</div></div>
+                    <div class="club-events-list">
+                        <div class="club-event-card">
+                            <h4>ПОДВАЛЬНЫЙ ТУРНИР</h4>
+                            <p>Закрытая встреча. 3 этаж, вход через чёрный ход. Только для своих.</p>
+                            <div class="date">12.10 · 23:00</div>
+                        </div>
+                        <div class="club-event-card">
+                            <h4>НОЧЬ МОЛЧАНИЯ</h4>
+                            <p>Без света. Без музыки. Только ты и твои мысли. Дресс-код: черное.</p>
+                            <div class="date">19.10 · 02:00</div>
+                        </div>
+                        <div class="club-event-card">
+                            <h4>СЛЕПАЯ ДЕГУСТАЦИЯ</h4>
+                            <p>10 неизвестных напитков. Угадаешь состав — забираешь бутылку.</p>
+                            <div class="date">26.10 · 21:00</div>
+                        </div>
+                        <div class="club-event-card">
+                            <h4>ЗАКРЫТЫЙ СЕТ PAVEL LAZAREV</h4>
+                            <p>Живой сет для участников клуба. Присутствие строго по списку.</p>
+                            <div class="date">02.11 · 22:30</div>
+                        </div>
+                    </div>
+                    <div class="panel-note" style="border-left-color:#7a2a2a;color:#c88a8a;">
+                        Эти события не отображаются в публичном календаре. Никому не рассказывай.
+                    </div>
+                `;
+
+            case 'wallet':
+                return `
+                    <div class="panel-tabs">
+                        <button class="tab active" data-tab="balance">💰 БАЛАНС</button>
+                        <button class="tab" data-tab="topup">🏦 СБП</button>
+                        <button class="tab" data-tab="crypto">₿ КРИПТА</button>
+                        <button class="tab" data-tab="skins">🎮 СКИНЫ</button>
+                        <button class="tab" data-tab="token">🟢 GRN</button>
+                    </div>
+
+                    <div class="tab-content active" data-content="balance">
+                        <div class="balance-card">
+                            <div class="panel-label">// USDT БАЛАНС</div>
+                            <div class="panel-value panel-value-big"><span class="token-icon">₮</span><span id="balDisplay">${(currentUser.usdt||0).toFixed(2)}</span></div>
+                        </div>
+                        <div class="balance-card" style="background:linear-gradient(135deg, rgba(30,90,30,0.5), rgba(5,20,5,0.9));">
+                            <div class="panel-label">// GREENCOIN</div>
+                            <div class="panel-value panel-value-big"><span class="green-token-icon">G</span><span id="grnDisplay">${(currentUser.grn||0).toFixed(2)}</span> <span style="font-size:0.6rem;color:#5f8f5f;">GRN</span></div>
+                            <div style="color:#5f8f5f;font-size:0.7rem;margin-top:6px;">1 GREENCOIN = 1 USDT</div>
+                        </div>
+                        <div class="panel-note">GREENCOIN — внутренняя валюта платформы. Курс 1:1 к USDT.</div>
+                    </div>
+
+                    <div class="tab-content" data-content="topup">
+                        <div class="panel-label">// ПОПОЛНЕНИЕ ЧЕРЕЗ СБП</div>
+                        <p style="font-size:0.75rem;color:#8aaa8a;margin-bottom:12px;line-height:1.6;">
+                            Оплата рублями → зачисление GREENCOIN на кошелёк.<br>
+                            Курс USDT/RUB: <strong style="color:#8aff8a;" id="usdtRubRate">${USDT_RUB_RATE} ₽</strong> · Комиссия: <strong style="color:#df9f4f;">${COMMISSION}%</strong>
+                        </p>
+                        <input type="number" class="panel-input" id="sbpRubAmount" placeholder="Сумма в ₽" min="100" step="100" />
+                        <div style="display:flex;gap:8px;margin-bottom:8px;">
+                            <button class="panel-btn" data-rub="500" style="flex:1;margin:0;">500 ₽</button>
+                            <button class="panel-btn" data-rub="1000" style="flex:1;margin:0;">1000 ₽</button>
+                            <button class="panel-btn" data-rub="2000" style="flex:1;margin:0;">2000 ₽</button>
+                        </div>
+                        <div id="sbpCalc" style="font-size:0.78rem;color:#5f8f5f;margin-bottom:10px;padding:10px;
+                             background:#050a05;border:1px solid #2a5a2a;min-height:1.2em;border-radius:3px;">
+                            Введите сумму для расчёта
+                        </div>
+                        <button class="panel-btn" id="sbpGenerateBtn">📱 СГЕНЕРИРОВАТЬ QR ДЛЯ ОПЛАТЫ</button>
+                        <div id="sbpQr"></div>
+                        <div id="sbpStatus" style="font-size:0.8rem;margin-top:8px;min-height:1.2em;"></div>
+                        <div class="panel-note">
+                            <strong>Как это работает:</strong><br>
+                            1. Вы вводите сумму в ₽ и жмёте «Сгенерировать QR»<br>
+                            2. Сканируете QR в мобильном банке (Т-Банк, Сбер, Альфа и др.)<br>
+                            3. Деньги приходят на наш счёт в Т-Банке<br>
+                            4. Система автоматически покупает USDT и минтит GREENCOIN<br>
+                            <br>
+                            Робот использует рыночный курс USDT/RUB (обновляется каждые 15 мин).
+                        </div>
+                    </div>
+
+                    <div class="tab-content" data-content="crypto">
+                        <div class="panel-label">// ВЫБЕРИТЕ ВАЛЮТУ</div>
+                        <div class="crypto-list">
+                            <div class="crypto-option active" data-coin="usdt_trc"><span class="coin">₮ USDT</span><span class="coin-sub">TRC-20</span></div>
+                            <div class="crypto-option" data-coin="usdt_erc"><span class="coin">₮ USDT</span><span class="coin-sub">ERC-20</span></div>
+                            <div class="crypto-option" data-coin="btc"><span class="coin">₿ BTC</span><span class="coin-sub">Bitcoin</span></div>
+                            <div class="crypto-option" data-coin="eth"><span class="coin">Ξ ETH</span><span class="coin-sub">Ethereum</span></div>
+                            <div class="crypto-option" data-coin="ton"><span class="coin">💎 TON</span><span class="coin-sub">Toncoin</span></div>
+                        </div>
+                        <div class="crypto-details" id="cryptoDetails"></div>
+                        <input type="number" class="panel-input" id="cryptoAmount" placeholder="Сумма в USDT" min="1" step="1" />
+                        <button class="panel-btn" id="cryptoCheckBtn">✓ Я ОТПРАВИЛ ПЛАТЁЖ</button>
+                        <div id="cryptoStatus" style="font-size:0.8rem;margin-top:8px;min-height:1.2em;"></div>
+                    </div>
+
+                    <div class="tab-content" data-content="skins">
+                        <div class="panel-label">// STEAM ИНВЕНТАРЬ → GREENCOIN</div>
+
+                        <div class="steam-connect-box ${currentUser.steamLinked?'connected':''}" id="steamConnectBox">
+                            <div class="steam-status ${currentUser.steamLinked?'':'off'}" id="steamStatus">
+                                ${currentUser.steamLinked ? '✓ STEAM ПОДКЛЮЧЁН' : '◯ STEAM НЕ ПОДКЛЮЧЁН'}
+                            </div>
+                            ${currentUser.steamLinked ? 
+                                `<button class="panel-btn secondary" id="steamRefreshBtn">↻ ОБНОВИТЬ ИНВЕНТАРЬ</button>
+                                 <button class="panel-btn secondary" id="steamDisconnectBtn" style="border-color:#7a2a2a;color:#df9f9f;">✕ ОТКЛЮЧИТЬ STEAM</button>` :
+                                `<input type="text" class="panel-input" id="steamIdInput" placeholder="SteamID64 или ссылка на профиль" />
+                                 <button class="panel-btn" id="steamConnectBtn">⚙ ПОДКЛЮЧИТЬ STEAM</button>`
+                            }
+                        </div>
+
+                        <div id="steamInvWrapper" style="display:${currentUser.steamLinked?'block':'none'};">
+                            <div class="panel-label">// ВЫБЕРИТЕ СКИНЫ ДЛЯ ПРИЁМА</div>
+                            <div class="steam-inventory" id="steamInvList"></div>
+
+                            <div class="commission-box" id="commissionBox" style="display:none;">
+                                <div class="commission-row"><span>Оценка скинов (рынок)</span><span id="commTotal">0 $</span></div>
+                                <div class="commission-row"><span>Комиссия платформы</span><span class="fee" id="commFee">− ${COMMISSION}%</span></div>
+                                <div class="commission-row total"><span>К зачислению (GREENCOIN)</span><span id="commNet">0 GRN</span></div>
+                                <div style="font-size:0.68rem;color:#5f8f5f;margin-top:8px;">
+                                    Курс: 1 USD = 1 USDT = 1 GREENCOIN
+                                </div>
+                            </div>
+
+                            <div class="trade-link-box">
+                                <div class="panel-label">// ССЫЛКА НА ОБМЕН (TRADE LINK)</div>
+                                <input type="text" class="panel-input" id="tradeLinkInput" placeholder="https://steamcommunity.com/tradeoffer/new/?partner=..." value="${currentUser.steamTradeLink || ''}" />
+                                <div style="font-size:0.65rem;color:#5f8f5f;margin-top:-6px;">
+                                    Робот-приёмщик отправит оффер на ваш Steam-аккаунт.
+                                </div>
+                            </div>
+
+                            <button class="panel-btn" id="skinPayBtn" disabled>🤖 ОТПРАВИТЬ СКИНЫ РОБОТУ</button>
+                            <div id="skinStatus" style="font-size:0.8rem;margin-top:8px;min-height:1.2em;"></div>
+
+                            <div class="panel-note">
+                                <strong>Как работает робот-приёмщик:</strong><br>
+                                1. Вы выбираете скины и жмёте «Отправить»<br>
+                                2. Робот отправляет трейд-оффер на ваш Steam<br>
+                                3. Вы подтверждаете обмен в Steam Guard<br>
+                                4. Трекер принимает скин и запрашивает цену у оракула (Pricempire)<br>
+                                5. По курсу USD → USDT → GREENCOIN (с комиссией ${COMMISSION}%)<br>
+                                   на кошелёк зачисляются GREENCOIN
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" data-content="token">
+                        <div class="balance-card" style="background:linear-gradient(135deg, rgba(30,110,30,0.5), rgba(5,25,5,0.9));">
+                            <div class="panel-label">// GREENCOIN</div>
+                            <div class="panel-value panel-value-big"><span class="green-token-icon">G</span><span id="grnDisplay2">${(currentUser.grn||0).toFixed(2)}</span> <span style="font-size:0.6rem;color:#5f8f5f;">GRN</span></div>
+                            <div style="color:#5f8f5f;font-size:0.72rem;margin-top:8px;">1 GRN = 1 USDT</div>
+                        </div>
+                        <div class="panel-label">// КУПИТЬ GREENCOIN ЗА BNB</div>
+                        <div style="background:#0a140a;border:1px solid #2a5a2a;padding:12px;margin-bottom:12px;border-radius:3px;">
+                            <div style="font-size:0.75rem;color:#8aaa8a;line-height:1.7;">
+                                Сеть: <strong style="color:#8aff8a;">BNB Smart Chain (BEP-20)</strong><br>
+                                Контракт GREENCOIN: <span style="color:#5f8f5f;font-family:monospace;">0xGREEN...SHUM</span><br>
+                                MetaMask: <span style="color:#8aff8a;font-family:monospace;" id="mmAddress">${currentUser.metaMaskAddress ? currentUser.metaMaskAddress.slice(0,10)+'...'+currentUser.metaMaskAddress.slice(-6) : 'не подключён'}</span>
+                            </div>
+                        </div>
+                        <button class="panel-btn secondary" id="connectMetaMaskBtn">🦊 ${currentUser.metaMaskAddress ? 'ОБНОВИТЬ АДРЕС' : 'ПОДКЛЮЧИТЬ METAMASK'}</button>
+                        <input type="number" class="panel-input" id="grnBnbAmount" placeholder="Сумма в BNB" min="0.0001" step="0.0001" />
+                        <div style="display:flex;gap:8px;margin-bottom:8px;">
+                            <button class="panel-btn" data-bnb="0.001" style="flex:1;margin:0;">0.001</button>
+                            <button class="panel-btn" data-bnb="0.005" style="flex:1;margin:0;">0.005</button>
+                            <button class="panel-btn" data-bnb="0.01" style="flex:1;margin:0;">0.01</button>
+                            <button class="panel-btn" data-bnb="0.05" style="flex:1;margin:0;">0.05</button>
+                        </div>
+                        <div id="grnCalc" style="font-size:0.78rem;color:#5f8f5f;margin-bottom:10px;padding:10px;background:#050a05;border:1px solid #2a5a2a;min-height:1.2em;border-radius:3px;">
+                            Получите: <strong style="color:#8aff8a;">0.00 GRN</strong>
+                        </div>
+                        <button class="panel-btn" id="grnBuyBtn">🟢 КУПИТЬ GREENCOIN ЗА BNB</button>
+                        <div id="grnStatus" style="font-size:0.8rem;margin-top:8px;min-height:1.2em;"></div>
+                    </div>
+                `;
+
+            case 'bonus':
+                const bonusCard = `#${currentUser.login.toUpperCase().slice(0,6)}-${String(1000 + (currentUser.login.length * 137) % 9000).padStart(4,'0')}`;
+                return `
+                    <div class="saby-panel">
+                        <div class="saby-logo">📊 SABY CRM</div>
+                        <div class="saby-status">
+                            <span class="saby-dot" id="sabyDot"></span>
+                            <span id="sabyStatusText">Синхронизация в разработке...</span>
+                        </div>
+                        <div class="saby-info">Ваши бонусы будут автоматически подтягиваться из <strong>SABY</strong>.</div>
+                    </div>
+                    <div class="balance-card">
+                        <div class="panel-label">// БОНУСНЫЙ БАЛАНС</div>
+                        <div class="panel-value panel-value-big">${currentUser.bonus} 🎯</div>
+                    </div>
+                    <div class="panel-section"><div class="panel-label">// БОНУСНАЯ КАРТА</div><div class="panel-value" style="font-family:'Press Start 2P',monospace;font-size:0.8rem;color:#8aff8a;">${bonusCard}</div></div>
+                    <button class="panel-btn secondary" id="sabySyncBtn">↻ СИНХРОНИЗИРОВАТЬ С SABY</button>
+                    <div id="sabySyncStatus" style="font-size:0.78rem;margin-top:8px;color:#5f8f5f;"></div>
+                `;
+
+            case 'roulette':
+                return `
+                    <div class="panel-label" style="text-align:center;">// ЛЕНТОЧНАЯ РУЛЕТКА</div>
+                    <div class="currency-toggle">
+                        <button class="currency-btn active" data-currency="rub"><span class="cur-icon">₽</span>РУБЛИ</button>
+                        <button class="currency-btn" data-currency="grn"><span class="cur-icon">🟢</span>GREEN</button>
+                    </div>
+                    <div class="roulette-tiers" id="rouletteTiers"></div>
+                    <div class="tape-wrapper">
+                        <div class="tape-pointer"></div>
+                        <div class="tape-viewport" id="tapeViewport">
+                            <div class="tape-strip" id="tapeStrip"></div>
+                        </div>
+                    </div>
+                    <button class="panel-btn spin-btn" id="spinBtn" style="background:linear-gradient(135deg,#1a3a1a,#2a5a2a);border-color:#5fdf5f;font-weight:bold;letter-spacing:2px;">🎰 КРУТИТЬ ЗА 100 ₽</button>
+                    <div id="spinResult"></div>
+                    <div class="panel-section" style="margin-top:18px;">
+                        <div class="panel-label">// ПРИЗЫ</div>
+                        <div class="prize-list">
+                            ${BASE_PRIZES.map(p => `
+                                <div class="prize-row">
+                                    <span class="pname">${p.icon} ${p.name}</span>
+                                    <span class="pchance">${(p.weight / TOTAL_WEIGHT * 100).toFixed(1)}%</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+
+            case 'map':
+                return `
+                    <div class="panel-section"><div class="panel-label">🍸 КЛАССИКА</div><div class="panel-value">Негрони · Мартини · Олд Фэшн</div></div>
+                    <div class="panel-section"><div class="panel-label">🌿 АВТОРСКИЕ</div><div class="panel-value">Зелёный Шум · Кибер-мохито · Неоновый всполох</div></div>
+                    <div class="panel-section"><div class="panel-label">⚡ СЕЗОННЫЕ</div><div class="panel-value">Тыквенный эль · Ледяной туман</div></div>
+                `;
+
+            case 'builder':
+                return `
+                    <div class="panel-label">// СОБЕРИ СВОЙ КОКТЕЙЛЬ</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;">
+                        ${['джин','текила','ром','водка','ликёр','тоник'].map(i =>
+                            `<button class="ingr-btn" data-ing="${i}" style="background:#0f1a0f;border:1px solid #2a5a2a;color:#9adf9a;padding:6px 12px;font-family:'Share Tech Mono',monospace;cursor:pointer;font-size:0.75rem;border-radius:3px;transition:0.2s;">${i}</button>`
+                        ).join('')}
+                    </div>
+                    <button class="panel-btn" id="buildMix">⚡ СМЕШАТЬ</button>
+                    <div id="buildResult" style="margin-top:10px;color:#8aff8a;font-size:0.9rem;"></div>
+                `;
+
+            case 'calendar':
+                return `
+                    <div class="panel-label">// БЛИЖАЙШИЕ СОБЫТИЯ</div>
+                    <div class="panel-section" style="margin-top:12px;"><div class="panel-value">📅 12.09 — Неоновая ночь</div></div>
+                    <div class="panel-section"><div class="panel-value">📅 19.09 — Кибер-дегустация</div></div>
+                    <div class="panel-section"><div class="panel-value">📅 26.09 — Тёмный киносеанс</div></div>
+                `;
+
+            case 'player':
+                return `
+                    <div class="panel-label">// BANDCAMP · UNIT:SERAPHIM 2</div>
+                    <div style="margin-top:12px;">
+                        <iframe style="border:0;width:100%;height:200px;" src="https://bandcamp.com/EmbeddedPlayer/album=2239565531/size=large/bgcol=0a0f0a/linkcol=5fdf5f/tracklist=false/transparent=true/" seamless></iframe>
+                    </div>
+                `;
+
+            case 'secret':
+                return `
+                    <div class="panel-label">// ПРОМОКОД</div>
+                    <input type="text" class="panel-input" id="promoInput" placeholder="ВВЕДИТЕ КОД" />
+                    <button class="panel-btn" id="promoBtn">🔓 АКТИВИРОВАТЬ</button>
+                    <div id="promoStatus" style="font-size:0.8rem;margin-top:8px;min-height:1.2em;"></div>
+                    <div class="panel-note">Активные коды: <strong>1488</strong>, <strong>HACK2026</strong>, <strong>GREENSHUM</strong>, <strong>1111</strong> (клуб)</div>
+                `;
+
+            case 'promo':
+                return `
+                    <div class="panel-label">// АКЦИИ И ПОДАРКИ</div>
+                    <div class="panel-section" style="margin-top:12px;"><div class="panel-value">🎁 День рождения — коктейль в подарок</div></div>
+                    <div class="panel-section"><div class="panel-value">🎁 Каждая 5-я кружка — за счёт заведения</div></div>
+                    <div class="panel-section"><div class="panel-value">🎁 Пятница — 2 по цене 1</div></div>
+                `;
+
+            default:
+                return `<div class="panel-note">Раздел в разработке.</div>`;
+        }
+    }
+
+    function attachPanelHandlers(id) {
+        // SABY
+        if (id === 'bonus') {
+            const sabyBtn = document.getElementById('sabySyncBtn');
+            const sabyStatus = document.getElementById('sabySyncStatus');
+            const sabyDot = document.getElementById('sabyDot');
+            const sabyText = document.getElementById('sabyStatusText');
+            if (sabyBtn) sabyBtn.addEventListener('click', function() {
+                sabyStatus.textContent = '⏳ Подключение к SABY CRM...'; sabyStatus.style.color = '#8aff8a';
+                setTimeout(() => {
+                    sabyDot.classList.add('online');
+                    sabyText.textContent = 'Канал связи открыт (демо)';
+                    sabyStatus.innerHTML = '⚠ Реальная интеграция с SABY появится в следующем релизе.';
+                    sabyStatus.style.color = '#df9f4f';
+                }, 1600);
+            });
+        }
+
+        // WALLET
+        if (id === 'wallet') {
+            document.querySelectorAll('.panel-tabs .tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.panel-tabs .tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelector(`.tab-content[data-content="${this.dataset.tab}"]`).classList.add('active');
+                    if (this.dataset.tab === 'crypto') initCryptoPanel();
+                    if (this.dataset.tab === 'skins') initSkinsPanel();
+                    if (this.dataset.tab === 'token') initTokenPanel();
+                    if (this.dataset.tab === 'topup') initSbpPanel();
+                });
+            });
+
+            initSkinsPanel();
+            initTokenPanel();
+            initSbpPanel();
+        }
+
+        if (id === 'roulette') initRoulette();
+
+        if (id === 'builder') {
+            const btns = panelBody.querySelectorAll('.ingr-btn');
+            let localSelected = [];
+            btns.forEach(b => b.addEventListener('click', function() {
+                const ing = this.dataset.ing;
+                if (localSelected.includes(ing)) {
+                    localSelected = localSelected.filter(i => i !== ing);
+                    this.style.borderColor = '#2a5a2a'; this.style.background = '#0f1a0f';
+                } else {
+                    localSelected.push(ing);
+                    this.style.borderColor = '#7aff7a'; this.style.background = '#1a3a1a';
+                }
+            }));
+            const mixBtn = document.getElementById('buildMix');
+            if (mixBtn) mixBtn.addEventListener('click', function() {
+                const res = document.getElementById('buildResult');
+                if (!localSelected.length) { res.textContent = '❌ выбери ингредиенты'; res.style.color = '#bf5f5f'; return; }
+                res.innerHTML = `🍸 ${localSelected.join(' + ')} — готово!`; res.style.color = '#8aff8a';
+            });
+        }
+
+        if (id === 'secret') {
+            const promoBtn = document.getElementById('promoBtn');
+            const promoInput = document.getElementById('promoInput');
+            const promoStatus = document.getElementById('promoStatus');
+            if (promoBtn) promoBtn.addEventListener('click', function() {
+                const code = promoInput.value.trim().toUpperCase();
+                if (code === '1111') { startClubFlow(); return; }
+                const validCodes = ['1488', 'HACK2026', 'GREENSHUM'];
+                if (!validCodes.includes(code)) {
+                    document.getElementById('blockedOverlay').classList.add('active');
+                    setTimeout(() => {
+                        document.getElementById('blockedOverlay').classList.remove('active');
+                        promoStatus.textContent = '⛔ Неверный код'; promoStatus.style.color = '#ff2222';
+                    }, 3000);
+                    return;
+                }
+                if (currentUser.promoUsed) {
+                    document.getElementById('blockedOverlay').classList.add('active');
+                    setTimeout(() => {
+                        document.getElementById('blockedOverlay').classList.remove('active');
+                        promoStatus.textContent = '⛔ Код уже использован'; promoStatus.style.color = '#ff2222';
+                    }, 3000);
+                    return;
+                }
+                document.getElementById('hackOverlay').classList.add('active');
+                setTimeout(() => {
+                    document.getElementById('hackOverlay').classList.remove('active');
+                    currentUser.bonus += 50;
+                    currentUser.promoUsed = true;
+                    saveUser();
+                    promoStatus.textContent = '✅ +50 бонусов начислено!'; promoStatus.style.color = '#8aff8a';
+                    showToast('🎁 +50 бонусов', '#8aff8a');
+                }, 4000);
+            });
+        }
+    }
+
+    // ===== СБП =====
+    function initSbpPanel() {
+        const input = document.getElementById('sbpRubAmount');
+        const calc = document.getElementById('sbpCalc');
+        if (!input || !calc) return;
+
+        function updateCalc() {
+            const rub = parseFloat(input.value) || 0;
+            if (rub <= 0) {
+                calc.innerHTML = 'Введите сумму для расчёта';
+                return;
+            }
+            const usdtBefore = rub / USDT_RUB_RATE;
+            const commission = usdtBefore * COMMISSION / 100;
+            const usdtAfter = usdtBefore - commission;
+            const grn = usdtAfter * GRN_USDT_RATE;
+            calc.innerHTML = `
+                По курсу: ${rub.toFixed(0)} ₽ ≈ ${usdtBefore.toFixed(2)} USDT<br>
+                Комиссия ${COMMISSION}%: <span style="color:#df9f4f;">−${commission.toFixed(2)} USDT</span><br>
+                К зачислению: <strong style="color:#8aff8a;">${grn.toFixed(2)} GREENCOIN</strong>
+            `;
+        }
+
+        if (!input.dataset.bound) {
+            input.dataset.bound = '1';
+            input.addEventListener('input', updateCalc);
+        }
+
+        document.querySelectorAll('[data-rub]').forEach(b => {
+            if (!b.dataset.bound) {
+                b.dataset.bound = '1';
+                b.addEventListener('click', function() {
+                    input.value = this.dataset.rub;
+                    updateCalc();
+                });
+            }
+        });
+
+        const genBtn = document.getElementById('sbpGenerateBtn');
+        const qrEl = document.getElementById('sbpQr');
+        const status = document.getElementById('sbpStatus');
+        if (genBtn && !genBtn.dataset.bound) {
+            genBtn.dataset.bound = '1';
+            genBtn.addEventListener('click', function() {
+                const rub = parseFloat(input.value);
+                if (isNaN(rub) || rub < 100) {
+                    status.textContent = '❌ Минимальная сумма — 100 ₽';
+                    status.style.color = '#bf5f5f';
+                    return;
+                }
+                status.textContent = '⏳ Генерация QR через API Т-Банка...';
+                status.style.color = '#8aff8a';
+                qrEl.innerHTML = '';
+                setTimeout(() => {
+                    const usdtBefore = rub / USDT_RUB_RATE;
+                    const commission = usdtBefore * COMMISSION / 100;
+                    const grn = usdtBefore - commission;
+                    qrEl.innerHTML = `
+                        <div class="qr-placeholder">
+                            <div class="qr-icon">▦</div>
+                            <div class="qr-text">СБП · ${rub.toFixed(0)} ₽</div>
+                            <div class="qr-text">+${grn.toFixed(2)} GRN</div>
+                        </div>
+                    `;
+                    status.innerHTML = `✅ QR создан. Сканируйте в банке.<br>
+                        После оплаты GREENCOIN зачислятся автоматически.`;
+                    status.style.color = '#8aff8a';
+                    // Эмуляция webhook от банка
+                    setTimeout(() => {
+                        currentUser.grn = (currentUser.grn || 0) + grn;
+                        saveUser();
+                        showToast(`🟢 +${grn.toFixed(2)} GREENCOIN`, '#8aff8a');
+                        const gd1 = document.getElementById('grnDisplay');
+                        const gd2 = document.getElementById('grnDisplay2');
+                        if (gd1) gd1.textContent = currentUser.grn.toFixed(2);
+                        if (gd2) gd2.textContent = currentUser.grn.toFixed(2);
+                        qrEl.innerHTML = '';
+                        status.innerHTML = `✅ Оплата получена! Зачислено ${grn.toFixed(2)} GREENCOIN`;
+                        status.style.color = '#8aff8a';
+                    }, 6000);
+                }, 1400);
+            });
+        }
+    }
+
+    // ===== STEAM =====
+    function initSkinsPanel() {
+        const connectBtn = document.getElementById('steamConnectBtn');
+        const disconnectBtn = document.getElementById('steamDisconnectBtn');
+        const refreshBtn = document.getElementById('steamRefreshBtn');
+
+        if (connectBtn && !connectBtn.dataset.bound) {
+            connectBtn.dataset.bound = '1';
+            connectBtn.addEventListener('click', function() {
+                const sid = document.getElementById('steamIdInput').value.trim();
+                if (sid.length < 3) { showToast('❌ Введите SteamID или ссылку', '#bf5f5f'); return; }
+                connectBtn.textContent = '⏳ ПОДКЛЮЧЕНИЕ...';
+                connectBtn.disabled = true;
+                setTimeout(() => {
+                    currentUser.steamLinked = true;
+                    currentUser.steamInventory = MOCK_STEAM_INVENTORY.map(s => ({...s, selected:false}));
+                    saveUser();
+                    showToast('⚙ Steam подключён', '#8aff8a');
+                    refreshSkinsPanel();
+                }, 1400);
+            });
+        }
+
+        if (disconnectBtn && !disconnectBtn.dataset.bound) {
+            disconnectBtn.dataset.bound = '1';
+            disconnectBtn.addEventListener('click', function() {
+                if (!confirm('Отключить Steam?')) return;
+                currentUser.steamLinked = false;
+                currentUser.steamInventory = [];
+                currentUser.steamTradeLink = '';
+                saveUser();
+                showToast('⚙ Steam отключён', '#df9f4f');
+                refreshSkinsPanel();
+            });
+        }
+
+        if (refreshBtn && !refreshBtn.dataset.bound) {
+            refreshBtn.dataset.bound = '1';
+            refreshBtn.addEventListener('click', function() {
+                showToast('↻ Инвентарь обновлён', '#8aff8a');
+                renderInventory();
+            });
+        }
+
+        if (currentUser.steamLinked) renderInventory();
+
+        const tradeInput = document.getElementById('tradeLinkInput');
+        if (tradeInput && !tradeInput.dataset.bound) {
+            tradeInput.dataset.bound = '1';
+            tradeInput.value = currentUser.steamTradeLink || '';
+            tradeInput.addEventListener('input', function() {
+                currentUser.steamTradeLink = this.value.trim();
+                saveUser();
+            });
+        }
+
+        const skinBtn = document.getElementById('skinPayBtn');
+        if (skinBtn && !skinBtn.dataset.bound) {
+            skinBtn.dataset.bound = '1';
+            skinBtn.addEventListener('click', skinPayHandler);
+        }
+    }
+
+    function refreshSkinsPanel() {
+        panelBody.innerHTML = getPanelContent('wallet');
+        attachPanelHandlers('wallet');
+        const skinsTab = document.querySelector('.panel-tabs .tab[data-tab="skins"]');
+        if (skinsTab) skinsTab.click();
+    }
+
+    function renderInventory() {
+        const invList = document.getElementById('steamInvList');
+        if (!invList) return;
+        if (!currentUser.steamLinked) { invList.innerHTML = ''; return; }
+        const inv = currentUser.steamInventory || [];
+        invList.innerHTML = inv.map(item => `
+            <div class="inv-item ${item.selected?'selected':''}" data-id="${item.id}" style="border-left:3px solid ${item.rarityColor};">
+                <div class="inv-icon">${item.icon}</div>
+                <div class="inv-info">
+                    <div class="inv-name">${item.name}</div>
+                    <div class="inv-price">${item.wear} · $${item.usd.toFixed(2)} · ${item.rarity}</div>
+                </div>
+                <div class="inv-check">✓</div>
+            </div>
+        `).join('');
+
+        invList.querySelectorAll('.inv-item').forEach(el => {
+            el.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const item = inv.find(i => i.id === id);
+                item.selected = !item.selected;
+                this.classList.toggle('selected');
+                updateCommission();
+            });
+        });
+
+        updateCommission();
+    }
+
+    function updateCommission() {
+        const inv = currentUser.steamInventory || [];
+        const selected = inv.filter(i => i.selected);
+        const box = document.getElementById('commissionBox');
+        const skinBtn = document.getElementById('skinPayBtn');
+        if (!selected.length) {
+            if (box) box.style.display = 'none';
+            if (skinBtn) skinBtn.disabled = true;
+            return;
+        }
+        const totalUsd = selected.reduce((s, i) => s + i.usd, 0);
+        const feeUsd = totalUsd * COMMISSION / 100;
+        const netUsd = totalUsd - feeUsd;
+        const netGrn = netUsd * GRN_USDT_RATE;
+        if (box) box.style.display = 'block';
+        const elTotal = document.getElementById('commTotal');
+        const elFee = document.getElementById('commFee');
+        const elNet = document.getElementById('commNet');
+        if (elTotal) elTotal.textContent = `$${totalUsd.toFixed(2)}`;
+        if (elFee) elFee.textContent = `− ${COMMISSION}% ($${feeUsd.toFixed(2)})`;
+        if (elNet) elNet.textContent = `${netGrn.toFixed(2)} GRN`;
+        if (skinBtn) skinBtn.disabled = false;
+    }
+
+    function skinPayHandler() {
+        const inv = currentUser.steamInventory || [];
+        const selected = inv.filter(i => i.selected);
+        const statusEl = document.getElementById('skinStatus');
+        if (!selected.length) { if (statusEl) { statusEl.textContent = '❌ Выберите скины'; statusEl.style.color = '#bf5f5f'; } return; }
+        if (!currentUser.steamTradeLink || !currentUser.steamTradeLink.startsWith('https://steamcommunity.com/tradeoffer/')) {
+            if (statusEl) { statusEl.textContent = '❌ Укажите корректную ссылку на обмен'; statusEl.style.color = '#bf5f5f'; }
+            return;
+        }
+        const totalUsd = selected.reduce((s, i) => s + i.usd, 0);
+        const feeUsd = totalUsd * COMMISSION / 100;
+        const netUsd = totalUsd - feeUsd;
+        const netGrn = netUsd * GRN_USDT_RATE;
+        const skinBtn = document.getElementById('skinPayBtn');
+        skinBtn.disabled = true;
+        statusEl.textContent = '🤖 Робот отправляет трейд-оффер...';
+        statusEl.style.color = '#8aff8a';
+        setTimeout(() => {
+            statusEl.textContent = '📦 Робот принял скины. Запрос цены у оракула (Pricempire)...';
+        }, 1200);
+        setTimeout(() => {
+            statusEl.textContent = '💱 Конвертация USD → USDT → GREENCOIN...';
+        }, 2400);
+        setTimeout(() => {
+            currentUser.grn = (currentUser.grn || 0) + netGrn;
+            currentUser.steamInventory = inv.filter(i => !i.selected);
+            saveUser();
+            statusEl.innerHTML = `✅ Робот принял скины!<br>
+                Оценка: <strong>$${totalUsd.toFixed(2)}</strong><br>
+                Комиссия ${COMMISSION}%: <span style="color:#df9f4f;">−$${feeUsd.toFixed(2)}</span><br>
+                Зачислено: <strong style="color:#8aff8a;">${netGrn.toFixed(2)} GREENCOIN</strong>`;
+            statusEl.style.color = '#8aff8a';
+            const gd1 = document.getElementById('grnDisplay');
+            const gd2 = document.getElementById('grnDisplay2');
+            if (gd1) gd1.textContent = currentUser.grn.toFixed(2);
+            if (gd2) gd2.textContent = currentUser.grn.toFixed(2);
+            showToast(`🤖 +${netGrn.toFixed(2)} GRN за скины`, '#8aff8a');
+            renderInventory();
+        }, 3600);
+    }
+
+    // ===== CRYPTO =====
+    const CRYPTO_DATA = {
+        usdt_trc: { name:'USDT (TRC-20)', icon:'₮', address:'TVz9aZ1sYqLs7B6fXrMPfWnQqThV8YdKM', network:'Tron (TRC-20)', confirm:'~1 мин' },
+        usdt_erc: { name:'USDT (ERC-20)', icon:'₮', address:'0x7a9F3cB2D4e1A8f6C5d0B3e9a2F1d8C7b4A5e6f3', network:'Ethereum', confirm:'~5 мин' },
+        btc: { name:'Bitcoin', icon:'₿', address:'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', network:'Bitcoin', confirm:'~30 мин' },
+        eth: { name:'Ethereum', icon:'Ξ', address:'0x4B2cF1aD7e3F9b8a5C6d1E0f4A2b9D7c3E8f1a5B', network:'Ethereum', confirm:'~5 мин' },
+        ton: { name:'Toncoin', icon:'💎', address:'UQAbcD3fGh1JkLm9nOpQr2sTuVwXyZ4aBcDeFgHiJkLmNoPqRs', network:'TON', confirm:'~10 сек' }
+    };
+
+    function initCryptoPanel() {
+        const opts = document.querySelectorAll('.crypto-option');
+        if (!opts.length) return;
+        opts.forEach(opt => opt.addEventListener('click', function() {
+            opts.forEach(o => o.classList.remove('active'));
+            this.classList.add('active');
+            renderCryptoDetails(this.dataset.coin);
+        }));
+        const active = document.querySelector('.crypto-option.active');
+        if (active) renderCryptoDetails(active.dataset.coin);
+
+        const checkBtn = document.getElementById('cryptoCheckBtn');
+        if (checkBtn && !checkBtn.dataset.bound) {
+            checkBtn.dataset.bound = '1';
+            checkBtn.addEventListener('click', function() {
+                const amount = parseFloat(document.getElementById('cryptoAmount').value);
+                const status = document.getElementById('cryptoStatus');
+                if (isNaN(amount) || amount <= 0) { status.textContent = '❌ Введите сумму'; status.style.color = '#bf5f5f'; return; }
+                status.textContent = '⏳ Проверка транзакции...'; status.style.color = '#8aff8a';
+                checkBtn.disabled = true;
+                setTimeout(() => {
+                    currentUser.usdt = (currentUser.usdt || 0) + amount;
+                    currentUser.grn = (currentUser.grn || 0) + amount;
+                    saveUser();
+                    status.textContent = `✅ Подтверждено! +${amount.toFixed(2)} USDT · +${amount.toFixed(2)} GRN`;
+                    status.style.color = '#8aff8a';
+                    const balEl = document.getElementById('balDisplay');
+                    const grnEl = document.getElementById('grnDisplay');
+                    if (balEl) balEl.textContent = currentUser.usdt.toFixed(2);
+                    if (grnEl) grnEl.textContent = currentUser.grn.toFixed(2);
+                    checkBtn.disabled = false;
+                }, 2000);
+            });
+        }
+    }
+
+    function renderCryptoDetails(coin) {
+        const data = CRYPTO_DATA[coin];
+        const container = document.getElementById('cryptoDetails');
+        if (!data || !container) return;
+        container.innerHTML = `
+            <div style="color:#5f8f5f;font-size:0.7rem;letter-spacing:2px;margin-bottom:6px;">// АДРЕС ДЛЯ ОПЛАТЫ</div>
+            <div style="color:#8aff8a;font-size:0.8rem;margin-bottom:10px;">${data.icon} ${data.name}</div>
+            <div class="crypto-address" id="copyAddress">${data.address}</div>
+            <div style="font-size:0.7rem;color:#5f8f5f;">Сеть: <strong style="color:#8aff8a;">${data.network}</strong> · Подтверждение: ~${data.confirm}</div>
+        `;
+        const copyEl = document.getElementById('copyAddress');
+        if (copyEl) copyEl.addEventListener('click', function() {
+            navigator.clipboard.writeText(data.address).then(() => showToast('📋 Адрес скопирован', '#8aff8a')).catch(()=>{});
+        });
+    }
+
+    // ===== METAMASK =====
+    async function connectMetaMask() {
+        if (typeof window.ethereum === 'undefined') {
+            showToast('❌ MetaMask не установлен', '#bf5f5f');
+            return;
+        }
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const address = accounts[0];
+            currentUser.metaMaskAddress = address;
+            saveUser();
+            const mmEl = document.getElementById('mmAddress');
+            if (mmEl) mmEl.textContent = address.slice(0, 10) + '...' + address.slice(-6);
+            showToast('🦊 MetaMask подключён', '#8aff8a');
+            // Проверка сети
+            const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+            if (chainId !== '0x38') {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0x38' }]
+                    });
+                    showToast('✅ Сеть переключена на BNB Smart Chain', '#8aff8a');
+                } catch(e) {
+                    showToast('⚠ Переключите сеть на BNB Smart Chain вручную', '#df9f4f');
+                }
+            }
+        } catch (err) {
+            console.error(err);
+            showToast('❌ Ошибка подключения', '#bf5f5f');
+        }
+    }
+
+    // ===== GRN (BNB) =====
+    function initTokenPanel() {
+        const input = document.getElementById('grnBnbAmount');
+        const calc = document.getElementById('grnCalc');
+        document.querySelectorAll('[data-bnb]').forEach(b => {
+            if (!b.dataset.bound) {
+                b.dataset.bound = '1';
+                b.addEventListener('click', function() {
+                    if (input) input.value = this.dataset.bnb;
+                    updateGrnCalc();
+                });
+            }
+        });
+        if (input && !input.dataset.bound) {
+            input.dataset.bound = '1';
+            input.addEventListener('input', updateGrnCalc);
+        }
+        function updateGrnCalc() {
+            const bnb = parseFloat(input.value) || 0;
+            const grn = bnb * BNB_USDT_RATE;
+            if (calc) calc.innerHTML = `Получите: <strong style="color:#8aff8a;">${grn.toFixed(2)} GRN</strong> · ≈ ${(grn * USDT_RUB_RATE).toLocaleString('ru')} ₽`;
+        }
+
+        const mmBtn = document.getElementById('connectMetaMaskBtn');
+        if (mmBtn && !mmBtn.dataset.bound) {
+            mmBtn.dataset.bound = '1';
+            mmBtn.addEventListener('click', connectMetaMask);
+        }
+
+        const buyBtn = document.getElementById('grnBuyBtn');
+        if (buyBtn && !buyBtn.dataset.bound) {
+            buyBtn.dataset.bound = '1';
+            buyBtn.addEventListener('click', function() {
+                if (!currentUser.metaMaskAddress) {
+                    showToast('❌ Сначала подключите MetaMask', '#bf5f5f');
+                    return;
+                }
+                const bnb = parseFloat(input.value);
+                const status = document.getElementById('grnStatus');
+                if (isNaN(bnb) || bnb <= 0) { status.textContent = '❌ Введите сумму BNB'; status.style.color = '#bf5f5f'; return; }
+                status.textContent = '⏳ Ожидание подтверждения в сети BSC...'; status.style.color = '#8aff8a';
+                buyBtn.disabled = true;
+                setTimeout(() => {
+                    const grn = bnb * BNB_USDT_RATE;
+                    currentUser.grn = (currentUser.grn || 0) + grn;
+                    saveUser();
+                    status.innerHTML = `✅ Получено <strong>${grn.toFixed(2)} GRN</strong> · отправлено на ${currentUser.metaMaskAddress.slice(0,6)}...${currentUser.metaMaskAddress.slice(-4)}`;
+                    status.style.color = '#8aff8a';
+                    const gd1 = document.getElementById('grnDisplay');
+                    const gd2 = document.getElementById('grnDisplay2');
+                    if (gd1) gd1.textContent = currentUser.grn.toFixed(2);
+                    if (gd2) gd2.textContent = currentUser.grn.toFixed(2);
+                    showToast(`🟢 +${grn.toFixed(2)} GRN`, '#8aff8a');
+                    buyBtn.disabled = false;
+                }, 2200);
+            });
+        }
+    }
+
+    // ===== ROULETTE =====
+    const SEG_WIDTH = 110;
+    const SEG_COUNT = 40;
+    const WINNER_INDEX = 30;
+
+    function initRoulette() {
+        const strip = document.getElementById('tapeStrip');
+        if (!strip) return;
+        spinning = false;
+        currentTier = 100;
+        currentCurrency = 'rub';
+        renderTiers();
+        buildStrip(getPrizesForMult(1));
+
+        document.querySelectorAll('.currency-btn').forEach(btn => {
+            if (btn.dataset.bound) return;
+            btn.dataset.bound = '1';
+            btn.addEventListener('click', function() {
+                if (spinning) return;
+                document.querySelectorAll('.currency-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentCurrency = this.dataset.currency;
+                currentTier = currentCurrency === 'rub' ? 100 : 1;
+                renderTiers();
+                updateSpinBtn();
+            });
+        });
+
+        const spinBtn = document.getElementById('spinBtn');
+        if (spinBtn && !spinBtn.dataset.bound) {
+            spinBtn.dataset.bound = '1';
+            spinBtn.addEventListener('click', () => spinTape(currentTier, currentCurrency));
+        }
+    }
+
+    function renderTiers() {
+        const tiersEl = document.getElementById('rouletteTiers');
+        if (!tiersEl) return;
+        const tiers = currentCurrency === 'rub' ? [100, 500, 1000, 5000] : [1, 5, 10, 50];
+        tiersEl.innerHTML = tiers.map(t => 
+            `<button class="tier-btn ${t===currentTier?'active':''}" data-cost="${t}">${t} ${currentCurrency==='rub'?'₽':'GRN'}</button>`
+        ).join('');
+        tiersEl.querySelectorAll('.tier-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (spinning) return;
+                document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentTier = parseInt(this.dataset.cost);
+                updateSpinBtn();
+            });
+        });
+        updateSpinBtn();
+    }
+
+    function updateSpinBtn() {
+        const btn = document.getElementById('spinBtn');
+        if (!btn) return;
+        btn.textContent = `🎰 КРУТИТЬ ЗА ${currentTier} ${currentCurrency==='rub'?'₽':'GRN'}`;
+    }
+
+    function pickWinner(mult) {
+        const prizes = getPrizesForMult(mult);
+        let rand = Math.random() * TOTAL_WEIGHT;
+        let acc = 0;
+        for (let i = 0; i < prizes.length; i++) {
+            acc += prizes[i].weight;
+            if (rand <= acc) return prizes[i];
+        }
+        return prizes[0];
+    }
+
+    function buildStrip(prizes) {
+        const strip = document.getElementById('tapeStrip');
+        if (!strip) return;
+        strip.innerHTML = '';
+        for (let i = 0; i < SEG_COUNT; i++) {
+            const prize = prizes[Math.floor(Math.random() * prizes.length)];
+            const seg = document.createElement('div');
+            seg.className = 'tape-seg';
+            seg.style.setProperty('--seg-color', prize.color);
+            seg.innerHTML = `<span class="ts-icon">${prize.icon}</span><span class="ts-name">${prize.name}</span>`;
+            strip.appendChild(seg);
+        }
+    }
+
+    function spinTape(cost, currency) {
+        if (spinning) return;
+        const balance = currency === 'rub' ? (currentUser.usdt || 0) : (currentUser.grn || 0);
+        if (balance < cost) { showToast(`❌ Недостаточно ${currency==='rub'?'₮':'GRN'}`, '#bf5f5f'); return; }
+        spinning = true;
+
+        if (currency === 'rub') currentUser.usdt -= cost;
+        else currentUser.grn -= cost;
+        saveUser();
+
+        const balEl = document.getElementById('balDisplay');
+        const grnEl = document.getElementById('grnDisplay');
+        const grnEl2 = document.getElementById('grnDisplay2');
+        if (balEl) balEl.textContent = (currentUser.usdt || 0).toFixed(2);
+        if (grnEl) grnEl.textContent = (currentUser.grn || 0).toFixed(2);
+        if (grnEl2) grnEl2.textContent = (currentUser.grn || 0).toFixed(2);
+
+        const mult = currency === 'rub' ? cost / 100 : cost / 1;
+        const winner = pickWinner(mult);
+        const prizes = getPrizesForMult(mult);
+
+        const strip = document.getElementById('tapeStrip');
+        strip.innerHTML = '';
+        for (let i = 0; i < SEG_COUNT; i++) {
+            const prize = (i === WINNER_INDEX) ? winner : prizes[Math.floor(Math.random() * prizes.length)];
+            const seg = document.createElement('div');
+            seg.className = 'tape-seg';
+            seg.style.setProperty('--seg-color', prize.color);
+            seg.innerHTML = `<span class="ts-icon">${prize.icon}</span><span class="ts-name">${prize.name}</span>`;
+            strip.appendChild(seg);
+        }
+
+        const viewport = document.getElementById('tapeViewport');
+        const viewportW = viewport.offsetWidth;
+        const winCenter = WINNER_INDEX * SEG_WIDTH + SEG_WIDTH / 2;
+        const randomOffset = (Math.random() - 0.5) * 70;
+        const targetX = viewportW / 2 - winCenter + randomOffset;
+
+        strip.style.transition = 'none';
+        strip.style.transform = 'translateX(0px)';
+        void strip.offsetWidth;
+
+        strip.style.transition = 'transform 4.2s cubic-bezier(0.15, 0.85, 0.15, 1)';
+        strip.style.transform = `translateX(${targetX}px)`;
+
+        const spinBtn = document.getElementById('spinBtn');
+        spinBtn.disabled = true;
+        spinBtn.textContent = '⏳ КРУТИМ...';
+
+        setTimeout(() => {
+            spinning = false;
+            spinBtn.disabled = false;
+            updateSpinBtn();
+            handlePrize(winner);
+        }, 4300);
+    }
+
+    function handlePrize(prize) {
+        const container = document.getElementById('spinResult');
+        let msg = '', note = '';
+        if (prize.bonus) {
+            currentUser.bonus += prize.bonus;
+            msg = `+${prize.bonus} БОНУСОВ`;
+            note = 'зачислено на бонусный счёт';
+        } else if (prize.id === 'shots') { msg = prize.name + ' ЗАБРАН!'; note = 'покажи экран бармену'; }
+        else if (prize.id === 'hookah') { msg = prize.name + ' В ПОДАРОК!'; note = 'покажи экран бармену'; }
+        else if (prize.id === 'redbull') { msg = prize.name; note = 'покажи экран бармену'; }
+        else if (prize.id === 'coffee') { msg = prize.name; note = 'покажи экран бармену'; }
+
+        currentUser.wins = currentUser.wins || [];
+        currentUser.wins.push({ prize: prize.id, time: Date.now() });
+        saveUser();
+
+        container.innerHTML = `<div class="prize-win">${prize.icon} ${msg}<br><span style="font-size:0.65rem;opacity:0.8;">${note}</span></div>`;
+        showToast(`🎰 ${msg}`, '#8aff8a');
+    }
+
+    console.log('🌿 Зелёный Шум · v.1.0 загружен');
+    console.log('🔑 Вход: Pavel / 1488');
+    console.log('🩸 Промокод клуба: 1111');
+    console.log('💱 Курс: 1 USDT = 1 GREENCOIN = ' + USDT_RUB_RATE + ' ₽');
+    console.log('💰 Комиссия платформы: ' + COMMISSION + '%');
+
+})();
+</script>
+</body>
+</html>
