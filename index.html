@@ -9,7 +9,7 @@
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
     img-src 'self' data: https:;
-    connect-src 'self' https://accounts.google.com https://bandcamp.com https://ваш-бэкенд.onrender.com http://localhost:3000;
+    connect-src 'self' https://accounts.google.com https://bandcamp.com https://backend122222.onrender.com http://localhost:3000;
     frame-src https://accounts.google.com https://oauth.telegram.org https://bandcamp.com;
     form-action 'self';
     base-uri 'self';
@@ -394,7 +394,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 .tg-widget-box { background:#0a140a; border:1px dashed #2a5a2a; padding:14px; text-align:center;
     border-radius:3px; margin:6px 0; }
 .tg-widget-box .tg-note { color:#5f8f5f; font-size:0.68rem; margin-top:6px; line-height:1.4; }
-
 .hack-overlay, .blocked-overlay { position:fixed; top:0; left:0; width:100%; height:100%;
     background:#000; z-index:2000; display:none; align-items:center; justify-content:center;
     flex-direction:column; }
@@ -518,7 +517,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 </head>
 <body>
 
-<!-- Индикатор бэкенда -->
 <div class="backend-badge" id="backendBadge">// CONNECTING...</div>
 
 <div class="container">
@@ -666,7 +664,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     </div>
 </div>
 
-<!-- CABINET -->
 <div class="cabinet-overlay" id="cabinetOverlay">
     <div class="cabinet-header">
         <span class="cabinet-title">⚡ СЕТЬ · ЗЕЛЁНЫЙ ШУМ</span>
@@ -687,9 +684,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             <button id="authSubmit">ВОЙТИ</button>
             <div class="switch-link" id="authSwitch">Нет аккаунта? Зарегистрироваться</div>
             <div class="error-msg" id="authError"></div>
-
             <div class="divider-or">ИЛИ ЧЕРЕЗ</div>
-
             <div id="g_id_onload"
                  data-client_id="ВСТАВЬ_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
                  data-callback="handleGoogleCredential"
@@ -703,16 +698,13 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                  data-size="large"
                  data-logo_alignment="left">
             </div>
-
             <div class="tg-widget-box">
                 <div id="tgLoginContainer"></div>
                 <div class="tg-note">Telegram-авторизация через @BotFather</div>
             </div>
-
             <button class="social-btn steam-btn" id="steamLoginBtn" style="margin-top:8px;">
                 <span class="sb-icon">⚙</span><span>ВОЙТИ ЧЕРЕЗ STEAM</span>
             </button>
-
             <div class="hint">Тестовый вход: Pavel / 1488</div>
         </div>
 
@@ -747,9 +739,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     // ============================================================
     // КОНФИГУРАЦИЯ
     // ============================================================
-    // ЗАМЕНИТЕ на URL вашего бэкенда после деплоя на Render/Vercel
-    const BACKEND_URL = localStorage.getItem('greenNoiseBackend') || 'https://ваш-бэкенд.onrender.com';
-    const USE_BACKEND = !BACKEND_URL.includes('ваш-бэкенд');
+    const BACKEND_URL = 'https://backend122222.onrender.com';
+    const USE_BACKEND = true;
 
     const USDT_RUB_RATE = 92;
     const GRN_USDT_RATE = 1;
@@ -758,9 +749,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 
     let backendOnline = false;
 
-    // ============================================================
-    // БЕЗОПАСНОСТЬ
-    // ============================================================
     function escapeHtml(str) {
         if (str === null || str === undefined) return '';
         return String(str)
@@ -774,9 +762,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         return !isNaN(n) && n >= min && n <= max;
     }
 
-    // ============================================================
-    // HTTP-КЛИЕНТ С FALLBACK
-    // ============================================================
     async function apiCall(path, options = {}) {
         if (!USE_BACKEND) return { ok: false, demo: true };
         try {
@@ -786,10 +771,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 ...(options.headers || {})
             };
             if (token) headers['Authorization'] = `Bearer ${token}`;
-
             const controller = new AbortController();
             const timeout = setTimeout(() => controller.abort(), 8000);
-
             const res = await fetch(`${BACKEND_URL}${path}`, {
                 ...options,
                 headers,
@@ -804,7 +787,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         }
     }
 
-    // Health-check бэкенда
     async function checkBackend() {
         const badge = document.getElementById('backendBadge');
         if (!USE_BACKEND) {
@@ -826,9 +808,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     checkBackend();
     setInterval(checkBackend, 30000);
 
-    // ============================================================
-    // УТИЛИТЫ
-    // ============================================================
     function showToast(msg, color) {
         const t = document.createElement('div');
         t.className = 'toast';
@@ -866,9 +845,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         }
     } catch(e) {}
 
-    // ============================================================
-    // ГЛАВНАЯ
-    // ============================================================
     document.querySelectorAll('.wall-tile').forEach(tile => {
         tile.addEventListener('click', function() {
             document.querySelectorAll('.wall-tile').forEach(t => t.classList.remove('active'));
@@ -958,9 +934,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     });
     secretInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('secretBtn').click(); });
 
-    // ============================================================
-    // CLUB FLOW
-    // ============================================================
     const clubModal = document.getElementById('clubModal');
     const clubBox = document.getElementById('clubBox');
     const bloodOverlay = document.getElementById('bloodOverlay');
@@ -1074,9 +1047,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         }
     }
 
-    // ============================================================
-    // КАБИНЕТ
-    // ============================================================
     const overlay = document.getElementById('cabinetOverlay');
     const cabinetTrigger = document.getElementById('cabinetTrigger');
     const cabinetClose = document.getElementById('cabinetClose');
@@ -1154,7 +1124,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         mainContent.classList.add('hidden');
         document.body.style.overflow = 'hidden';
 
-        // Проверяем URL-параметры (Steam redirect)
         const params = new URLSearchParams(window.location.search);
         const steamToken = params.get('steam_token');
         const steamError = params.get('steam_error');
@@ -1198,7 +1167,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 rebuildNodes();
                 resizeCanvas();
                 startAnimation();
-                // Обновляем с сервера в фоне
                 if (USE_BACKEND) loadProfileFromBackend().then(() => rebuildNodes());
                 return;
             } catch(e) { console.error(e); }
@@ -1224,9 +1192,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         activeNode = null;
     });
 
-    // ============================================================
-    // АВТОРИЗАЦИЯ
-    // ============================================================
     let isLogin = true;
     const authTitle = document.getElementById('authTitle');
     const authLogin = document.getElementById('authLogin');
@@ -1318,12 +1283,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         el.addEventListener('keydown', e => { if (e.key === 'Enter') doAuth(); })
     );
 
-    // ============================================================
-    // GOOGLE
-    // ============================================================
     window.handleGoogleCredential = async function(response) {
         try {
-            // Если бэкенд онлайн — верифицируем на сервере
             if (USE_BACKEND && backendOnline) {
                 const res = await apiCall('/auth/google', {
                     method: 'POST',
@@ -1340,7 +1301,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                     return;
                 }
             }
-            // Fallback: локально
             const payload = JSON.parse(atob(response.credential.split('.')[1]));
             const googleId = payload.sub;
             const email = payload.email;
@@ -1363,9 +1323,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         }
     };
 
-    // ============================================================
-    // TELEGRAM
-    // ============================================================
     function initAuthWidgets() {
         const tgContainer = document.getElementById('tgLoginContainer');
         if (!tgContainer || tgContainer.dataset.bound) return;
@@ -1404,7 +1361,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                     return;
                 }
             }
-            // Fallback
             const login = 'tg_' + String(user.id);
             const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
             if (!users[login]) {
@@ -1424,21 +1380,14 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         }
     };
 
-    // ============================================================
-    // STEAM REAL AUTH
-    // ============================================================
     document.getElementById('steamLoginBtn').addEventListener('click', function() {
         if (!USE_BACKEND) {
-            showToast('⚠ Настройте BACKEND_URL для Steam-входа', '#df9f4f');
+            showToast('⚠ Настройте BACKEND_URL', '#df9f4f');
             return;
         }
-        // Открываем Steam OpenID через бэкенд
         window.location.href = `${BACKEND_URL}/auth/steam`;
     });
 
-    // ============================================================
-    // NODES / NETWORK
-    // ============================================================
     function rebuildNodes() {
         NODES = [...BASE_NODES];
         if (currentUser && currentUser.clubMember) NODES.push(CLUB_NODE);
@@ -1648,8 +1597,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                                 <div class="steam-status off">◯ STEAM НЕ ПОДКЛЮЧЁН</div>
                                 <button class="panel-btn" id="steamConnectBtn2">⚙ ВОЙТИ ЧЕРЕЗ STEAM</button>
                                 <div style="font-size:0.7rem;color:#5f8f5f;margin-top:10px;line-height:1.6;">
-                                    Для приёма скинов необходимо войти через Steam.<br>
-                                    После входа откроется доступ к вашему инвентарю.
+                                    Для приёма скинов необходимо войти через Steam.
                                 </div>
                             </div>
                         `}
@@ -1664,7 +1612,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                         <div style="background:#0a140a;border:1px solid #2a5a2a;padding:12px;margin-bottom:12px;border-radius:3px;">
                             <div style="font-size:0.75rem;color:#8aaa8a;line-height:1.7;">
                                 Сеть: <strong style="color:#8aff8a;">BNB Smart Chain (BEP-20)</strong><br>
-                                Контракт: <span style="color:#5f8f5f;font-family:monospace;">0xGREEN...SHUM</span><br>
                                 MetaMask: <span style="color:#8aff8a;font-family:monospace;" id="mmAddress">${safeMM}</span>
                             </div>
                         </div>
@@ -1834,692 +1781,4 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             const mixBtn = document.getElementById('buildMix');
             if (mixBtn) mixBtn.addEventListener('click', function() {
                 const res = document.getElementById('buildResult');
-                if (!localSelected.length) { res.textContent = '❌ выбери ингредиенты'; res.style.color = '#bf5f5f'; return; }
-                res.innerHTML = `🍸 ${localSelected.map(escapeHtml).join(' + ')} — готово!`;
-                res.style.color = '#8aff8a';
-            });
-        }
-
-        if (id === 'secret') {
-            const promoBtn = document.getElementById('promoBtn');
-            const promoInput = document.getElementById('promoInput');
-            const promoStatus = document.getElementById('promoStatus');
-            if (promoBtn) promoBtn.addEventListener('click', function() {
-                const code = promoInput.value.trim().toUpperCase();
-                if (code === '1111') { startClubFlow(); return; }
-                const validCodes = ['1488', 'HACK2026', 'GREENSHUM'];
-                if (!validCodes.includes(code)) {
-                    document.getElementById('blockedOverlay').classList.add('active');
-                    setTimeout(() => {
-                        document.getElementById('blockedOverlay').classList.remove('active');
-                        promoStatus.textContent = '⛔ Неверный код'; promoStatus.style.color = '#ff2222';
-                    }, 3000);
-                    return;
-                }
-                if (currentUser.promoUsed) {
-                    document.getElementById('blockedOverlay').classList.add('active');
-                    setTimeout(() => {
-                        document.getElementById('blockedOverlay').classList.remove('active');
-                        promoStatus.textContent = '⛔ Код уже использован'; promoStatus.style.color = '#ff2222';
-                    }, 3000);
-                    return;
-                }
-                document.getElementById('hackOverlay').classList.add('active');
-                setTimeout(() => {
-                    document.getElementById('hackOverlay').classList.remove('active');
-                    currentUser.bonus = (parseInt(currentUser.bonus)||0) + 50;
-                    currentUser.promoUsed = true;
-                    saveUser();
-                    promoStatus.textContent = '✅ +50 бонусов!'; promoStatus.style.color = '#8aff8a';
-                    showToast('🎁 +50 бонусов', '#8aff8a');
-                }, 4000);
-            });
-        }
-    }
-
-    // ============================================================
-    // СБП — РЕАЛЬНЫЙ ВЫЗОВ БЭКЕНДА + FALLBACK
-    // ============================================================
-    function initSbpPanel() {
-        const input = document.getElementById('sbpRubAmount');
-        const calc = document.getElementById('sbpCalc');
-        if (!input || !calc) return;
-
-        function updateCalc() {
-            const rub = parseFloat(input.value) || 0;
-            if (rub <= 0) { calc.innerHTML = 'Введите сумму для расчёта'; return; }
-            if (rub < 100) { calc.innerHTML = '<span style="color:#bf5f5f;">Минимум: 100 ₽</span>'; return; }
-            if (rub > 150000) { calc.innerHTML = '<span style="color:#bf5f5f;">Максимум: 150 000 ₽</span>'; return; }
-            const usdtBefore = rub / USDT_RUB_RATE;
-            const commission = usdtBefore * COMMISSION / 100;
-            const grn = usdtBefore - commission;
-            calc.innerHTML = `
-                По курсу: ${rub.toFixed(0)} ₽ ≈ ${usdtBefore.toFixed(2)} USDT<br>
-                Комиссия ${COMMISSION}%: <span style="color:#df9f4f;">−${commission.toFixed(2)} USDT</span><br>
-                К зачислению: <strong style="color:#8aff8a;">${grn.toFixed(2)} GREENCOIN</strong>
-            `;
-        }
-        if (!input.dataset.bound) {
-            input.dataset.bound = '1';
-            input.addEventListener('input', updateCalc);
-        }
-        document.querySelectorAll('[data-rub]').forEach(b => {
-            if (!b.dataset.bound) {
-                b.dataset.bound = '1';
-                b.addEventListener('click', function() {
-                    input.value = this.dataset.rub;
-                    updateCalc();
-                });
-            }
-        });
-
-        const genBtn = document.getElementById('sbpGenerateBtn');
-        const qrEl = document.getElementById('sbpQr');
-        const status = document.getElementById('sbpStatus');
-        if (genBtn && !genBtn.dataset.bound) {
-            genBtn.dataset.bound = '1';
-            genBtn.addEventListener('click', async function() {
-                const rub = parseFloat(input.value);
-                if (!isValidAmount(rub, 100, 150000)) {
-                    status.textContent = '❌ Введите сумму от 100 до 150 000 ₽';
-                    status.style.color = '#bf5f5f';
-                    return;
-                }
-                status.textContent = '⏳ Генерация QR...';
-                status.style.color = '#8aff8a';
-                qrEl.innerHTML = '';
-
-                const usdtBefore = rub / USDT_RUB_RATE;
-                const commission = usdtBefore * COMMISSION / 100;
-                const grn = usdtBefore - commission;
-
-                // ============================================
-                // 1. ПЫТАЕМСЯ ЧЕРЕЗ БЭКЕНД
-                // ============================================
-                if (USE_BACKEND && backendOnline) {
-                    const res = await apiCall('/sbp/create', {
-                        method: 'POST',
-                        body: JSON.stringify({ amountRub: rub })
-                    });
-                    if (res.ok && res.data) {
-                        const data = res.data;
-                        qrEl.innerHTML = `
-                            <div class="sbp-qr-container">
-                                <div id="sbpQrCode">${data.qrImage ? '' : '<div style="padding:20px;color:#666;">QR</div>'}</div>
-                                <div class="sbp-caption">СБП · Оплата</div>
-                                <div class="sbp-amount">${rub.toFixed(0)} ₽</div>
-                                <div class="sbp-caption" style="font-size:0.65rem;margin-top:6px;">+${(data.amountGrn || grn).toFixed(2)} GRN</div>
-                                <div class="sbp-status-badge pending" id="sbpBadge">⏳ Ожидание оплаты</div>
-                            </div>
-                        `;
-                        // Вставка SVG от банка
-                        if (data.qrImage) {
-                            const qrCode = document.getElementById('sbpQrCode');
-                            qrCode.innerHTML = data.qrImage;
-                        } else {
-                            new QRCode(document.getElementById('sbpQrCode'), {
-                                text: data.paymentUrl || 'https://qr.nspk.ru/AS1A',
-                                width: 240, height: 240,
-                                colorDark: '#0a0f0a', colorLight: '#ffffff',
-                                correctLevel: QRCode.CorrectLevel.M
-                            });
-                        }
-                        status.innerHTML = `✅ QR создан. Сканируйте в приложении банка.`;
-                        status.style.color = '#8aff8a';
-                        // Опрос статуса
-                        const orderId = data.orderId;
-                        const interval = setInterval(async () => {
-                            const s = await apiCall(`/sbp/status/${orderId}`);
-                            if (s.ok && s.data?.status === 'completed') {
-                                clearInterval(interval);
-                                const badge = document.getElementById('sbpBadge');
-                                if (badge) { badge.className = 'sbp-status-badge confirmed'; badge.textContent = '✅ Оплачено'; }
-                                currentUser.usdt = (parseFloat(currentUser.usdt)||0) + (s.data.amountUsdt || 0);
-                                currentUser.grn = (parseFloat(currentUser.grn)||0) + (s.data.amountGrn || 0);
-                                saveUser();
-                                status.innerHTML = `✅ Оплата получена! Зачислено ${(s.data.amountGrn || 0).toFixed(2)} GRN`;
-                                showToast(`💰 +${(s.data.amountGrn || 0).toFixed(2)} GRN`, '#8aff8a');
-                            }
-                        }, 3000);
-                        // Отменяем опрос через 10 минут
-                        setTimeout(() => clearInterval(interval), 600000);
-                        return;
-                    }
-                }
-
-                // ============================================
-                // 2. FALLBACK — демо-режим
-                // ============================================
-                const sbpPayload = `https://qr.nspk.ru/AS1A${Date.now().toString(36).toUpperCase()}?type=02&sum=${Math.round(rub*100)}&cur=RUB&crc=RU`;
-                setTimeout(() => {
-                    qrEl.innerHTML = `
-                        <div class="sbp-qr-container">
-                            <div id="sbpQrCode"></div>
-                            <div class="sbp-caption">СБП · Оплата</div>
-                            <div class="sbp-amount">${rub.toFixed(0)} ₽</div>
-                            <div class="sbp-caption" style="font-size:0.65rem;margin-top:6px;">+${grn.toFixed(2)} GRN</div>
-                            <div class="sbp-status-badge pending" id="sbpBadge">⏳ Демо-режим</div>
-                        </div>
-                    `;
-                    try {
-                        new QRCode(document.getElementById('sbpQrCode'), {
-                            text: sbpPayload, width: 240, height: 240,
-                            colorDark: '#0a0f0a', colorLight: '#ffffff',
-                            correctLevel: QRCode.CorrectLevel.M
-                        });
-                    } catch(e) { console.error('QR:', e); }
-                    status.innerHTML = `⚠ Демо-режим (бэкенд недоступен).<br>После подключения бэкенда платежи будут реальными.`;
-                    status.style.color = '#df9f4f';
-                }, 600);
-            });
-        }
-    }
-
-    // ============================================================
-    // STEAM
-    // ============================================================
-    function initSkinsPanel() {
-        // Кнопка входа через Steam для непривязанных
-        const connectBtn2 = document.getElementById('steamConnectBtn2');
-        if (connectBtn2 && !connectBtn2.dataset.bound) {
-            connectBtn2.dataset.bound = '1';
-            connectBtn2.addEventListener('click', function() {
-                if (!USE_BACKEND) {
-                    showToast('⚠ Настройте BACKEND_URL для Steam-входа', '#df9f4f');
-                    return;
-                }
-                window.location.href = `${BACKEND_URL}/auth/steam`;
-            });
-        }
-
-        const refreshBtn = document.getElementById('steamRefreshBtn');
-        if (refreshBtn && !refreshBtn.dataset.bound) {
-            refreshBtn.dataset.bound = '1';
-            refreshBtn.addEventListener('click', loadSteamInventory);
-        }
-
-        const tradeInput = document.getElementById('tradeLinkInput');
-        if (tradeInput && !tradeInput.dataset.bound) {
-            tradeInput.dataset.bound = '1';
-            tradeInput.value = currentUser.steamTradeLink || '';
-            tradeInput.addEventListener('input', function() {
-                const val = this.value.trim();
-                if (val === '' || val.startsWith('https://steamcommunity.com/tradeoffer/')) {
-                    currentUser.steamTradeLink = val;
-                    saveUser();
-                    this.style.borderColor = '#2a5a2a';
-                } else {
-                    this.style.borderColor = '#bf5f5f';
-                }
-            });
-        }
-
-        const skinBtn = document.getElementById('skinPayBtn');
-        if (skinBtn && !skinBtn.dataset.bound) {
-            skinBtn.dataset.bound = '1';
-            skinBtn.addEventListener('click', skinPayHandler);
-        }
-    }
-
-    async function loadSteamInventory() {
-        const invList = document.getElementById('steamInvList');
-        if (!invList) return;
-        invList.innerHTML = '<div style="padding:20px;text-align:center;color:#8aff8a;font-size:0.75rem;">⏳ Загрузка инвентаря из Steam...</div>';
-
-        // Через бэкенд
-        if (USE_BACKEND && backendOnline) {
-            const res = await apiCall('/skins/inventory', { method: 'POST' });
-            if (res.ok && res.data?.inventory) {
-                steamInventoryCache = res.data.inventory.map(i => ({ ...i, selected: false }));
-                // Получаем цены
-                const names = steamInventoryCache.filter(i => i.marketable).slice(0, 20).map(i => i.marketHashName);
-                if (names.length) {
-                    const estRes = await apiCall('/skins/estimate', {
-                        method: 'POST',
-                        body: JSON.stringify({ marketHashNames: names })
-                    });
-                    if (estRes.ok && estRes.data?.items) {
-                        steamInventoryEstimated = estRes.data.items;
-                    }
-                }
-                renderInventory();
-                showToast(`📦 Загружено ${steamInventoryCache.length} предметов`, '#8aff8a');
-                return;
-            }
-        }
-
-        // Демо-инвентарь
-        invList.innerHTML = '<div style="padding:20px;text-align:center;color:#df9f4f;font-size:0.75rem;">⚠ Демо-инвентарь (бэкенд недоступен)</div>';
-        const demo = [
-            { assetId:'1', name:'AK-47 | Redline', marketHashName:'AK-47 | Redline (Field-Tested)', icon:'🔫', rarity:'Засекреченное', tradable:true },
-            { assetId:'2', name:'AWP | Wildfire', marketHashName:'AWP | Wildfire (Minimal Wear)', icon:'🎯', rarity:'Тайное', tradable:true },
-            { assetId:'3', name:'M4A4 | Neo-Noir', marketHashName:'M4A4 | Neo-Noir (Factory New)', icon:'🔫', rarity:'Тайное', tradable:true },
-            { assetId:'4', name:'★ Karambit | Doppler', marketHashName:'★ Karambit | Doppler (Factory New)', icon:'🗡', rarity:'★ Особое', tradable:true },
-            { assetId:'5', name:'USP-S | Kill Confirmed', marketHashName:'USP-S | Kill Confirmed (Field-Tested)', icon:'🔫', rarity:'Тайное', tradable:true }
-        ];
-        steamInventoryCache = demo.map(i => ({ ...i, selected: false, priceUsd: 0, priceRub: 0 }));
-        steamInventoryEstimated = steamInventoryCache;
-        renderInventory();
-    }
-
-    function renderInventory() {
-        const invList = document.getElementById('steamInvList');
-        if (!invList) return;
-        if (!steamInventoryCache.length) {
-            invList.innerHTML = '<div style="padding:20px;text-align:center;color:#5f8f5f;font-size:0.75rem;">Инвентарь пуст</div>';
-            return;
-        }
-        invList.innerHTML = steamInventoryCache.map(item => {
-            const est = steamInventoryEstimated.find(e => e.marketHashName === item.marketHashName);
-            const priceUsd = est ? (est.priceUsd || 0) : 0;
-            const priceRub = est ? (est.priceRub || 0) : 0;
-            const iconHtml = item.icon && item.icon.startsWith('http')
-                ? `<img src="${escapeHtml(item.icon)}" alt="" onerror="this.style.display='none'" />`
-                : escapeHtml(item.icon || '🎁');
-            return `
-                <div class="inv-item ${item.selected?'selected':''}" data-id="${escapeHtml(item.assetId)}">
-                    <div class="inv-icon">${iconHtml}</div>
-                    <div class="inv-info">
-                        <div class="inv-name">${escapeHtml(item.name)}</div>
-                        <div class="inv-price">${escapeHtml(item.rarity || '')} · $${priceUsd.toFixed(2)} · ${priceRub.toFixed(0)} ₽</div>
-                    </div>
-                    <div class="inv-check">✓</div>
-                </div>
-            `;
-        }).join('');
-        invList.querySelectorAll('.inv-item').forEach(el => {
-            el.addEventListener('click', function() {
-                const id = this.dataset.id;
-                const item = steamInventoryCache.find(i => i.assetId === id);
-                if (item) {
-                    item.selected = !item.selected;
-                    this.classList.toggle('selected');
-                    updateCommission();
-                }
-            });
-        });
-        updateCommission();
-    }
-
-    function updateCommission() {
-        const selected = steamInventoryCache.filter(i => i.selected);
-        const box = document.getElementById('commissionBox');
-        const skinBtn = document.getElementById('skinPayBtn');
-        if (!selected.length) {
-            if (box) box.style.display = 'none';
-            if (skinBtn) skinBtn.disabled = true;
-            return;
-        }
-        const totalUsd = selected.reduce((s, i) => {
-            const est = steamInventoryEstimated.find(e => e.marketHashName === i.marketHashName);
-            return s + (est ? (est.priceUsd || 0) : 0);
-        }, 0);
-        const feeUsd = totalUsd * COMMISSION / 100;
-        const netGrn = (totalUsd - feeUsd) * GRN_USDT_RATE;
-        if (box) box.style.display = 'block';
-        const elTotal = document.getElementById('commTotal');
-        const elFee = document.getElementById('commFee');
-        const elNet = document.getElementById('commNet');
-        if (elTotal) elTotal.textContent = `$${totalUsd.toFixed(2)}`;
-        if (elFee) elFee.textContent = `−$${feeUsd.toFixed(2)}`;
-        if (elNet) elNet.textContent = `${netGrn.toFixed(2)} GRN`;
-        if (skinBtn) skinBtn.disabled = false;
-    }
-
-    async function skinPayHandler() {
-        const selected = steamInventoryCache.filter(i => i.selected);
-        const statusEl = document.getElementById('skinStatus');
-        if (!selected.length) { if (statusEl) { statusEl.textContent = '❌ Выберите скины'; statusEl.style.color = '#bf5f5f'; } return; }
-        if (!currentUser.steamTradeLink || !currentUser.steamTradeLink.startsWith('https://steamcommunity.com/tradeoffer/')) {
-            if (statusEl) { statusEl.textContent = '❌ Укажите ссылку на обмен'; statusEl.style.color = '#bf5f5f'; }
-            return;
-        }
-        const skinBtn = document.getElementById('skinPayBtn');
-        skinBtn.disabled = true;
-        statusEl.textContent = '🤖 Робот отправляет трейд-оффер...'; statusEl.style.color = '#8aff8a';
-
-        // Через бэкенд
-        if (USE_BACKEND && backendOnline) {
-            const names = selected.map(i => i.marketHashName);
-            const res = await apiCall('/skins/accept', {
-                method: 'POST',
-                body: JSON.stringify({ marketHashNames: names, tradeLink: currentUser.steamTradeLink })
-            });
-            if (res.ok && res.data) {
-                const d = res.data;
-                currentUser.grn = (parseFloat(currentUser.grn)||0) + d.netGrn;
-                saveUser();
-                statusEl.innerHTML = `✅ Принято!<br>Оценка: <strong>$${d.totalUsd.toFixed(2)}</strong><br>Комиссия: <span style="color:#df9f4f;">−$${d.commission.toFixed(2)}</span><br>Зачислено: <strong style="color:#8aff8a;">${d.netGrn.toFixed(2)} GRN</strong>`;
-                statusEl.style.color = '#8aff8a';
-                const gd1 = document.getElementById('grnDisplay');
-                if (gd1) gd1.textContent = currentUser.grn.toFixed(2);
-                showToast(`🤖 +${d.netGrn.toFixed(2)} GRN`, '#8aff8a');
-                steamInventoryCache = steamInventoryCache.filter(i => !i.selected);
-                renderInventory();
-                skinBtn.disabled = false;
-                return;
-            }
-        }
-
-        // Fallback демо
-        setTimeout(() => {
-            const totalUsd = selected.reduce((s, i) => {
-                const est = steamInventoryEstimated.find(e => e.marketHashName === i.marketHashName);
-                return s + (est ? (est.priceUsd || 0) : 25);
-            }, 0) || 25 * selected.length;
-            const feeUsd = totalUsd * COMMISSION / 100;
-            const netGrn = totalUsd - feeUsd;
-            currentUser.grn = (parseFloat(currentUser.grn)||0) + netGrn;
-            saveUser();
-            statusEl.innerHTML = `✅ Демо-приём завершён!<br>Оценка: <strong>$${totalUsd.toFixed(2)}</strong><br>Комиссия: <span style="color:#df9f4f;">−$${feeUsd.toFixed(2)}</span><br>Зачислено: <strong style="color:#8aff8a;">${netGrn.toFixed(2)} GRN</strong>`;
-            statusEl.style.color = '#8aff8a';
-            const gd1 = document.getElementById('grnDisplay');
-            if (gd1) gd1.textContent = currentUser.grn.toFixed(2);
-            showToast(`🤖 +${netGrn.toFixed(2)} GRN (демо)`, '#df9f4f');
-            steamInventoryCache = steamInventoryCache.filter(i => !i.selected);
-            renderInventory();
-            skinBtn.disabled = false;
-        }, 2500);
-    }
-
-    // ============================================================
-    // CRYPTO (TON и USDT)
-    // ============================================================
-    const CRYPTO_DATA = {
-        usdt_trc: { name:'USDT (TRC-20)', icon:'₮', address:'TVz9aZ1sYqLs7B6fXrMPfWnQqThV8YdKM', network:'Tron (TRC-20)', confirm:'~1 мин' },
-        ton: { name:'Toncoin', icon:'💎', address:'UQAbcD3fGh1JkLm9nOpQr2sTuVwXyZ4aBcDeFgHiJkLmNoPqRs', network:'TON', confirm:'~10 сек' }
-    };
-
-    function initCryptoPanel() {
-        const opts = document.querySelectorAll('.crypto-option');
-        if (!opts.length) return;
-        opts.forEach(opt => opt.addEventListener('click', function() {
-            opts.forEach(o => o.classList.remove('active'));
-            this.classList.add('active');
-            renderCryptoDetails(this.dataset.coin);
-        }));
-        const active = document.querySelector('.crypto-option.active');
-        if (active) renderCryptoDetails(active.dataset.coin);
-
-        const checkBtn = document.getElementById('cryptoCheckBtn');
-        if (checkBtn && !checkBtn.dataset.bound) {
-            checkBtn.dataset.bound = '1';
-            checkBtn.addEventListener('click', function() {
-                const amount = parseFloat(document.getElementById('cryptoAmount').value);
-                const status = document.getElementById('cryptoStatus');
-                if (!isValidAmount(amount, 1, 100000)) { status.textContent = '❌ Введите сумму от 1 до 100 000'; status.style.color = '#bf5f5f'; return; }
-                status.textContent = '⏳ Проверка транзакции...'; status.style.color = '#8aff8a';
-                checkBtn.disabled = true;
-                setTimeout(() => {
-                    currentUser.usdt = (parseFloat(currentUser.usdt)||0) + amount;
-                    currentUser.grn = (parseFloat(currentUser.grn)||0) + amount;
-                    saveUser();
-                    status.textContent = `✅ +${amount.toFixed(2)} USDT · +${amount.toFixed(2)} GRN`;
-                    status.style.color = '#8aff8a';
-                    const balEl = document.getElementById('balDisplay');
-                    const grnEl = document.getElementById('grnDisplay');
-                    if (balEl) balEl.textContent = currentUser.usdt.toFixed(2);
-                    if (grnEl) grnEl.textContent = currentUser.grn.toFixed(2);
-                    checkBtn.disabled = false;
-                }, 2000);
-            });
-        }
-    }
-
-    function renderCryptoDetails(coin) {
-        const data = CRYPTO_DATA[coin];
-        const container = document.getElementById('cryptoDetails');
-        if (!data || !container) return;
-        container.innerHTML = `
-            <div style="color:#5f8f5f;font-size:0.7rem;letter-spacing:2px;margin-bottom:6px;">// АДРЕС</div>
-            <div style="color:#8aff8a;font-size:0.8rem;margin-bottom:10px;">${escapeHtml(data.icon)} ${escapeHtml(data.name)}</div>
-            <div class="crypto-address" id="copyAddress">${escapeHtml(data.address)}</div>
-            <div style="font-size:0.7rem;color:#5f8f5f;">Сеть: <strong style="color:#8aff8a;">${escapeHtml(data.network)}</strong></div>
-        `;
-        const copyEl = document.getElementById('copyAddress');
-        if (copyEl) copyEl.addEventListener('click', function() {
-            navigator.clipboard.writeText(data.address).then(() => showToast('📋 Скопировано', '#8aff8a')).catch(()=>{});
-        });
-    }
-
-    // ============================================================
-    // METAMASK
-    // ============================================================
-    async function connectMetaMask() {
-        if (typeof window.ethereum === 'undefined') {
-            showToast('❌ MetaMask не установлен', '#bf5f5f');
-            return;
-        }
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            const address = accounts[0];
-            if (!/^0x[a-fA-F0-9]{40}$/.test(address)) throw new Error('Invalid address');
-            currentUser.metaMaskAddress = address;
-            saveUser();
-            const mmEl = document.getElementById('mmAddress');
-            if (mmEl) mmEl.textContent = address.slice(0, 10) + '...' + address.slice(-6);
-            showToast('🦊 MetaMask подключён', '#8aff8a');
-            const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-            if (chainId !== '0x38') {
-                try {
-                    await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x38' }] });
-                    showToast('✅ Сеть BSC активирована', '#8aff8a');
-                } catch(e) { showToast('⚠ Переключите сеть вручную', '#df9f4f'); }
-            }
-        } catch (err) {
-            console.error(err);
-            showToast('❌ Ошибка подключения', '#bf5f5f');
-        }
-    }
-
-    // ============================================================
-    // GRN
-    // ============================================================
-    function initTokenPanel() {
-        const input = document.getElementById('grnBnbAmount');
-        const calc = document.getElementById('grnCalc');
-        document.querySelectorAll('[data-bnb]').forEach(b => {
-            if (!b.dataset.bound) {
-                b.dataset.bound = '1';
-                b.addEventListener('click', function() {
-                    if (input) input.value = this.dataset.bnb;
-                    updateGrnCalc();
-                });
-            }
-        });
-        if (input && !input.dataset.bound) {
-            input.dataset.bound = '1';
-            input.addEventListener('input', updateGrnCalc);
-        }
-        function updateGrnCalc() {
-            const bnb = parseFloat(input.value) || 0;
-            const grn = bnb * BNB_USDT_RATE;
-            if (calc) calc.innerHTML = `Получите: <strong style="color:#8aff8a;">${grn.toFixed(2)} GRN</strong> · ≈ ${(grn * USDT_RUB_RATE).toLocaleString('ru')} ₽`;
-        }
-
-        const mmBtn = document.getElementById('connectMetaMaskBtn');
-        if (mmBtn && !mmBtn.dataset.bound) {
-            mmBtn.dataset.bound = '1';
-            mmBtn.addEventListener('click', connectMetaMask);
-        }
-
-        const buyBtn = document.getElementById('grnBuyBtn');
-        if (buyBtn && !buyBtn.dataset.bound) {
-            buyBtn.dataset.bound = '1';
-            buyBtn.addEventListener('click', function() {
-                if (!currentUser.metaMaskAddress) { showToast('❌ Сначала подключите MetaMask', '#bf5f5f'); return; }
-                const bnb = parseFloat(input.value);
-                const status = document.getElementById('grnStatus');
-                if (!isValidAmount(bnb, 0.0001, 100)) { status.textContent = '❌ Некорректная сумма'; status.style.color = '#bf5f5f'; return; }
-                status.textContent = '⏳ Ожидание подтверждения в BSC...'; status.style.color = '#8aff8a';
-                buyBtn.disabled = true;
-                setTimeout(() => {
-                    const grn = bnb * BNB_USDT_RATE;
-                    currentUser.grn = (parseFloat(currentUser.grn)||0) + grn;
-                    saveUser();
-                    status.innerHTML = `✅ +${grn.toFixed(2)} GRN → ${escapeHtml(currentUser.metaMaskAddress.slice(0,6))}...${escapeHtml(currentUser.metaMaskAddress.slice(-4))}`;
-                    status.style.color = '#8aff8a';
-                    const gd1 = document.getElementById('grnDisplay');
-                    if (gd1) gd1.textContent = currentUser.grn.toFixed(2);
-                    showToast(`🟢 +${grn.toFixed(2)} GRN`, '#8aff8a');
-                    buyBtn.disabled = false;
-                }, 2200);
-            });
-        }
-    }
-
-    // ============================================================
-    // ROULETTE
-    // ============================================================
-    const SEG_WIDTH = 110, SEG_COUNT = 40, WINNER_INDEX = 30;
-
-    function initRoulette() {
-        const strip = document.getElementById('tapeStrip');
-        if (!strip) return;
-        spinning = false; currentTier = 100; currentCurrency = 'rub';
-        renderTiers();
-        buildStrip(getPrizesForMult(1));
-
-        document.querySelectorAll('.currency-btn').forEach(btn => {
-            if (btn.dataset.bound) return;
-            btn.dataset.bound = '1';
-            btn.addEventListener('click', function() {
-                if (spinning) return;
-                document.querySelectorAll('.currency-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentCurrency = this.dataset.currency;
-                currentTier = currentCurrency === 'rub' ? 100 : 1;
-                renderTiers();
-                updateSpinBtn();
-            });
-        });
-
-        const spinBtn = document.getElementById('spinBtn');
-        if (spinBtn && !spinBtn.dataset.bound) {
-            spinBtn.dataset.bound = '1';
-            spinBtn.addEventListener('click', () => spinTape(currentTier, currentCurrency));
-        }
-    }
-
-    function renderTiers() {
-        const tiersEl = document.getElementById('rouletteTiers');
-        if (!tiersEl) return;
-        const tiers = currentCurrency === 'rub' ? [100, 500, 1000, 5000] : [1, 5, 10, 50];
-        tiersEl.innerHTML = tiers.map(t => 
-            `<button class="tier-btn ${t===currentTier?'active':''}" data-cost="${t}">${t} ${currentCurrency==='rub'?'₽':'GRN'}</button>`
-        ).join('');
-        tiersEl.querySelectorAll('.tier-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (spinning) return;
-                document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentTier = parseInt(this.dataset.cost);
-                updateSpinBtn();
-            });
-        });
-        updateSpinBtn();
-    }
-
-    function updateSpinBtn() {
-        const btn = document.getElementById('spinBtn');
-        if (!btn) return;
-        btn.textContent = `🎰 КРУТИТЬ ЗА ${currentTier} ${currentCurrency==='rub'?'₽':'GRN'}`;
-    }
-
-    function pickWinner(mult) {
-        const prizes = getPrizesForMult(mult);
-        let rand = Math.random() * TOTAL_WEIGHT, acc = 0;
-        for (let i = 0; i < prizes.length; i++) {
-            acc += prizes[i].weight;
-            if (rand <= acc) return prizes[i];
-        }
-        return prizes[0];
-    }
-
-    function buildStrip(prizes) {
-        const strip = document.getElementById('tapeStrip');
-        if (!strip) return;
-        strip.innerHTML = '';
-        for (let i = 0; i < SEG_COUNT; i++) {
-            const prize = prizes[Math.floor(Math.random() * prizes.length)];
-            const seg = document.createElement('div');
-            seg.className = 'tape-seg';
-            seg.style.setProperty('--seg-color', prize.color);
-            seg.innerHTML = `<span class="ts-icon">${escapeHtml(prize.icon)}</span><span class="ts-name">${escapeHtml(prize.name)}</span>`;
-            strip.appendChild(seg);
-        }
-    }
-
-    function spinTape(cost, currency) {
-        if (spinning) return;
-        const balance = currency === 'rub' ? (parseFloat(currentUser.usdt)||0) : (parseFloat(currentUser.grn)||0);
-        if (balance < cost) { showToast(`❌ Недостаточно ${currency==='rub'?'₮':'GRN'}`, '#bf5f5f'); return; }
-        spinning = true;
-        if (currency === 'rub') currentUser.usdt = (parseFloat(currentUser.usdt)||0) - cost;
-        else currentUser.grn = (parseFloat(currentUser.grn)||0) - cost;
-        saveUser();
-
-        const balEl = document.getElementById('balDisplay');
-        const grnEl = document.getElementById('grnDisplay');
-        if (balEl) balEl.textContent = (parseFloat(currentUser.usdt)||0).toFixed(2);
-        if (grnEl) grnEl.textContent = (parseFloat(currentUser.grn)||0).toFixed(2);
-
-        const mult = currency === 'rub' ? cost / 100 : cost;
-        const winner = pickWinner(mult);
-        const prizes = getPrizesForMult(mult);
-        const strip = document.getElementById('tapeStrip');
-        strip.innerHTML = '';
-        for (let i = 0; i < SEG_COUNT; i++) {
-            const prize = (i === WINNER_INDEX) ? winner : prizes[Math.floor(Math.random() * prizes.length)];
-            const seg = document.createElement('div');
-            seg.className = 'tape-seg';
-            seg.style.setProperty('--seg-color', prize.color);
-            seg.innerHTML = `<span class="ts-icon">${escapeHtml(prize.icon)}</span><span class="ts-name">${escapeHtml(prize.name)}</span>`;
-            strip.appendChild(seg);
-        }
-        const viewport = document.getElementById('tapeViewport');
-        const viewportW = viewport.offsetWidth;
-        const winCenter = WINNER_INDEX * SEG_WIDTH + SEG_WIDTH / 2;
-        const randomOffset = (Math.random() - 0.5) * 70;
-        const targetX = viewportW / 2 - winCenter + randomOffset;
-        strip.style.transition = 'none';
-        strip.style.transform = 'translateX(0px)';
-        void strip.offsetWidth;
-        strip.style.transition = 'transform 4.2s cubic-bezier(0.15, 0.85, 0.15, 1)';
-        strip.style.transform = `translateX(${targetX}px)`;
-        const spinBtn = document.getElementById('spinBtn');
-        spinBtn.disabled = true;
-        spinBtn.textContent = '⏳ КРУТИМ...';
-        setTimeout(() => {
-            spinning = false;
-            spinBtn.disabled = false;
-            updateSpinBtn();
-            handlePrize(winner);
-        }, 4300);
-    }
-
-    function handlePrize(prize) {
-        const container = document.getElementById('spinResult');
-        let msg = '', note = '';
-        if (prize.bonus) {
-            currentUser.bonus = (parseInt(currentUser.bonus)||0) + prize.bonus;
-            msg = `+${prize.bonus} БОНУСОВ`; note = 'зачислено';
-        } else if (prize.id === 'shots') { msg = prize.name + ' ЗАБРАН!'; note = 'покажи бармену'; }
-        else if (prize.id === 'hookah') { msg = prize.name + ' В ПОДАРОК!'; note = 'покажи бармену'; }
-        else { msg = prize.name; note = 'покажи бармену'; }
-        currentUser.wins = currentUser.wins || [];
-        currentUser.wins.push({ prize: prize.id, time: Date.now() });
-        saveUser();
-        container.innerHTML = `<div class="prize-win">${escapeHtml(prize.icon)} ${escapeHtml(msg)}<br><span style="font-size:0.65rem;opacity:0.8;">${escapeHtml(note)}</span></div>`;
-        showToast(`🎰 ${msg}`, '#8aff8a');
-    }
-
-    console.log('🌿 Зелёный Шум · v.1.2 loaded');
-    console.log('🔑 Вход: Pavel / 1488 · Клуб: 1111');
-    console.log('💱 1 USDT = 1 GREENCOIN = ' + USDT_RUB_RATE + ' ₽ · Комиссия: ' + COMMISSION + '%');
-    console.log('🔌 Backend:', USE_BACKEND ? BACKEND_URL : 'DEMO MODE');
-
-})();
-</script>
-</body>
-</html>
+                if (!localSelected.length) { res.textContent = '❌ выбери ингредиенты'; res.style.color = '#bf5f5
