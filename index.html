@@ -3,8 +3,29 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ===== БЕЗОПАСНОСТЬ: CSP ===== -->
+<meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://accounts.google.com https://telegram.org https://cdn.jsdelivr.net;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: https:;
+    connect-src 'self' https://bandcamp.com https://accounts.google.com https://api.telegram.org;
+    frame-src https://accounts.google.com https://oauth.telegram.org https://bandcamp.com;
+    form-action 'self';
+    base-uri 'self';
+    frame-ancestors 'none';
+">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+
 <title>Зелёный Шум · киберпанк-бар</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" integrity="sha384-3zSEDfvllQohrq0PhL1fOXJuC/jSOO34H46tWaJIjh//q3NlqA8OIA/0XHqHXjIs" crossorigin="anonymous"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:#0a0f0a; color:#b0ffb0; font-family:'Share Tech Mono',monospace;
@@ -14,7 +35,7 @@ body { background:#0a0f0a; color:#b0ffb0; font-family:'Share Tech Mono',monospac
 .header { border:2px solid #2b5e2b; padding:20px 30px; margin-bottom:40px;
     display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center;
     background:#0e140e; box-shadow:0 0 20px rgba(0,255,0,0.08); position:relative; }
-.header::after { content:"// ЗЕЛЁНЫЙ ШУМ // v.1.0"; position:absolute; bottom:-12px; right:30px;
+.header::after { content:"// ЗЕЛЁНЫЙ ШУМ // v.1.1"; position:absolute; bottom:-12px; right:30px;
     background:#0a0f0a; padding:0 12px; font-size:10px; color:#3a7a3a; letter-spacing:2px; }
 .logo h1 { font-family:'Press Start 2P',monospace; font-size:1.8rem; color:#8aff8a;
     text-shadow:0 0 10px #00aa00,0 0 30px #003300; letter-spacing:4px; }
@@ -175,7 +196,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 .panel-body::-webkit-scrollbar-thumb:hover { background:#5fdf5f; }
 .panel-section { margin-bottom:20px; }
 .panel-label { color:#5f8f5f; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
-.panel-value { color:#b0ffb0; font-size:1rem; }
+.panel-value { color:#b0ffb0; font-size:1rem; word-break:break-word; }
 .panel-value-big { color:#8aff8a; font-size:1.5rem; font-family:'Press Start 2P',monospace; letter-spacing:1px; }
 .panel-tabs { display:flex; flex-wrap:wrap; margin-bottom:20px; border-bottom:1px solid #1f4f1f; }
 .panel-tabs button { flex:1; min-width:60px; background:none; border:none; color:#5f8f5f;
@@ -260,12 +281,18 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 .commission-row .fee { color:#df9f4f; }
 .trade-link-box { margin-top:10px; padding:10px; background:#050a05; border:1px solid #2a5a2a;
     border-radius:3px; }
-.qr-placeholder { background:#fff; width:200px; height:200px; margin:14px auto;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:4px; }
-.qr-placeholder .qr-icon { font-size:3rem; color:#0a0f0a; }
-.qr-placeholder .qr-text { color:#0a0f0a; font-size:0.7rem; font-family:'Share Tech Mono',monospace; margin-top:6px; }
-.mm-connected { display:inline-block; padding:2px 8px; background:#1a3a1a; border:1px solid #5fdf5f;
-    border-radius:2px; font-size:0.65rem; color:#8aff8a; }
+.sbp-qr-container { background:#fff; padding:16px; margin:14px auto; display:flex;
+    flex-direction:column; align-items:center; justify-content:center; border-radius:6px;
+    max-width:260px; box-shadow:0 0 30px rgba(0,255,0,0.15); }
+.sbp-qr-container #sbpQrCode { display:flex; justify-content:center; }
+.sbp-qr-container .sbp-caption { color:#0a0f0a; font-family:'Share Tech Mono',monospace;
+    font-size:0.75rem; margin-top:10px; text-align:center; font-weight:bold; }
+.sbp-qr-container .sbp-amount { color:#0a4a0a; font-family:'Press Start 2P',monospace;
+    font-size:0.85rem; margin-top:4px; }
+.sbp-link-btn { display:inline-block; margin-top:10px; padding:12px 20px; background:#2a5a2a;
+    border:1px solid #5fdf5f; color:#b0ffb0; font-family:'Share Tech Mono',monospace;
+    text-decoration:none; border-radius:3px; transition:0.25s; letter-spacing:1px; font-size:0.8rem; }
+.sbp-link-btn:hover { background:#3a7a3a; box-shadow:0 0 25px rgba(0,255,0,0.3); color:#fff; }
 .currency-toggle { display:flex; gap:6px; margin-bottom:12px; }
 .currency-btn { flex:1; padding:8px; background:#0a140a; border:1px solid #2a5a2a;
     color:#7aaa7a; font-family:'Share Tech Mono',monospace; font-size:0.72rem;
@@ -335,7 +362,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 .saby-info { font-size:0.7rem; color:#5f8f5f; line-height:1.6; }
 .auth-form { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
     background:rgba(10,15,10,0.97); border:2px solid #2a5a2a;
-    padding:34px 32px; max-width:400px; width:90%; z-index:30;
+    padding:34px 32px; max-width:420px; width:92%; z-index:30;
     box-shadow:0 0 60px rgba(0,255,0,0.08); animation:fadeSlideIn 0.5s ease;
     max-height:92vh; overflow-y:auto; border-radius:4px; }
 .auth-form::before { content:"// SECURE AUTH"; position:absolute; top:-9px; left:20px;
@@ -355,15 +382,21 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 .auth-form .switch-link:hover { color:#8aff8a; }
 .auth-form .error-msg { color:#bf5f5f; font-size:0.8rem; margin-top:8px; text-align:center; min-height:1.2em; }
 .auth-form .hint { color:#4f7a4f; font-size:0.7rem; text-align:center; margin-top:12px; letter-spacing:1px; }
-.social-auth { display:flex; gap:8px; margin-top:12px; }
-.social-btn { flex:1; padding:10px; background:#0a0f0a; border:1px solid #2a5a2a;
+.social-auth { display:flex; gap:8px; margin-top:12px; flex-direction:column; }
+.social-btn { padding:11px 14px; background:#0a0f0a; border:1px solid #2a5a2a;
     cursor:pointer; transition:0.25s; font-family:'Share Tech Mono',monospace;
-    color:#9adf9a; font-size:0.7rem; display:flex; flex-direction:column;
-    align-items:center; gap:4px; letter-spacing:1px; border-radius:3px; }
+    color:#9adf9a; font-size:0.78rem; display:flex; align-items:center; justify-content:center;
+    gap:10px; letter-spacing:1px; border-radius:3px; text-decoration:none; }
 .social-btn:hover { background:#1a2f1a; border-color:#5fdf5f; color:#ccffcc; transform:translateY(-2px); }
-.social-btn .sb-icon { font-size:1.2rem; }
+.social-btn .sb-icon { font-size:1.1rem; }
+#g_id_onload { position:absolute; }
+.g_id_signin { display:flex; justify-content:center; margin:0; }
 .divider-or { display:flex; align-items:center; gap:10px; margin:14px 0; color:#3a6a3a; font-size:0.7rem; }
 .divider-or::before, .divider-or::after { content:""; flex:1; height:1px; background:#1f4f1f; }
+.tg-widget-box { background:#0a140a; border:1px dashed #2a5a2a; padding:14px; text-align:center;
+    border-radius:3px; margin:6px 0; }
+.tg-widget-box .tg-note { color:#5f8f5f; font-size:0.68rem; margin-top:6px; line-height:1.4; }
+
 .hack-overlay, .blocked-overlay { position:fixed; top:0; left:0; width:100%; height:100%;
     background:#000; z-index:2000; display:none; align-items:center; justify-content:center;
     flex-direction:column; }
@@ -501,7 +534,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     <div class="main-content" id="mainContent">
         <section id="wall">
             <h2 class="section-title">ИНТЕРАКТИВНАЯ СТЕНА</h2>
-            <p style="margin-bottom:16px;color:#7aaa7a;font-size:0.9rem;">Кликай по плиткам — стена оживает. Каждая — триггер события.</p>
+            <p style="margin-bottom:16px;color:#7aaa7a;font-size:0.9rem;">Кликай по плиткам — стена оживает.</p>
             <div class="wall" id="wallContainer">
                 <div class="wall-tile">▸ ВИНИЛ</div>
                 <div class="wall-tile">▸ ЛАЗЕР</div>
@@ -515,18 +548,16 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 
         <section id="radio">
             <h2 class="section-title">ВЕБ-РАДИО · BANDCAMP</h2>
-            <p class="radio-note">Прямой эфир с альбома <em>UNIT:SERAPHIM 2 – THE PATIENT</em> от Pavel Lazarev</p>
+            <p class="radio-note">Прямой эфир с альбома <em>UNIT:SERAPHIM 2 – THE PATIENT</em></p>
             <div class="radio-box">
-                <iframe src="https://bandcamp.com/EmbeddedPlayer/album=2239565531/size=large/bgcol=0a0f0a/linkcol=5fdf5f/tracklist=true/transparent=true/" seamless>
-                    <a href="https://pavellazarev.bandcamp.com/album/unit-seraphim-2-the-patient">UNIT:SERAPHIM 2 - THE PATIENT by Pavel Lazarev</a>
-                </iframe>
+                <iframe src="https://bandcamp.com/EmbeddedPlayer/album=2239565531/size=large/bgcol=0a0f0a/linkcol=5fdf5f/tracklist=true/transparent=true/" seamless title="Bandcamp player"></iframe>
             </div>
         </section>
 
         <section id="tour">
             <h2 class="section-title">3D-ТУР ПО БАРУ</h2>
             <div class="three-container" id="threeContainer">
-                <div class="coming">⚡ 3D-СЦЕНА ЗАГРУЖАЕТСЯ...<br><span style="font-size:0.65rem;color:#3f6f3f;">(подключи Three.js + модель бара)</span></div>
+                <div class="coming">⚡ 3D-СЦЕНА ЗАГРУЖАЕТСЯ...<br><span style="font-size:0.65rem;color:#3f6f3f;">(подключи Three.js)</span></div>
             </div>
         </section>
 
@@ -566,13 +597,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             </div>
             <div class="story-card">
                 <h4>🌿 «Кибер-мохито»</h4>
-                <p style="color:#8aaa8a;font-size:0.85rem;">Ром, мята, лайм, сахарный сироп и газировка. Впервые подан в 2077 году.</p>
+                <p style="color:#8aaa8a;font-size:0.85rem;">Ром, мята, лайм, сахарный сироп и газировка.</p>
                 <small>футуристический ретро</small>
-            </div>
-            <div class="story-card">
-                <h4>⚡ «Неоновый всполох»</h4>
-                <p style="color:#8aaa8a;font-size:0.85rem;">Водка, ликёр Blue Curacao, тоник и сок лайма. Светится под ультрафиолетом.</p>
-                <small>хит вечеринок</small>
             </div>
         </section>
 
@@ -586,7 +612,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             <h2 class="section-title">СЕКРЕТНЫЙ РАЗДЕЛ</h2>
             <div class="secret-area">
                 <p style="color:#6a9a6a;font-size:0.8rem;margin-bottom:12px;">введи пароль для входа в закрытый клуб</p>
-                <input type="text" id="secretInput" placeholder="••••••••" />
+                <input type="password" id="secretInput" placeholder="••••••••" autocomplete="off" maxlength="32" />
                 <button id="secretBtn">⏎ ВОЙТИ</button>
                 <div id="secretMessage">подсказка: попробуй <em>1111</em></div>
             </div>
@@ -605,9 +631,9 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         <section id="events">
             <h2 class="section-title">ЛЕНТА МЕРОПРИЯТИЙ</h2>
             <div class="grid-2">
-                <div class="card"><h3>▸ 12.09 · НЕОНОВАЯ НОЧЬ</h3><p>Сет от Pavel Lazarev + визуальный арт. Вход свободный.</p></div>
-                <div class="card"><h3>▸ 19.09 · КИБЕР-ДЕГУСТАЦИЯ</h3><p>5 новых коктейлей, голосование за лучший. Начало в 21:00.</p></div>
-                <div class="card"><h3>▸ 26.09 · ТЁМНЫЙ КИНОСЕАНС</h3><p>«Бегущий по лезвию» на проекторе. Попкорн и пиво.</p></div>
+                <div class="card"><h3>▸ 12.09 · НЕОНОВАЯ НОЧЬ</h3><p>Сет от Pavel Lazarev + визуальный арт.</p></div>
+                <div class="card"><h3>▸ 19.09 · КИБЕР-ДЕГУСТАЦИЯ</h3><p>5 новых коктейлей, голосование за лучший.</p></div>
+                <div class="card"><h3>▸ 26.09 · ТЁМНЫЙ КИНОСЕАНС</h3><p>«Бегущий по лезвию» на проекторе.</p></div>
             </div>
         </section>
 
@@ -615,10 +641,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             <h2 class="section-title">БЛОГ · КУЛЬТУРА ПИТИЯ</h2>
             <div class="blog-card">
                 <h3>🍃 ПОЧЕМУ МЯТА — ЭТО КИБЕРПАНК?</h3>
-                <p style="color:#8aaa8a;font-size:0.85rem;margin-top:8px;">
-                    Свежесть, контраст, лёгкая горечь. В «Зелёном Шуме» мята стала символом
-                    сопротивления слащавым коктейлям. В этом материале — история от первого бармена.
-                </p>
+                <p style="color:#8aaa8a;font-size:0.85rem;margin-top:8px;">Свежесть, контраст, лёгкая горечь.</p>
                 <small style="color:#4f7a4f;">читать полностью →</small>
             </div>
         </section>
@@ -627,18 +650,13 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             <h2 class="section-title">ИМЕНИННИКАМ</h2>
             <div class="birthday-card">
                 <h3 style="color:#b8ffb8;margin-bottom:8px;">🎂 КОКТЕЙЛЬ В ПОДАРОК</h3>
-                <p style="color:#8aaa8a;font-size:0.85rem;">
-                    В день рождения — любой коктейль из карты за счёт заведения.
-                    Предъяви паспорт бармену и получи «Зелёный Шум» в подарок.
-                </p>
-                <p style="color:#4f7a4f;font-size:0.75rem;margin-top:8px;">* при предварительном бронировании стола</p>
+                <p style="color:#8aaa8a;font-size:0.85rem;">В день рождения — любой коктейль за счёт заведения.</p>
             </div>
         </section>
 
         <footer class="footer">
             <span>ЗЕЛЁНЫЙ ШУМ · 1995–2026</span>
             <span># cyberpunk · # bar · # saint-p</span>
-            <span>сделано на <span style="color:#4f8f4f;">⚡</span> в нулевых</span>
         </footer>
     </div>
 </div>
@@ -656,20 +674,41 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 
         <div class="auth-form" id="authForm">
             <h2 id="authTitle">ВХОД</h2>
-            <input type="text" id="authLogin" placeholder="логин" autocomplete="off" />
-            <input type="password" id="authPassword" placeholder="пароль" autocomplete="off" />
+            <input type="text" id="authLogin" placeholder="логин" autocomplete="username" maxlength="32" />
+            <input type="password" id="authPassword" placeholder="пароль" autocomplete="current-password" maxlength="128" />
             <div id="authExtra" style="display:none;">
-                <input type="password" id="authPassword2" placeholder="повторите пароль" autocomplete="off" />
+                <input type="password" id="authPassword2" placeholder="повторите пароль" autocomplete="new-password" maxlength="128" />
             </div>
             <button id="authSubmit">ВОЙТИ</button>
             <div class="switch-link" id="authSwitch">Нет аккаунта? Зарегистрироваться</div>
             <div class="error-msg" id="authError"></div>
-            <div class="divider-or">ИЛИ ЧЕРЕЗ</div>
-            <div class="social-auth">
-                <button class="social-btn" data-provider="tg"><span class="sb-icon">✈</span><span>TELEGRAM</span></button>
-                <button class="social-btn" data-provider="steam"><span class="sb-icon">⚙</span><span>STEAM</span></button>
-                <button class="social-btn" data-provider="google"><span class="sb-icon">G</span><span>GOOGLE</span></button>
+
+            <div class="divider-or">ИЛИ ВОЙТИ ЧЕРЕЗ</div>
+
+            <!-- Google Sign-In (GIS) -->
+            <div id="g_id_onload"
+                 data-client_id="ВСТАВЬ_СВОЙ_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+                 data-callback="handleGoogleCredential"
+                 data-auto_prompt="false">
             </div>
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-shape="rectangular"
+                 data-theme="filled_black"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+
+            <!-- Telegram Login Widget -->
+            <div class="tg-widget-box">
+                <div id="tgLoginContainer"></div>
+                <div class="tg-note">
+                    Telegram-авторизация требует настройки бота через @BotFather<br>
+                    и указания домена сайта командой <em>/setdomain</em>
+                </div>
+            </div>
+
             <div class="hint">Тестовый вход: Pavel / 1488</div>
         </div>
 
@@ -701,6 +740,49 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 (function() {
     'use strict';
 
+    // ============================================================
+    // БЕЗОПАСНОСТЬ: ЭКРАНИРОВАНИЕ ПОЛЬЗОВАТЕЛЬСКИХ ДАННЫХ
+    // ============================================================
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    // Валидация логина: только буквы, цифры, _ и - (3-32 символа)
+    function isValidLogin(login) {
+        return /^[a-zA-Z0-9_-]{3,32}$/.test(login);
+    }
+
+    // Минимальная длина пароля
+    function isValidPassword(pass) {
+        return typeof pass === 'string' && pass.length >= 4 && pass.length <= 128;
+    }
+
+    // Валидация суммы (только положительные числа)
+    function isValidAmount(val, min, max) {
+        const n = parseFloat(val);
+        return !isNaN(n) && n >= min && n <= max;
+    }
+
+    // ============================================================
+    // КОНСТАНТЫ
+    // ============================================================
+    const SBP_PHONE = '89081330869';           // Ваш номер для СБП
+    const SBP_BANK = 'Т-Банк';
+    const USDT_RUB_RATE = 92;
+    const GRN_USDT_RATE = 1;
+    const BNB_USDT_RATE = 570;
+    const COMMISSION = 7.5;
+    const BACKEND_URL = 'https://ваш-бэкенд.vercel.app'; // ← замените
+
+    // ============================================================
+    // УТИЛИТЫ
+    // ============================================================
     function showToast(msg, color) {
         const t = document.createElement('div');
         t.className = 'toast';
@@ -720,22 +802,26 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 
     function saveUser() {
         if (!currentUser) return;
-        localStorage.setItem('greenNoiseUser', JSON.stringify(currentUser));
-        const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
-        if (users[currentUser.login]) {
-            Object.assign(users[currentUser.login], {
-                bonus: currentUser.bonus, usdt: currentUser.usdt, grn: currentUser.grn,
-                promoUsed: currentUser.promoUsed, wins: currentUser.wins || [],
-                testBonusGiven: currentUser.testBonusGiven,
-                steamLinked: currentUser.steamLinked, steamInventory: currentUser.steamInventory,
-                steamTradeLink: currentUser.steamTradeLink,
-                clubMember: currentUser.clubMember,
-                metaMaskAddress: currentUser.metaMaskAddress
-            });
-            localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
-        }
+        try {
+            localStorage.setItem('greenNoiseUser', JSON.stringify(currentUser));
+            const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
+            if (users[currentUser.login]) {
+                Object.assign(users[currentUser.login], {
+                    bonus: currentUser.bonus, usdt: currentUser.usdt, grn: currentUser.grn,
+                    promoUsed: currentUser.promoUsed, wins: currentUser.wins || [],
+                    testBonusGiven: currentUser.testBonusGiven,
+                    steamLinked: currentUser.steamLinked, steamInventory: currentUser.steamInventory,
+                    steamTradeLink: currentUser.steamTradeLink,
+                    clubMember: currentUser.clubMember,
+                    metaMaskAddress: currentUser.metaMaskAddress,
+                    authProvider: currentUser.authProvider
+                });
+                localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
+            }
+        } catch (e) { console.error('Save error:', e); }
     }
 
+    // Инициализация пользователя Pavel
     try {
         const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
         if (!users.Pavel) {
@@ -744,13 +830,15 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         }
     } catch(e) {}
 
-    // ===== ГЛАВНАЯ =====
+    // ============================================================
+    // ГЛАВНАЯ СТРАНИЦА
+    // ============================================================
     document.querySelectorAll('.wall-tile').forEach(tile => {
         tile.addEventListener('click', function() {
             document.querySelectorAll('.wall-tile').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
             const status = document.getElementById('wallStatus');
-            status.textContent = `статус: активирован «${this.textContent.trim().replace('▸ ','')}»`;
+            status.textContent = `статус: активирован «${escapeHtml(this.textContent.trim().replace('▸ ',''))}»`;
             status.style.color = '#8aff8a';
         });
     });
@@ -771,7 +859,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     document.getElementById('mixBtn').addEventListener('click', function() {
         if (!selected.length) { resultDesc.textContent = '❌ добавь хотя бы один ингредиент!'; resultDesc.style.color = '#bf5f5f'; return; }
         resultName.textContent = `🍸 ${selected.join(' + ')}`;
-        resultDesc.textContent = '✨ коктейль смешан! Нажми «Заказать»'; resultDesc.style.color = '#8aff8a';
+        resultDesc.textContent = '✨ коктейль смешан!'; resultDesc.style.color = '#8aff8a';
         orderBtn.style.display = 'block';
     });
     document.getElementById('resetCocktail').addEventListener('click', function() {
@@ -787,6 +875,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         setTimeout(() => { orderBtn.textContent = '🛎 ЗАКАЗАТЬ ЭТОТ КОКТЕЙЛЬ'; }, 2500);
     });
 
+    // Календарь
     const calendarGrid = document.getElementById('calendarGrid');
     const eventInfo = document.getElementById('eventInfo');
     const daysInMonth = new Date(2026, 9, 0).getDate();
@@ -802,12 +891,13 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         if (events[d]) { dayDiv.classList.add('event'); dayDiv.textContent = `${d} ✦`; }
         else dayDiv.textContent = d;
         dayDiv.addEventListener('click', function() {
-            eventInfo.innerHTML = events[d] ? `📌 ${d}.09 · ${events[d]}` : `📅 ${d}.09 — событий нет`;
+            eventInfo.innerHTML = events[d] ? `📌 ${d}.09 · ${escapeHtml(events[d])}` : `📅 ${d}.09 — событий нет`;
             eventInfo.style.color = events[d] ? '#8aff8a' : '#5f8f5f';
         });
         calendarGrid.appendChild(dayDiv);
     }
 
+    // Шумомер
     const noiseFill = document.getElementById('noiseFill');
     const noiseLabel = document.getElementById('noiseLabel');
     function updateNoise() {
@@ -822,22 +912,24 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         this.innerHTML = '<div class="coming">⚡ 3D-СЦЕНА ЗАГРУЖАЕТСЯ...<br><span style="font-size:0.65rem;color:#3f6f3f;">(Three.js + модель бара)</span></div>';
     });
 
-    // СЕКРЕТ
+    // Секретный раздел
     const secretInput = document.getElementById('secretInput');
     const secretMsg = document.getElementById('secretMessage');
     document.getElementById('secretBtn').addEventListener('click', function() {
         const pwd = secretInput.value.trim();
         if (pwd === '1111') { startClubFlow(); secretInput.value = ''; }
         else if (pwd.toLowerCase() === 'шум' || pwd.toLowerCase() === 'shum') {
-            secretMsg.innerHTML = '✅ Пароль верный, но для клуба нужен другой код.';
+            secretMsg.textContent = '✅ Пароль верный, но для клуба нужен другой код.';
             secretMsg.style.color = '#8aff8a';
         } else {
-            secretMsg.innerHTML = '❌ неверный пароль'; secretMsg.style.color = '#bf5f5f';
+            secretMsg.textContent = '❌ неверный пароль'; secretMsg.style.color = '#bf5f5f';
         }
     });
     secretInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('secretBtn').click(); });
 
+    // ============================================================
     // CLUB FLOW
+    // ============================================================
     const clubModal = document.getElementById('clubModal');
     const clubBox = document.getElementById('clubBox');
     const bloodOverlay = document.getElementById('bloodOverlay');
@@ -856,7 +948,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 Вы готовы стать частью <strong style="color:#ff5f5f;">закрытого клуба</strong>?
             </p>
             <p style="text-align:center;color:#8aaa8a;font-size:0.8rem;">
-                Это не шутка. Доступ к закрытым событиям бара, спецпредложениям и закрытым дропам.
+                Это не шутка. Доступ к закрытым событиям бара.
             </p>
             <div class="club-btn-row">
                 <button class="club-btn-yes" id="clubYes">ДА</button>
@@ -876,7 +968,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             <h2>📜 ПРАВИЛА КЛУБА</h2>
             <p style="font-size:0.85rem;">Первое правило бойцовского клуба — не говорить о бойцовском клубе.</p>
             <ul class="rules">
-                <li>Второе правило бойцовского клуба — не говорить о бойцовском клубе.</li>
+                <li>Второе правило — не говорить о бойцовском клубе.</li>
                 <li>Если кто-то кричит «стоп» — драка окончена.</li>
                 <li>Драка идёт столько, сколько нужно.</li>
                 <li>В драке участвуют только двое.</li>
@@ -918,9 +1010,9 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     const dialogs = [
         { speaker:'БАРМЕН', msg:'Ты уверен, что хочешь туда войти, парень?' },
         { speaker:'ГОСТЬ', msg:'Да. Я готов.' },
-        { speaker:'БАРМЕН', msg:'Хорошо. Тогда запомни: то, что здесь происходит — остаётся здесь.' },
+        { speaker:'БАРМЕН', msg:'Тогда запомни: то, что здесь происходит — остаётся здесь.' },
         { speaker:'СИСТЕМА', msg:'Регистрация участника клуба... подтверждено.' },
-        { speaker:'СИСТЕМА', msg:'Доступ к закрытым событиям открыт. Добро пожаловать в семью.' }
+        { speaker:'СИСТЕМА', msg:'Доступ к закрытым событиям открыт.' }
     ];
 
     function startDialogs() {
@@ -950,11 +1042,13 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             showToast('🩸 ДОБРО ПОЖАЛОВАТЬ В КЛУБ', '#ff5f5f');
         } else {
             localStorage.setItem('clubPending', '1');
-            showToast('🩸 Войди в кабинет для активации клуба', '#ff5f5f');
+            showToast('🩸 Войди в кабинет для активации', '#ff5f5f');
         }
     }
 
-    // ===== КАБИНЕТ =====
+    // ============================================================
+    // КАБИНЕТ
+    // ============================================================
     const overlay = document.getElementById('cabinetOverlay');
     const cabinetTrigger = document.getElementById('cabinetTrigger');
     const cabinetClose = document.getElementById('cabinetClose');
@@ -976,13 +1070,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     let spinning = false;
     let currentTier = 100;
     let currentCurrency = 'rub';
-
-    // КУРСЫ
-    const GRN_USDT_RATE = 1;      // 1 GREENCOIN = 1 USDT
-    const USDT_RUB_RATE = 92;      // мок-курс USDT/RUB
-    const BNB_USDT_RATE = 570;     // 1 BNB ≈ 570 USDT
-    const COMMISSION = 7.5;        // 7.5%
-    const STEAM_MARKET_FEE = 0.87; // Steam держит ~13% при продаже, робот ориентируется на реальную цену площадки
 
     const BASE_PRIZES = [
         { id:'shots',   name:'СЕТ ШОТОВ',    icon:'🥃', weight:5,  color:'#c41f1f' },
@@ -1007,7 +1094,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         });
     }
 
-    // STEAM ИНВЕНТАРЬ — цены в USD (актуальная рыночная стоимость)
     const MOCK_STEAM_INVENTORY = [
         { id:'ak_redline',    name:'AK-47 | Redline',              wear:'Field-Tested', usd:15.50,  icon:'🔫', rarity:'Засекреченное', rarityColor:'#eb4b4b' },
         { id:'awp_wildfire',  name:'AWP | Wildfire',               wear:'Minimal Wear', usd:95.00,  icon:'🎯', rarity:'Тайное',         rarityColor:'#eb4b4b' },
@@ -1017,8 +1103,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         { id:'glock_fade',    name:'Glock-18 | Fade',              wear:'Factory New',  usd:480.00, icon:'🔫', rarity:'Запрещённое',    rarityColor:'#8847ff' },
         { id:'butterfly_sl',  name:'★ Butterfly Knife | Slaughter',wear:'Minimal Wear', usd:1400.00,icon:'🗡', rarity:'★ Особое',        rarityColor:'#8650ac' },
         { id:'deagle_print',  name:'Desert Eagle | Printstream',   wear:'Minimal Wear', usd:65.80,  icon:'🔫', rarity:'Тайное',         rarityColor:'#eb4b4b' },
-        { id:'ak_firesnak',   name:'AK-47 | Fire Serpent',         wear:'Field-Tested', usd:750.00, icon:'🔫', rarity:'Тайное',         rarityColor:'#eb4b4b' },
-        { id:'m4a1_print',    name:'M4A1-S | Printstream',         wear:'Factory New',  usd:115.00, icon:'🔫', rarity:'Тайное',         rarityColor:'#eb4b4b' },
     ];
 
     const BASE_NODES = [
@@ -1042,29 +1126,32 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         document.body.style.overflow = 'hidden';
         const saved = localStorage.getItem('greenNoiseUser');
         if (saved) {
-            currentUser = JSON.parse(saved);
-            if (currentUser.usdt === undefined) currentUser.usdt = 0;
-            if (currentUser.grn === undefined) currentUser.grn = 0;
-            if (!currentUser.wins) currentUser.wins = [];
-            if (!currentUser.steamInventory) currentUser.steamInventory = [];
-            if (localStorage.getItem('clubPending') === '1' && !currentUser.clubMember) {
-                currentUser.clubMember = true;
-                localStorage.removeItem('clubPending');
-                saveUser();
-                setTimeout(() => showToast('🩸 Клуб активирован!', '#ff5f5f'), 800);
-            }
-            cabinetUserLabel.textContent = `// ${currentUser.login.toUpperCase()}`;
-            authForm.style.display = 'none';
-            nodesContainer.style.display = 'block';
-            rebuildNodes();
-            resizeCanvas();
-            startAnimation();
-        } else {
-            authForm.style.display = 'block';
-            nodesContainer.style.display = 'none';
-            sidePanel.classList.remove('open');
-            cabinetUserLabel.textContent = '— НЕ АВТОРИЗОВАН —';
+            try {
+                currentUser = JSON.parse(saved);
+                if (currentUser.usdt === undefined) currentUser.usdt = 0;
+                if (currentUser.grn === undefined) currentUser.grn = 0;
+                if (!currentUser.wins) currentUser.wins = [];
+                if (!currentUser.steamInventory) currentUser.steamInventory = [];
+                if (localStorage.getItem('clubPending') === '1' && !currentUser.clubMember) {
+                    currentUser.clubMember = true;
+                    localStorage.removeItem('clubPending');
+                    saveUser();
+                    setTimeout(() => showToast('🩸 Клуб активирован!', '#ff5f5f'), 800);
+                }
+                cabinetUserLabel.textContent = `// ${String(currentUser.login).toUpperCase()}`;
+                authForm.style.display = 'none';
+                nodesContainer.style.display = 'block';
+                rebuildNodes();
+                resizeCanvas();
+                startAnimation();
+                return;
+            } catch(e) { console.error(e); }
         }
+        authForm.style.display = 'block';
+        nodesContainer.style.display = 'none';
+        sidePanel.classList.remove('open');
+        cabinetUserLabel.textContent = '— НЕ АВТОРИЗОВАН —';
+        initAuthWidgets();
     }
     function closeCabinet() {
         overlay.classList.remove('active');
@@ -1081,7 +1168,9 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         activeNode = null;
     });
 
-    // AUTH
+    // ============================================================
+    // АВТОРИЗАЦИЯ
+    // ============================================================
     let isLogin = true;
     const authTitle = document.getElementById('authTitle');
     const authLogin = document.getElementById('authLogin');
@@ -1106,7 +1195,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         authError.textContent = '';
     });
 
-    function loginAs(login, userData) {
+    function loginAs(login, userData, provider) {
         if (!userData.testBonusGiven) {
             userData.usdt = (userData.usdt || 0) + 1000;
             userData.testBonusGiven = true;
@@ -1126,14 +1215,15 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             steamInventory: userData.steamInventory || [],
             steamTradeLink: userData.steamTradeLink || '',
             clubMember: userData.clubMember || false,
-            metaMaskAddress: userData.metaMaskAddress || ''
+            metaMaskAddress: userData.metaMaskAddress || '',
+            authProvider: provider || userData.authProvider || 'local'
         };
         if (localStorage.getItem('clubPending') === '1' && !currentUser.clubMember) {
             currentUser.clubMember = true;
             localStorage.removeItem('clubPending');
         }
         saveUser();
-        cabinetUserLabel.textContent = `// ${login.toUpperCase()}`;
+        cabinetUserLabel.textContent = `// ${String(login).toUpperCase()}`;
         authForm.style.display = 'none';
         nodesContainer.style.display = 'block';
         rebuildNodes();
@@ -1144,20 +1234,31 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     function doAuth() {
         const login = authLogin.value.trim();
         const pass = authPassword.value.trim();
+        authError.textContent = '';
+
         if (!login || !pass) { authError.textContent = 'Заполните все поля'; return; }
+        if (!isValidLogin(login)) {
+            authError.textContent = 'Логин: 3-32 символа (a-z, 0-9, _, -)';
+            return;
+        }
+        if (!isValidPassword(pass)) {
+            authError.textContent = 'Пароль: от 4 до 128 символов';
+            return;
+        }
+
         try {
             const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
             if (!isLogin) {
                 if (pass !== authPassword2.value.trim()) { authError.textContent = 'Пароли не совпадают'; return; }
                 if (users[login]) { authError.textContent = 'Логин занят'; return; }
-                users[login] = { password:pass, bonus:0, usdt:0, grn:0, promoUsed:false, wins:[], clubMember:false };
+                users[login] = { password:pass, bonus:0, usdt:0, grn:0, promoUsed:false, wins:[], clubMember:false, authProvider:'local' };
                 localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
-                loginAs(login, users[login]);
+                loginAs(login, users[login], 'local');
             } else {
                 if (!users[login] || users[login].password !== pass) {
                     authError.textContent = 'Неверный логин или пароль'; return;
                 }
-                loginAs(login, users[login]);
+                loginAs(login, users[login], users[login].authProvider || 'local');
             }
         } catch(e) { console.error(e); authError.textContent = 'Ошибка: см. консоль'; }
     }
@@ -1166,24 +1267,92 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         el.addEventListener('keydown', e => { if (e.key === 'Enter') doAuth(); })
     );
 
-    document.querySelectorAll('.social-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const provider = this.dataset.provider;
-            const providerName = { tg:'Telegram', steam:'Steam', google:'Google' }[provider];
-            showToast(`⏳ Подключение к ${providerName}...`, '#5fdf5f');
-            setTimeout(() => {
-                const login = `${provider}_guest`;
-                const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
-                if (!users[login]) {
-                    users[login] = { password:'social_'+Date.now(), bonus:50, usdt:100, grn:0, promoUsed:false, wins:[], clubMember:false };
-                    localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
-                }
-                loginAs(login, users[login]);
-                showToast(`✅ Вход через ${providerName}`, '#8aff8a');
-            }, 1400);
-        });
-    });
+    // ============================================================
+    // GOOGLE SIGN-IN (GIS)
+    // ============================================================
+    window.handleGoogleCredential = function(response) {
+        try {
+            // Декодируем JWT от Google (только для извлечения данных)
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            const googleId = payload.sub;
+            const email = payload.email;
+            const name = payload.name || email.split('@')[0];
 
+            // В реальном приложении здесь: отправка credential на бэкенд для верификации
+            // fetch(`${BACKEND_URL}/auth/google`, { method:'POST', body: JSON.stringify({ credential: response.credential }) })
+
+            const login = 'google_' + String(googleId).slice(-8);
+            const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
+            if (!users[login]) {
+                users[login] = {
+                    password: 'oauth_' + crypto.getRandomValues(new Uint32Array(4)).join(''),
+                    bonus: 50, usdt: 100, grn: 0, promoUsed: false, wins: [],
+                    clubMember: false, authProvider: 'google',
+                    email: email, displayName: name
+                };
+                localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
+            }
+            loginAs(login, users[login], 'google');
+            showToast(`✅ Вход через Google (${escapeHtml(email)})`, '#8aff8a');
+        } catch (e) {
+            console.error(e);
+            showToast('❌ Ошибка Google-авторизации', '#bf5f5f');
+        }
+    };
+
+    // ============================================================
+    // TELEGRAM LOGIN WIDGET
+    // ============================================================
+    function initAuthWidgets() {
+        // Telegram widget — инициализируется только если задан бот
+        const tgContainer = document.getElementById('tgLoginContainer');
+        if (!tgContainer || tgContainer.dataset.bound) return;
+        tgContainer.dataset.bound = '1';
+        // ЗАМЕНИТЕ 'YOUR_BOT_USERNAME' на имя вашего бота (без @)
+        // Пример: если бот @GreenNoiseBarBot, то 'GreenNoiseBarBot'
+        const BOT_USERNAME = 'YOUR_BOT_USERNAME';
+        if (BOT_USERNAME === 'YOUR_BOT_USERNAME') {
+            tgContainer.innerHTML = '<div style="color:#7aaa7a;font-size:0.72rem;padding:10px;">⚠ Укажите имя бота в коде (initAuthWidgets)</div>';
+            return;
+        }
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://telegram.org/js/telegram-widget.js?22';
+        script.setAttribute('data-telegram-login', BOT_USERNAME);
+        script.setAttribute('data-size', 'large');
+        script.setAttribute('data-radius', '3');
+        script.setAttribute('data-onauth', 'handleTelegramAuth(user)');
+        script.setAttribute('data-request-access', 'write');
+        tgContainer.appendChild(script);
+    }
+
+    window.handleTelegramAuth = function(user) {
+        try {
+            // В реальном приложении: отправка данных на бэкенд для проверки hash
+            // fetch(`${BACKEND_URL}/auth/telegram`, { method:'POST', body: JSON.stringify(user) })
+            const login = 'tg_' + String(user.id);
+            const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
+            if (!users[login]) {
+                users[login] = {
+                    password: 'oauth_' + crypto.getRandomValues(new Uint32Array(4)).join(''),
+                    bonus: 50, usdt: 100, grn: 0, promoUsed: false, wins: [],
+                    clubMember: false, authProvider: 'telegram',
+                    displayName: user.first_name + (user.last_name ? ' ' + user.last_name : ''),
+                    tgUsername: user.username || ''
+                };
+                localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
+            }
+            loginAs(login, users[login], 'telegram');
+            showToast(`✅ Вход через Telegram (${escapeHtml(user.first_name || 'user')})`, '#8aff8a');
+        } catch (e) {
+            console.error(e);
+            showToast('❌ Ошибка Telegram-авторизации', '#bf5f5f');
+        }
+    };
+
+    // ============================================================
+    // NODES / NETWORK
+    // ============================================================
     function rebuildNodes() {
         NODES = [...BASE_NODES];
         if (currentUser && currentUser.clubMember) NODES.push(CLUB_NODE);
@@ -1197,7 +1366,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         centerEl.style.left = CENTER.x + '%';
         centerEl.style.top = CENTER.y + '%';
         centerEl.dataset.node = CENTER.id;
-        centerEl.innerHTML = `<div class="node-icon">${CENTER.icon}</div><div class="node-label">${CENTER.label}</div><div class="node-sub">// ${currentUser.login}</div>`;
+        centerEl.innerHTML = `<div class="node-icon">${CENTER.icon}</div><div class="node-label">${CENTER.label}</div><div class="node-sub">// ${escapeHtml(currentUser.login)}</div>`;
         centerEl.addEventListener('click', () => openPanel(CENTER));
         nodesContainer.appendChild(centerEl);
 
@@ -1266,6 +1435,9 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     }
 
     function getPanelContent(id) {
+        const safeLogin = escapeHtml(currentUser.login);
+        const safeMM = currentUser.metaMaskAddress ? escapeHtml(currentUser.metaMaskAddress.slice(0,10)) + '...' + escapeHtml(currentUser.metaMaskAddress.slice(-6)) : 'не подключён';
+
         switch (id) {
             case 'profile':
                 return `
@@ -1274,43 +1446,26 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                         <div class="id-value">${getPersonalId(currentUser.login)}</div>
                     </div>
                     ${currentUser.clubMember ? '<div class="club-badge">🩸 УЧАСТНИК КЛУБА</div>' : ''}
-                    <div class="panel-section"><div class="panel-label">// Логин</div><div class="panel-value">${currentUser.login}</div></div>
-                    <div class="panel-section"><div class="panel-label">// Бонусный баланс</div><div class="panel-value panel-value-big">${currentUser.bonus}</div></div>
-                    <div class="panel-section"><div class="panel-label">// USDT баланс</div><div class="panel-value panel-value-big">${(currentUser.usdt||0).toFixed(2)}</div></div>
-                    <div class="panel-section"><div class="panel-label">// GREENCOIN</div><div class="panel-value panel-value-big">${(currentUser.grn||0).toFixed(2)} GRN</div></div>
-                    ${currentUser.metaMaskAddress ? `<div class="panel-section"><div class="panel-label">// MetaMask</div><div class="panel-value" style="font-family:monospace;font-size:0.75rem;color:#8aff8a;">${currentUser.metaMaskAddress.slice(0,10)}...${currentUser.metaMaskAddress.slice(-6)}</div></div>` : ''}
+                    <div class="panel-section"><div class="panel-label">// Логин</div><div class="panel-value">${safeLogin}</div></div>
+                    <div class="panel-section"><div class="panel-label">// Способ входа</div><div class="panel-value">${escapeHtml(currentUser.authProvider || 'local')}</div></div>
+                    <div class="panel-section"><div class="panel-label">// Бонусный баланс</div><div class="panel-value panel-value-big">${parseInt(currentUser.bonus)||0}</div></div>
+                    <div class="panel-section"><div class="panel-label">// USDT баланс</div><div class="panel-value panel-value-big">${(parseFloat(currentUser.usdt)||0).toFixed(2)}</div></div>
+                    <div class="panel-section"><div class="panel-label">// GREENCOIN</div><div class="panel-value panel-value-big">${(parseFloat(currentUser.grn)||0).toFixed(2)} GRN</div></div>
+                    ${currentUser.metaMaskAddress ? `<div class="panel-section"><div class="panel-label">// MetaMask</div><div class="panel-value" style="font-family:monospace;font-size:0.75rem;color:#8aff8a;">${safeMM}</div></div>` : ''}
                     <div class="panel-note">Выход из аккаунта не предусмотрен. Ты здесь навсегда. 🩸</div>
                 `;
 
             case 'club_events':
                 return `
                     <div class="club-badge">🩸 ТОЛЬКО ДЛЯ УЧАСТНИКОВ</div>
-                    <div class="panel-section"><div class="panel-label">// СОБЫТИЯ УЧАСТНИКОВ КЛУБА</div></div>
+                    <div class="panel-section"><div class="panel-label">// СОБЫТИЯ УЧАСТНИКОВ</div></div>
                     <div class="club-events-list">
-                        <div class="club-event-card">
-                            <h4>ПОДВАЛЬНЫЙ ТУРНИР</h4>
-                            <p>Закрытая встреча. 3 этаж, вход через чёрный ход. Только для своих.</p>
-                            <div class="date">12.10 · 23:00</div>
-                        </div>
-                        <div class="club-event-card">
-                            <h4>НОЧЬ МОЛЧАНИЯ</h4>
-                            <p>Без света. Без музыки. Только ты и твои мысли. Дресс-код: черное.</p>
-                            <div class="date">19.10 · 02:00</div>
-                        </div>
-                        <div class="club-event-card">
-                            <h4>СЛЕПАЯ ДЕГУСТАЦИЯ</h4>
-                            <p>10 неизвестных напитков. Угадаешь состав — забираешь бутылку.</p>
-                            <div class="date">26.10 · 21:00</div>
-                        </div>
-                        <div class="club-event-card">
-                            <h4>ЗАКРЫТЫЙ СЕТ PAVEL LAZAREV</h4>
-                            <p>Живой сет для участников клуба. Присутствие строго по списку.</p>
-                            <div class="date">02.11 · 22:30</div>
-                        </div>
+                        <div class="club-event-card"><h4>ПОДВАЛЬНЫЙ ТУРНИР</h4><p>Закрытая встреча. 3 этаж, вход через чёрный ход.</p><div class="date">12.10 · 23:00</div></div>
+                        <div class="club-event-card"><h4>НОЧЬ МОЛЧАНИЯ</h4><p>Без света. Без музыки. Дресс-код: черное.</p><div class="date">19.10 · 02:00</div></div>
+                        <div class="club-event-card"><h4>СЛЕПАЯ ДЕГУСТАЦИЯ</h4><p>10 неизвестных напитков. Угадаешь — забираешь бутылку.</p><div class="date">26.10 · 21:00</div></div>
+                        <div class="club-event-card"><h4>СЕТ PAVEL LAZAREV</h4><p>Живой сет только для участников клуба.</p><div class="date">02.11 · 22:30</div></div>
                     </div>
-                    <div class="panel-note" style="border-left-color:#7a2a2a;color:#c88a8a;">
-                        Эти события не отображаются в публичном календаре. Никому не рассказывай.
-                    </div>
+                    <div class="panel-note" style="border-left-color:#7a2a2a;color:#c88a8a;">Никому не рассказывай.</div>
                 `;
 
             case 'wallet':
@@ -1326,23 +1481,22 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                     <div class="tab-content active" data-content="balance">
                         <div class="balance-card">
                             <div class="panel-label">// USDT БАЛАНС</div>
-                            <div class="panel-value panel-value-big"><span class="token-icon">₮</span><span id="balDisplay">${(currentUser.usdt||0).toFixed(2)}</span></div>
+                            <div class="panel-value panel-value-big"><span class="token-icon">₮</span><span id="balDisplay">${(parseFloat(currentUser.usdt)||0).toFixed(2)}</span></div>
                         </div>
                         <div class="balance-card" style="background:linear-gradient(135deg, rgba(30,90,30,0.5), rgba(5,20,5,0.9));">
                             <div class="panel-label">// GREENCOIN</div>
-                            <div class="panel-value panel-value-big"><span class="green-token-icon">G</span><span id="grnDisplay">${(currentUser.grn||0).toFixed(2)}</span> <span style="font-size:0.6rem;color:#5f8f5f;">GRN</span></div>
+                            <div class="panel-value panel-value-big"><span class="green-token-icon">G</span><span id="grnDisplay">${(parseFloat(currentUser.grn)||0).toFixed(2)}</span> <span style="font-size:0.6rem;color:#5f8f5f;">GRN</span></div>
                             <div style="color:#5f8f5f;font-size:0.7rem;margin-top:6px;">1 GREENCOIN = 1 USDT</div>
                         </div>
-                        <div class="panel-note">GREENCOIN — внутренняя валюта платформы. Курс 1:1 к USDT.</div>
                     </div>
 
                     <div class="tab-content" data-content="topup">
                         <div class="panel-label">// ПОПОЛНЕНИЕ ЧЕРЕЗ СБП</div>
                         <p style="font-size:0.75rem;color:#8aaa8a;margin-bottom:12px;line-height:1.6;">
-                            Оплата рублями → зачисление GREENCOIN на кошелёк.<br>
-                            Курс USDT/RUB: <strong style="color:#8aff8a;" id="usdtRubRate">${USDT_RUB_RATE} ₽</strong> · Комиссия: <strong style="color:#df9f4f;">${COMMISSION}%</strong>
+                            Оплата рублями на номер <strong style="color:#8aff8a;">${SBP_PHONE}</strong> (${SBP_BANK}).<br>
+                            Курс: <strong style="color:#8aff8a;">${USDT_RUB_RATE} ₽ = 1 USDT</strong> · Комиссия: <strong style="color:#df9f4f;">${COMMISSION}%</strong>
                         </p>
-                        <input type="number" class="panel-input" id="sbpRubAmount" placeholder="Сумма в ₽" min="100" step="100" />
+                        <input type="number" class="panel-input" id="sbpRubAmount" placeholder="Сумма в ₽" min="100" max="150000" step="100" />
                         <div style="display:flex;gap:8px;margin-bottom:8px;">
                             <button class="panel-btn" data-rub="500" style="flex:1;margin:0;">500 ₽</button>
                             <button class="panel-btn" data-rub="1000" style="flex:1;margin:0;">1000 ₽</button>
@@ -1356,13 +1510,13 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                         <div id="sbpQr"></div>
                         <div id="sbpStatus" style="font-size:0.8rem;margin-top:8px;min-height:1.2em;"></div>
                         <div class="panel-note">
-                            <strong>Как это работает:</strong><br>
-                            1. Вы вводите сумму в ₽ и жмёте «Сгенерировать QR»<br>
-                            2. Сканируете QR в мобильном банке (Т-Банк, Сбер, Альфа и др.)<br>
-                            3. Деньги приходят на наш счёт в Т-Банке<br>
-                            4. Система автоматически покупает USDT и минтит GREENCOIN<br>
-                            <br>
-                            Робот использует рыночный курс USDT/RUB (обновляется каждые 15 мин).
+                            <strong>Как оплатить через СБП:</strong><br>
+                            1. Введите сумму и нажмите «Сгенерировать QR»<br>
+                            2. Откройте приложение банка (Т-Банк, Сбер, Альфа и др.)<br>
+                            3. Отсканируйте QR или откройте ссылку ниже<br>
+                            4. Подтвердите перевод на номер <strong>${SBP_PHONE}</strong><br>
+                            5. GREENCOIN зачислятся после подтверждения банком<br><br>
+                            <span style="color:#df9f4f;">⚠ Тестовый режим: реальное зачисление требует интеграции с API банка.</span>
                         </div>
                     </div>
 
@@ -1383,67 +1537,45 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 
                     <div class="tab-content" data-content="skins">
                         <div class="panel-label">// STEAM ИНВЕНТАРЬ → GREENCOIN</div>
-
-                        <div class="steam-connect-box ${currentUser.steamLinked?'connected':''}" id="steamConnectBox">
-                            <div class="steam-status ${currentUser.steamLinked?'':'off'}" id="steamStatus">
+                        <div class="steam-connect-box ${currentUser.steamLinked?'connected':''}">
+                            <div class="steam-status ${currentUser.steamLinked?'':'off'}">
                                 ${currentUser.steamLinked ? '✓ STEAM ПОДКЛЮЧЁН' : '◯ STEAM НЕ ПОДКЛЮЧЁН'}
                             </div>
                             ${currentUser.steamLinked ? 
-                                `<button class="panel-btn secondary" id="steamRefreshBtn">↻ ОБНОВИТЬ ИНВЕНТАРЬ</button>
+                                `<button class="panel-btn secondary" id="steamRefreshBtn">↻ ОБНОВИТЬ</button>
                                  <button class="panel-btn secondary" id="steamDisconnectBtn" style="border-color:#7a2a2a;color:#df9f9f;">✕ ОТКЛЮЧИТЬ STEAM</button>` :
-                                `<input type="text" class="panel-input" id="steamIdInput" placeholder="SteamID64 или ссылка на профиль" />
+                                `<input type="text" class="panel-input" id="steamIdInput" placeholder="SteamID64 или ссылка" maxlength="128" />
                                  <button class="panel-btn" id="steamConnectBtn">⚙ ПОДКЛЮЧИТЬ STEAM</button>`
                             }
                         </div>
-
                         <div id="steamInvWrapper" style="display:${currentUser.steamLinked?'block':'none'};">
-                            <div class="panel-label">// ВЫБЕРИТЕ СКИНЫ ДЛЯ ПРИЁМА</div>
+                            <div class="panel-label">// ВЫБЕРИТЕ СКИНЫ</div>
                             <div class="steam-inventory" id="steamInvList"></div>
-
                             <div class="commission-box" id="commissionBox" style="display:none;">
-                                <div class="commission-row"><span>Оценка скинов (рынок)</span><span id="commTotal">0 $</span></div>
-                                <div class="commission-row"><span>Комиссия платформы</span><span class="fee" id="commFee">− ${COMMISSION}%</span></div>
-                                <div class="commission-row total"><span>К зачислению (GREENCOIN)</span><span id="commNet">0 GRN</span></div>
-                                <div style="font-size:0.68rem;color:#5f8f5f;margin-top:8px;">
-                                    Курс: 1 USD = 1 USDT = 1 GREENCOIN
-                                </div>
+                                <div class="commission-row"><span>Оценка скинов</span><span id="commTotal">0 $</span></div>
+                                <div class="commission-row"><span>Комиссия</span><span class="fee" id="commFee">− ${COMMISSION}%</span></div>
+                                <div class="commission-row total"><span>К зачислению</span><span id="commNet">0 GRN</span></div>
                             </div>
-
                             <div class="trade-link-box">
-                                <div class="panel-label">// ССЫЛКА НА ОБМЕН (TRADE LINK)</div>
-                                <input type="text" class="panel-input" id="tradeLinkInput" placeholder="https://steamcommunity.com/tradeoffer/new/?partner=..." value="${currentUser.steamTradeLink || ''}" />
-                                <div style="font-size:0.65rem;color:#5f8f5f;margin-top:-6px;">
-                                    Робот-приёмщик отправит оффер на ваш Steam-аккаунт.
-                                </div>
+                                <div class="panel-label">// ССЫЛКА НА ОБМЕН</div>
+                                <input type="text" class="panel-input" id="tradeLinkInput" placeholder="https://steamcommunity.com/tradeoffer/new/?partner=..." maxlength="256" value="${escapeHtml(currentUser.steamTradeLink || '')}" />
                             </div>
-
-                            <button class="panel-btn" id="skinPayBtn" disabled>🤖 ОТПРАВИТЬ СКИНЫ РОБОТУ</button>
+                            <button class="panel-btn" id="skinPayBtn" disabled>🤖 ОТПРАВИТЬ РОБОТУ</button>
                             <div id="skinStatus" style="font-size:0.8rem;margin-top:8px;min-height:1.2em;"></div>
-
-                            <div class="panel-note">
-                                <strong>Как работает робот-приёмщик:</strong><br>
-                                1. Вы выбираете скины и жмёте «Отправить»<br>
-                                2. Робот отправляет трейд-оффер на ваш Steam<br>
-                                3. Вы подтверждаете обмен в Steam Guard<br>
-                                4. Трекер принимает скин и запрашивает цену у оракула (Pricempire)<br>
-                                5. По курсу USD → USDT → GREENCOIN (с комиссией ${COMMISSION}%)<br>
-                                   на кошелёк зачисляются GREENCOIN
-                            </div>
                         </div>
                     </div>
 
                     <div class="tab-content" data-content="token">
                         <div class="balance-card" style="background:linear-gradient(135deg, rgba(30,110,30,0.5), rgba(5,25,5,0.9));">
                             <div class="panel-label">// GREENCOIN</div>
-                            <div class="panel-value panel-value-big"><span class="green-token-icon">G</span><span id="grnDisplay2">${(currentUser.grn||0).toFixed(2)}</span> <span style="font-size:0.6rem;color:#5f8f5f;">GRN</span></div>
+                            <div class="panel-value panel-value-big"><span class="green-token-icon">G</span><span id="grnDisplay2">${(parseFloat(currentUser.grn)||0).toFixed(2)}</span> GRN</div>
                             <div style="color:#5f8f5f;font-size:0.72rem;margin-top:8px;">1 GRN = 1 USDT</div>
                         </div>
-                        <div class="panel-label">// КУПИТЬ GREENCOIN ЗА BNB</div>
                         <div style="background:#0a140a;border:1px solid #2a5a2a;padding:12px;margin-bottom:12px;border-radius:3px;">
                             <div style="font-size:0.75rem;color:#8aaa8a;line-height:1.7;">
                                 Сеть: <strong style="color:#8aff8a;">BNB Smart Chain (BEP-20)</strong><br>
-                                Контракт GREENCOIN: <span style="color:#5f8f5f;font-family:monospace;">0xGREEN...SHUM</span><br>
-                                MetaMask: <span style="color:#8aff8a;font-family:monospace;" id="mmAddress">${currentUser.metaMaskAddress ? currentUser.metaMaskAddress.slice(0,10)+'...'+currentUser.metaMaskAddress.slice(-6) : 'не подключён'}</span>
+                                Контракт: <span style="color:#5f8f5f;font-family:monospace;">0xGREEN...SHUM</span><br>
+                                MetaMask: <span style="color:#8aff8a;font-family:monospace;" id="mmAddress">${safeMM}</span>
                             </div>
                         </div>
                         <button class="panel-btn secondary" id="connectMetaMaskBtn">🦊 ${currentUser.metaMaskAddress ? 'ОБНОВИТЬ АДРЕС' : 'ПОДКЛЮЧИТЬ METAMASK'}</button>
@@ -1452,33 +1584,30 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                             <button class="panel-btn" data-bnb="0.001" style="flex:1;margin:0;">0.001</button>
                             <button class="panel-btn" data-bnb="0.005" style="flex:1;margin:0;">0.005</button>
                             <button class="panel-btn" data-bnb="0.01" style="flex:1;margin:0;">0.01</button>
-                            <button class="panel-btn" data-bnb="0.05" style="flex:1;margin:0;">0.05</button>
                         </div>
                         <div id="grnCalc" style="font-size:0.78rem;color:#5f8f5f;margin-bottom:10px;padding:10px;background:#050a05;border:1px solid #2a5a2a;min-height:1.2em;border-radius:3px;">
                             Получите: <strong style="color:#8aff8a;">0.00 GRN</strong>
                         </div>
-                        <button class="panel-btn" id="grnBuyBtn">🟢 КУПИТЬ GREENCOIN ЗА BNB</button>
+                        <button class="panel-btn" id="grnBuyBtn">🟢 КУПИТЬ GRN ЗА BNB</button>
                         <div id="grnStatus" style="font-size:0.8rem;margin-top:8px;min-height:1.2em;"></div>
                     </div>
                 `;
 
             case 'bonus':
-                const bonusCard = `#${currentUser.login.toUpperCase().slice(0,6)}-${String(1000 + (currentUser.login.length * 137) % 9000).padStart(4,'0')}`;
                 return `
                     <div class="saby-panel">
                         <div class="saby-logo">📊 SABY CRM</div>
                         <div class="saby-status">
                             <span class="saby-dot" id="sabyDot"></span>
-                            <span id="sabyStatusText">Синхронизация в разработке...</span>
+                            <span id="sabyStatusText">Ожидание синхронизации...</span>
                         </div>
-                        <div class="saby-info">Ваши бонусы будут автоматически подтягиваться из <strong>SABY</strong>.</div>
+                        <div class="saby-info">Бонусы подтягиваются из <strong>SABY</strong>.</div>
                     </div>
                     <div class="balance-card">
                         <div class="panel-label">// БОНУСНЫЙ БАЛАНС</div>
-                        <div class="panel-value panel-value-big">${currentUser.bonus} 🎯</div>
+                        <div class="panel-value panel-value-big">${parseInt(currentUser.bonus)||0} 🎯</div>
                     </div>
-                    <div class="panel-section"><div class="panel-label">// БОНУСНАЯ КАРТА</div><div class="panel-value" style="font-family:'Press Start 2P',monospace;font-size:0.8rem;color:#8aff8a;">${bonusCard}</div></div>
-                    <button class="panel-btn secondary" id="sabySyncBtn">↻ СИНХРОНИЗИРОВАТЬ С SABY</button>
+                    <button class="panel-btn secondary" id="sabySyncBtn">↻ СИНХРОНИЗИРОВАТЬ</button>
                     <div id="sabySyncStatus" style="font-size:0.78rem;margin-top:8px;color:#5f8f5f;"></div>
                 `;
 
@@ -1486,8 +1615,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 return `
                     <div class="panel-label" style="text-align:center;">// ЛЕНТОЧНАЯ РУЛЕТКА</div>
                     <div class="currency-toggle">
-                        <button class="currency-btn active" data-currency="rub"><span class="cur-icon">₽</span>РУБЛИ</button>
-                        <button class="currency-btn" data-currency="grn"><span class="cur-icon">🟢</span>GREEN</button>
+                        <button class="currency-btn active" data-currency="rub">₽ РУБЛИ</button>
+                        <button class="currency-btn" data-currency="grn">🟢 GREEN</button>
                     </div>
                     <div class="roulette-tiers" id="rouletteTiers"></div>
                     <div class="tape-wrapper">
@@ -1496,17 +1625,12 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                             <div class="tape-strip" id="tapeStrip"></div>
                         </div>
                     </div>
-                    <button class="panel-btn spin-btn" id="spinBtn" style="background:linear-gradient(135deg,#1a3a1a,#2a5a2a);border-color:#5fdf5f;font-weight:bold;letter-spacing:2px;">🎰 КРУТИТЬ ЗА 100 ₽</button>
+                    <button class="panel-btn" id="spinBtn" style="background:linear-gradient(135deg,#1a3a1a,#2a5a2a);border-color:#5fdf5f;font-weight:bold;">🎰 КРУТИТЬ ЗА 100 ₽</button>
                     <div id="spinResult"></div>
                     <div class="panel-section" style="margin-top:18px;">
                         <div class="panel-label">// ПРИЗЫ</div>
                         <div class="prize-list">
-                            ${BASE_PRIZES.map(p => `
-                                <div class="prize-row">
-                                    <span class="pname">${p.icon} ${p.name}</span>
-                                    <span class="pchance">${(p.weight / TOTAL_WEIGHT * 100).toFixed(1)}%</span>
-                                </div>
-                            `).join('')}
+                            ${BASE_PRIZES.map(p => `<div class="prize-row"><span class="pname">${p.icon} ${escapeHtml(p.name)}</span><span class="pchance">${(p.weight / TOTAL_WEIGHT * 100).toFixed(1)}%</span></div>`).join('')}
                         </div>
                     </div>
                 `;
@@ -1520,10 +1644,10 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 
             case 'builder':
                 return `
-                    <div class="panel-label">// СОБЕРИ СВОЙ КОКТЕЙЛЬ</div>
+                    <div class="panel-label">// СОБЕРИ КОКТЕЙЛЬ</div>
                     <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;">
                         ${['джин','текила','ром','водка','ликёр','тоник'].map(i =>
-                            `<button class="ingr-btn" data-ing="${i}" style="background:#0f1a0f;border:1px solid #2a5a2a;color:#9adf9a;padding:6px 12px;font-family:'Share Tech Mono',monospace;cursor:pointer;font-size:0.75rem;border-radius:3px;transition:0.2s;">${i}</button>`
+                            `<button class="ingr-btn" data-ing="${escapeHtml(i)}" style="background:#0f1a0f;border:1px solid #2a5a2a;color:#9adf9a;padding:6px 12px;font-family:'Share Tech Mono',monospace;cursor:pointer;font-size:0.75rem;border-radius:3px;">${escapeHtml(i)}</button>`
                         ).join('')}
                     </div>
                     <button class="panel-btn" id="buildMix">⚡ СМЕШАТЬ</button>
@@ -1532,7 +1656,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 
             case 'calendar':
                 return `
-                    <div class="panel-label">// БЛИЖАЙШИЕ СОБЫТИЯ</div>
+                    <div class="panel-label">// СОБЫТИЯ</div>
                     <div class="panel-section" style="margin-top:12px;"><div class="panel-value">📅 12.09 — Неоновая ночь</div></div>
                     <div class="panel-section"><div class="panel-value">📅 19.09 — Кибер-дегустация</div></div>
                     <div class="panel-section"><div class="panel-value">📅 26.09 — Тёмный киносеанс</div></div>
@@ -1542,25 +1666,24 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 return `
                     <div class="panel-label">// BANDCAMP · UNIT:SERAPHIM 2</div>
                     <div style="margin-top:12px;">
-                        <iframe style="border:0;width:100%;height:200px;" src="https://bandcamp.com/EmbeddedPlayer/album=2239565531/size=large/bgcol=0a0f0a/linkcol=5fdf5f/tracklist=false/transparent=true/" seamless></iframe>
+                        <iframe style="border:0;width:100%;height:200px;" src="https://bandcamp.com/EmbeddedPlayer/album=2239565531/size=large/bgcol=0a0f0a/linkcol=5fdf5f/tracklist=false/transparent=true/" seamless title="Bandcamp"></iframe>
                     </div>
                 `;
 
             case 'secret':
                 return `
                     <div class="panel-label">// ПРОМОКОД</div>
-                    <input type="text" class="panel-input" id="promoInput" placeholder="ВВЕДИТЕ КОД" />
+                    <input type="text" class="panel-input" id="promoInput" placeholder="ВВЕДИТЕ КОД" maxlength="32" autocomplete="off" />
                     <button class="panel-btn" id="promoBtn">🔓 АКТИВИРОВАТЬ</button>
                     <div id="promoStatus" style="font-size:0.8rem;margin-top:8px;min-height:1.2em;"></div>
-                    <div class="panel-note">Активные коды: <strong>1488</strong>, <strong>HACK2026</strong>, <strong>GREENSHUM</strong>, <strong>1111</strong> (клуб)</div>
+                    <div class="panel-note">Коды: <strong>1488</strong>, <strong>HACK2026</strong>, <strong>1111</strong></div>
                 `;
 
             case 'promo':
                 return `
-                    <div class="panel-label">// АКЦИИ И ПОДАРКИ</div>
-                    <div class="panel-section" style="margin-top:12px;"><div class="panel-value">🎁 День рождения — коктейль в подарок</div></div>
+                    <div class="panel-label">// АКЦИИ</div>
+                    <div class="panel-section" style="margin-top:12px;"><div class="panel-value">🎁 День рождения — коктейль</div></div>
                     <div class="panel-section"><div class="panel-value">🎁 Каждая 5-я кружка — за счёт заведения</div></div>
-                    <div class="panel-section"><div class="panel-value">🎁 Пятница — 2 по цене 1</div></div>
                 `;
 
             default:
@@ -1569,7 +1692,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     }
 
     function attachPanelHandlers(id) {
-        // SABY
         if (id === 'bonus') {
             const sabyBtn = document.getElementById('sabySyncBtn');
             const sabyStatus = document.getElementById('sabySyncStatus');
@@ -1579,14 +1701,13 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 sabyStatus.textContent = '⏳ Подключение к SABY CRM...'; sabyStatus.style.color = '#8aff8a';
                 setTimeout(() => {
                     sabyDot.classList.add('online');
-                    sabyText.textContent = 'Канал связи открыт (демо)';
-                    sabyStatus.innerHTML = '⚠ Реальная интеграция с SABY появится в следующем релизе.';
+                    sabyText.textContent = 'Демо-режим';
+                    sabyStatus.textContent = '⚠ Интеграция появится в следующем релизе.';
                     sabyStatus.style.color = '#df9f4f';
                 }, 1600);
             });
         }
 
-        // WALLET
         if (id === 'wallet') {
             document.querySelectorAll('.panel-tabs .tab').forEach(tab => {
                 tab.addEventListener('click', function() {
@@ -1600,7 +1721,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                     if (this.dataset.tab === 'topup') initSbpPanel();
                 });
             });
-
             initSkinsPanel();
             initTokenPanel();
             initSbpPanel();
@@ -1625,7 +1745,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             if (mixBtn) mixBtn.addEventListener('click', function() {
                 const res = document.getElementById('buildResult');
                 if (!localSelected.length) { res.textContent = '❌ выбери ингредиенты'; res.style.color = '#bf5f5f'; return; }
-                res.innerHTML = `🍸 ${localSelected.join(' + ')} — готово!`; res.style.color = '#8aff8a';
+                res.innerHTML = `🍸 ${localSelected.map(escapeHtml).join(' + ')} — готово!`;
+                res.style.color = '#8aff8a';
             });
         }
 
@@ -1656,17 +1777,19 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 document.getElementById('hackOverlay').classList.add('active');
                 setTimeout(() => {
                     document.getElementById('hackOverlay').classList.remove('active');
-                    currentUser.bonus += 50;
+                    currentUser.bonus = (parseInt(currentUser.bonus)||0) + 50;
                     currentUser.promoUsed = true;
                     saveUser();
-                    promoStatus.textContent = '✅ +50 бонусов начислено!'; promoStatus.style.color = '#8aff8a';
+                    promoStatus.textContent = '✅ +50 бонусов!'; promoStatus.style.color = '#8aff8a';
                     showToast('🎁 +50 бонусов', '#8aff8a');
                 }, 4000);
             });
         }
     }
 
-    // ===== СБП =====
+    // ============================================================
+    // СБП (СИСТЕМА БЫСТРЫХ ПЛАТЕЖЕЙ)
+    // ============================================================
     function initSbpPanel() {
         const input = document.getElementById('sbpRubAmount');
         const calc = document.getElementById('sbpCalc');
@@ -1674,10 +1797,9 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 
         function updateCalc() {
             const rub = parseFloat(input.value) || 0;
-            if (rub <= 0) {
-                calc.innerHTML = 'Введите сумму для расчёта';
-                return;
-            }
+            if (rub <= 0) { calc.innerHTML = 'Введите сумму для расчёта'; return; }
+            if (rub < 100) { calc.innerHTML = '<span style="color:#bf5f5f;">Минимальная сумма: 100 ₽</span>'; return; }
+            if (rub > 150000) { calc.innerHTML = '<span style="color:#bf5f5f;">Максимум: 150 000 ₽</span>'; return; }
             const usdtBefore = rub / USDT_RUB_RATE;
             const commission = usdtBefore * COMMISSION / 100;
             const usdtAfter = usdtBefore - commission;
@@ -1711,47 +1833,64 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             genBtn.dataset.bound = '1';
             genBtn.addEventListener('click', function() {
                 const rub = parseFloat(input.value);
-                if (isNaN(rub) || rub < 100) {
-                    status.textContent = '❌ Минимальная сумма — 100 ₽';
+                if (!isValidAmount(rub, 100, 150000)) {
+                    status.textContent = '❌ Введите сумму от 100 до 150 000 ₽';
                     status.style.color = '#bf5f5f';
                     return;
                 }
-                status.textContent = '⏳ Генерация QR через API Т-Банка...';
+
+                status.textContent = '⏳ Генерация QR-кода...';
                 status.style.color = '#8aff8a';
                 qrEl.innerHTML = '';
+
+                const usdtBefore = rub / USDT_RUB_RATE;
+                const commission = usdtBefore * COMMISSION / 100;
+                const grn = usdtBefore - commission;
+
+                // Формат СБП-ссылки, распознаваемый мобильными банками РФ
+                // В реальной интеграции здесь должен быть URL от банка через API
+                const sbpPayload = `https://qr.nspk.ru/AS1A${Date.now().toString(36).toUpperCase()}?type=02&bank=100000000111&sum=${Math.round(rub*100)}&cur=RUB&crc=RU&phone=${SBP_PHONE}`;
+
                 setTimeout(() => {
-                    const usdtBefore = rub / USDT_RUB_RATE;
-                    const commission = usdtBefore * COMMISSION / 100;
-                    const grn = usdtBefore - commission;
                     qrEl.innerHTML = `
-                        <div class="qr-placeholder">
-                            <div class="qr-icon">▦</div>
-                            <div class="qr-text">СБП · ${rub.toFixed(0)} ₽</div>
-                            <div class="qr-text">+${grn.toFixed(2)} GRN</div>
+                        <div class="sbp-qr-container">
+                            <div id="sbpQrCode"></div>
+                            <div class="sbp-caption">СБП · ${SBP_BANK}</div>
+                            <div class="sbp-amount">${rub.toFixed(0)} ₽</div>
+                            <div class="sbp-caption" style="font-size:0.65rem;margin-top:6px;">+${grn.toFixed(2)} GRN</div>
                         </div>
+                        <a href="tel:${SBP_PHONE}" class="sbp-link-btn" rel="noopener noreferrer">📞 Позвонить для перевода</a>
                     `;
-                    status.innerHTML = `✅ QR создан. Сканируйте в банке.<br>
-                        После оплаты GREENCOIN зачислятся автоматически.`;
+                    // Генерация QR через qrcodejs
+                    try {
+                        new QRCode(document.getElementById('sbpQrCode'), {
+                            text: sbpPayload,
+                            width: 220,
+                            height: 220,
+                            colorDark: '#0a0f0a',
+                            colorLight: '#ffffff',
+                            correctLevel: QRCode.CorrectLevel.M
+                        });
+                    } catch(e) {
+                        console.error('QR error:', e);
+                        document.getElementById('sbpQrCode').innerHTML = 
+                            '<div style="color:#000;font-size:0.7rem;padding:20px;text-align:center;">QR-код<br>недоступен</div>';
+                    }
+
+                    status.innerHTML = `✅ QR создан.<br>
+                        <strong>Сумма:</strong> ${rub.toFixed(0)} ₽<br>
+                        <strong>Получатель:</strong> ${SBP_PHONE} (${SBP_BANK})<br>
+                        <strong>Зачислится:</strong> ${grn.toFixed(2)} GRN<br>
+                        <span style="color:#df9f4f;font-size:0.7rem;">После оплаты GREENCOIN зачислятся автоматически (требуется сервер).</span>`;
                     status.style.color = '#8aff8a';
-                    // Эмуляция webhook от банка
-                    setTimeout(() => {
-                        currentUser.grn = (currentUser.grn || 0) + grn;
-                        saveUser();
-                        showToast(`🟢 +${grn.toFixed(2)} GREENCOIN`, '#8aff8a');
-                        const gd1 = document.getElementById('grnDisplay');
-                        const gd2 = document.getElementById('grnDisplay2');
-                        if (gd1) gd1.textContent = currentUser.grn.toFixed(2);
-                        if (gd2) gd2.textContent = currentUser.grn.toFixed(2);
-                        qrEl.innerHTML = '';
-                        status.innerHTML = `✅ Оплата получена! Зачислено ${grn.toFixed(2)} GREENCOIN`;
-                        status.style.color = '#8aff8a';
-                    }, 6000);
-                }, 1400);
+                }, 800);
             });
         }
     }
 
-    // ===== STEAM =====
+    // ============================================================
+    // STEAM
+    // ============================================================
     function initSkinsPanel() {
         const connectBtn = document.getElementById('steamConnectBtn');
         const disconnectBtn = document.getElementById('steamDisconnectBtn');
@@ -1761,7 +1900,10 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             connectBtn.dataset.bound = '1';
             connectBtn.addEventListener('click', function() {
                 const sid = document.getElementById('steamIdInput').value.trim();
-                if (sid.length < 3) { showToast('❌ Введите SteamID или ссылку', '#bf5f5f'); return; }
+                if (!/^[\w\-/\.:]{3,256}$/.test(sid)) {
+                    showToast('❌ Некорректный SteamID', '#bf5f5f');
+                    return;
+                }
                 connectBtn.textContent = '⏳ ПОДКЛЮЧЕНИЕ...';
                 connectBtn.disabled = true;
                 setTimeout(() => {
@@ -1802,8 +1944,15 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             tradeInput.dataset.bound = '1';
             tradeInput.value = currentUser.steamTradeLink || '';
             tradeInput.addEventListener('input', function() {
-                currentUser.steamTradeLink = this.value.trim();
-                saveUser();
+                const val = this.value.trim();
+                if (val === '' || val.startsWith('https://steamcommunity.com/tradeoffer/')) {
+                    currentUser.steamTradeLink = val;
+                    saveUser();
+                } else {
+                    this.style.borderColor = '#bf5f5f';
+                    return;
+                }
+                this.style.borderColor = '#2a5a2a';
             });
         }
 
@@ -1827,26 +1976,26 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         if (!currentUser.steamLinked) { invList.innerHTML = ''; return; }
         const inv = currentUser.steamInventory || [];
         invList.innerHTML = inv.map(item => `
-            <div class="inv-item ${item.selected?'selected':''}" data-id="${item.id}" style="border-left:3px solid ${item.rarityColor};">
-                <div class="inv-icon">${item.icon}</div>
+            <div class="inv-item ${item.selected?'selected':''}" data-id="${escapeHtml(item.id)}" style="border-left:3px solid ${escapeHtml(item.rarityColor)};">
+                <div class="inv-icon">${escapeHtml(item.icon)}</div>
                 <div class="inv-info">
-                    <div class="inv-name">${item.name}</div>
-                    <div class="inv-price">${item.wear} · $${item.usd.toFixed(2)} · ${item.rarity}</div>
+                    <div class="inv-name">${escapeHtml(item.name)}</div>
+                    <div class="inv-price">${escapeHtml(item.wear)} · $${parseFloat(item.usd).toFixed(2)} · ${escapeHtml(item.rarity)}</div>
                 </div>
                 <div class="inv-check">✓</div>
             </div>
         `).join('');
-
         invList.querySelectorAll('.inv-item').forEach(el => {
             el.addEventListener('click', function() {
                 const id = this.dataset.id;
                 const item = inv.find(i => i.id === id);
-                item.selected = !item.selected;
-                this.classList.toggle('selected');
-                updateCommission();
+                if (item) {
+                    item.selected = !item.selected;
+                    this.classList.toggle('selected');
+                    updateCommission();
+                }
             });
         });
-
         updateCommission();
     }
 
@@ -1860,7 +2009,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             if (skinBtn) skinBtn.disabled = true;
             return;
         }
-        const totalUsd = selected.reduce((s, i) => s + i.usd, 0);
+        const totalUsd = selected.reduce((s, i) => s + parseFloat(i.usd || 0), 0);
         const feeUsd = totalUsd * COMMISSION / 100;
         const netUsd = totalUsd - feeUsd;
         const netGrn = netUsd * GRN_USDT_RATE;
@@ -1880,42 +2029,35 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         const statusEl = document.getElementById('skinStatus');
         if (!selected.length) { if (statusEl) { statusEl.textContent = '❌ Выберите скины'; statusEl.style.color = '#bf5f5f'; } return; }
         if (!currentUser.steamTradeLink || !currentUser.steamTradeLink.startsWith('https://steamcommunity.com/tradeoffer/')) {
-            if (statusEl) { statusEl.textContent = '❌ Укажите корректную ссылку на обмен'; statusEl.style.color = '#bf5f5f'; }
+            if (statusEl) { statusEl.textContent = '❌ Укажите ссылку на обмен'; statusEl.style.color = '#bf5f5f'; }
             return;
         }
-        const totalUsd = selected.reduce((s, i) => s + i.usd, 0);
+        const totalUsd = selected.reduce((s, i) => s + parseFloat(i.usd || 0), 0);
         const feeUsd = totalUsd * COMMISSION / 100;
-        const netUsd = totalUsd - feeUsd;
-        const netGrn = netUsd * GRN_USDT_RATE;
+        const netGrn = (totalUsd - feeUsd) * GRN_USDT_RATE;
         const skinBtn = document.getElementById('skinPayBtn');
         skinBtn.disabled = true;
-        statusEl.textContent = '🤖 Робот отправляет трейд-оффер...';
-        statusEl.style.color = '#8aff8a';
+        statusEl.textContent = '🤖 Робот отправляет трейд-оффер...'; statusEl.style.color = '#8aff8a';
+        setTimeout(() => { statusEl.textContent = '📦 Робот принял скины. Оценка через оракул (Pricempire)...'; }, 1200);
+        setTimeout(() => { statusEl.textContent = '💱 Конвертация USD → USDT → GREENCOIN...'; }, 2400);
         setTimeout(() => {
-            statusEl.textContent = '📦 Робот принял скины. Запрос цены у оракула (Pricempire)...';
-        }, 1200);
-        setTimeout(() => {
-            statusEl.textContent = '💱 Конвертация USD → USDT → GREENCOIN...';
-        }, 2400);
-        setTimeout(() => {
-            currentUser.grn = (currentUser.grn || 0) + netGrn;
+            currentUser.grn = (parseFloat(currentUser.grn)||0) + netGrn;
             currentUser.steamInventory = inv.filter(i => !i.selected);
             saveUser();
-            statusEl.innerHTML = `✅ Робот принял скины!<br>
-                Оценка: <strong>$${totalUsd.toFixed(2)}</strong><br>
-                Комиссия ${COMMISSION}%: <span style="color:#df9f4f;">−$${feeUsd.toFixed(2)}</span><br>
-                Зачислено: <strong style="color:#8aff8a;">${netGrn.toFixed(2)} GREENCOIN</strong>`;
+            statusEl.innerHTML = `✅ Робот принял скины!<br>Оценка: <strong>$${totalUsd.toFixed(2)}</strong><br>Комиссия: <span style="color:#df9f4f;">−$${feeUsd.toFixed(2)}</span><br>Зачислено: <strong style="color:#8aff8a;">${netGrn.toFixed(2)} GRN</strong>`;
             statusEl.style.color = '#8aff8a';
             const gd1 = document.getElementById('grnDisplay');
             const gd2 = document.getElementById('grnDisplay2');
             if (gd1) gd1.textContent = currentUser.grn.toFixed(2);
             if (gd2) gd2.textContent = currentUser.grn.toFixed(2);
-            showToast(`🤖 +${netGrn.toFixed(2)} GRN за скины`, '#8aff8a');
+            showToast(`🤖 +${netGrn.toFixed(2)} GRN`, '#8aff8a');
             renderInventory();
         }, 3600);
     }
 
-    // ===== CRYPTO =====
+    // ============================================================
+    // CRYPTO
+    // ============================================================
     const CRYPTO_DATA = {
         usdt_trc: { name:'USDT (TRC-20)', icon:'₮', address:'TVz9aZ1sYqLs7B6fXrMPfWnQqThV8YdKM', network:'Tron (TRC-20)', confirm:'~1 мин' },
         usdt_erc: { name:'USDT (ERC-20)', icon:'₮', address:'0x7a9F3cB2D4e1A8f6C5d0B3e9a2F1d8C7b4A5e6f3', network:'Ethereum', confirm:'~5 мин' },
@@ -1941,14 +2083,14 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             checkBtn.addEventListener('click', function() {
                 const amount = parseFloat(document.getElementById('cryptoAmount').value);
                 const status = document.getElementById('cryptoStatus');
-                if (isNaN(amount) || amount <= 0) { status.textContent = '❌ Введите сумму'; status.style.color = '#bf5f5f'; return; }
+                if (!isValidAmount(amount, 1, 100000)) { status.textContent = '❌ Введите сумму от 1 до 100 000'; status.style.color = '#bf5f5f'; return; }
                 status.textContent = '⏳ Проверка транзакции...'; status.style.color = '#8aff8a';
                 checkBtn.disabled = true;
                 setTimeout(() => {
-                    currentUser.usdt = (currentUser.usdt || 0) + amount;
-                    currentUser.grn = (currentUser.grn || 0) + amount;
+                    currentUser.usdt = (parseFloat(currentUser.usdt)||0) + amount;
+                    currentUser.grn = (parseFloat(currentUser.grn)||0) + amount;
                     saveUser();
-                    status.textContent = `✅ Подтверждено! +${amount.toFixed(2)} USDT · +${amount.toFixed(2)} GRN`;
+                    status.textContent = `✅ +${amount.toFixed(2)} USDT · +${amount.toFixed(2)} GRN`;
                     status.style.color = '#8aff8a';
                     const balEl = document.getElementById('balDisplay');
                     const grnEl = document.getElementById('grnDisplay');
@@ -1965,18 +2107,20 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         const container = document.getElementById('cryptoDetails');
         if (!data || !container) return;
         container.innerHTML = `
-            <div style="color:#5f8f5f;font-size:0.7rem;letter-spacing:2px;margin-bottom:6px;">// АДРЕС ДЛЯ ОПЛАТЫ</div>
-            <div style="color:#8aff8a;font-size:0.8rem;margin-bottom:10px;">${data.icon} ${data.name}</div>
-            <div class="crypto-address" id="copyAddress">${data.address}</div>
-            <div style="font-size:0.7rem;color:#5f8f5f;">Сеть: <strong style="color:#8aff8a;">${data.network}</strong> · Подтверждение: ~${data.confirm}</div>
+            <div style="color:#5f8f5f;font-size:0.7rem;letter-spacing:2px;margin-bottom:6px;">// АДРЕС</div>
+            <div style="color:#8aff8a;font-size:0.8rem;margin-bottom:10px;">${escapeHtml(data.icon)} ${escapeHtml(data.name)}</div>
+            <div class="crypto-address" id="copyAddress">${escapeHtml(data.address)}</div>
+            <div style="font-size:0.7rem;color:#5f8f5f;">Сеть: <strong style="color:#8aff8a;">${escapeHtml(data.network)}</strong></div>
         `;
         const copyEl = document.getElementById('copyAddress');
         if (copyEl) copyEl.addEventListener('click', function() {
-            navigator.clipboard.writeText(data.address).then(() => showToast('📋 Адрес скопирован', '#8aff8a')).catch(()=>{});
+            navigator.clipboard.writeText(data.address).then(() => showToast('📋 Скопировано', '#8aff8a')).catch(()=>{});
         });
     }
 
-    // ===== METAMASK =====
+    // ============================================================
+    // METAMASK
+    // ============================================================
     async function connectMetaMask() {
         if (typeof window.ethereum === 'undefined') {
             showToast('❌ MetaMask не установлен', '#bf5f5f');
@@ -1985,23 +2129,18 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         try {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             const address = accounts[0];
+            if (!/^0x[a-fA-F0-9]{40}$/.test(address)) throw new Error('Invalid address');
             currentUser.metaMaskAddress = address;
             saveUser();
             const mmEl = document.getElementById('mmAddress');
             if (mmEl) mmEl.textContent = address.slice(0, 10) + '...' + address.slice(-6);
             showToast('🦊 MetaMask подключён', '#8aff8a');
-            // Проверка сети
             const chainId = await window.ethereum.request({ method: 'eth_chainId' });
             if (chainId !== '0x38') {
                 try {
-                    await window.ethereum.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: '0x38' }]
-                    });
-                    showToast('✅ Сеть переключена на BNB Smart Chain', '#8aff8a');
-                } catch(e) {
-                    showToast('⚠ Переключите сеть на BNB Smart Chain вручную', '#df9f4f');
-                }
+                    await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x38' }] });
+                    showToast('✅ Сеть BSC активирована', '#8aff8a');
+                } catch(e) { showToast('⚠ Переключите сеть вручную', '#df9f4f'); }
             }
         } catch (err) {
             console.error(err);
@@ -2009,7 +2148,9 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         }
     }
 
-    // ===== GRN (BNB) =====
+    // ============================================================
+    // GRN (BNB)
+    // ============================================================
     function initTokenPanel() {
         const input = document.getElementById('grnBnbAmount');
         const calc = document.getElementById('grnCalc');
@@ -2042,20 +2183,17 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         if (buyBtn && !buyBtn.dataset.bound) {
             buyBtn.dataset.bound = '1';
             buyBtn.addEventListener('click', function() {
-                if (!currentUser.metaMaskAddress) {
-                    showToast('❌ Сначала подключите MetaMask', '#bf5f5f');
-                    return;
-                }
+                if (!currentUser.metaMaskAddress) { showToast('❌ Сначала подключите MetaMask', '#bf5f5f'); return; }
                 const bnb = parseFloat(input.value);
                 const status = document.getElementById('grnStatus');
-                if (isNaN(bnb) || bnb <= 0) { status.textContent = '❌ Введите сумму BNB'; status.style.color = '#bf5f5f'; return; }
-                status.textContent = '⏳ Ожидание подтверждения в сети BSC...'; status.style.color = '#8aff8a';
+                if (!isValidAmount(bnb, 0.0001, 100)) { status.textContent = '❌ Некорректная сумма BNB'; status.style.color = '#bf5f5f'; return; }
+                status.textContent = '⏳ Ожидание подтверждения в BSC...'; status.style.color = '#8aff8a';
                 buyBtn.disabled = true;
                 setTimeout(() => {
                     const grn = bnb * BNB_USDT_RATE;
-                    currentUser.grn = (currentUser.grn || 0) + grn;
+                    currentUser.grn = (parseFloat(currentUser.grn)||0) + grn;
                     saveUser();
-                    status.innerHTML = `✅ Получено <strong>${grn.toFixed(2)} GRN</strong> · отправлено на ${currentUser.metaMaskAddress.slice(0,6)}...${currentUser.metaMaskAddress.slice(-4)}`;
+                    status.innerHTML = `✅ +${grn.toFixed(2)} GRN → ${escapeHtml(currentUser.metaMaskAddress.slice(0,6))}...${escapeHtml(currentUser.metaMaskAddress.slice(-4))}`;
                     status.style.color = '#8aff8a';
                     const gd1 = document.getElementById('grnDisplay');
                     const gd2 = document.getElementById('grnDisplay2');
@@ -2068,17 +2206,15 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         }
     }
 
-    // ===== ROULETTE =====
-    const SEG_WIDTH = 110;
-    const SEG_COUNT = 40;
-    const WINNER_INDEX = 30;
+    // ============================================================
+    // ROULETTE
+    // ============================================================
+    const SEG_WIDTH = 110, SEG_COUNT = 40, WINNER_INDEX = 30;
 
     function initRoulette() {
         const strip = document.getElementById('tapeStrip');
         if (!strip) return;
-        spinning = false;
-        currentTier = 100;
-        currentCurrency = 'rub';
+        spinning = false; currentTier = 100; currentCurrency = 'rub';
         renderTiers();
         buildStrip(getPrizesForMult(1));
 
@@ -2130,8 +2266,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 
     function pickWinner(mult) {
         const prizes = getPrizesForMult(mult);
-        let rand = Math.random() * TOTAL_WEIGHT;
-        let acc = 0;
+        let rand = Math.random() * TOTAL_WEIGHT, acc = 0;
         for (let i = 0; i < prizes.length; i++) {
             acc += prizes[i].weight;
             if (rand <= acc) return prizes[i];
@@ -2148,32 +2283,29 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             const seg = document.createElement('div');
             seg.className = 'tape-seg';
             seg.style.setProperty('--seg-color', prize.color);
-            seg.innerHTML = `<span class="ts-icon">${prize.icon}</span><span class="ts-name">${prize.name}</span>`;
+            seg.innerHTML = `<span class="ts-icon">${escapeHtml(prize.icon)}</span><span class="ts-name">${escapeHtml(prize.name)}</span>`;
             strip.appendChild(seg);
         }
     }
 
     function spinTape(cost, currency) {
         if (spinning) return;
-        const balance = currency === 'rub' ? (currentUser.usdt || 0) : (currentUser.grn || 0);
+        const balance = currency === 'rub' ? (parseFloat(currentUser.usdt)||0) : (parseFloat(currentUser.grn)||0);
         if (balance < cost) { showToast(`❌ Недостаточно ${currency==='rub'?'₮':'GRN'}`, '#bf5f5f'); return; }
         spinning = true;
 
-        if (currency === 'rub') currentUser.usdt -= cost;
-        else currentUser.grn -= cost;
+        if (currency === 'rub') currentUser.usdt = (parseFloat(currentUser.usdt)||0) - cost;
+        else currentUser.grn = (parseFloat(currentUser.grn)||0) - cost;
         saveUser();
 
         const balEl = document.getElementById('balDisplay');
         const grnEl = document.getElementById('grnDisplay');
-        const grnEl2 = document.getElementById('grnDisplay2');
-        if (balEl) balEl.textContent = (currentUser.usdt || 0).toFixed(2);
-        if (grnEl) grnEl.textContent = (currentUser.grn || 0).toFixed(2);
-        if (grnEl2) grnEl2.textContent = (currentUser.grn || 0).toFixed(2);
+        if (balEl) balEl.textContent = (currentUser.usdt||0).toFixed(2);
+        if (grnEl) grnEl.textContent = (currentUser.grn||0).toFixed(2);
 
-        const mult = currency === 'rub' ? cost / 100 : cost / 1;
+        const mult = currency === 'rub' ? cost / 100 : cost;
         const winner = pickWinner(mult);
         const prizes = getPrizesForMult(mult);
-
         const strip = document.getElementById('tapeStrip');
         strip.innerHTML = '';
         for (let i = 0; i < SEG_COUNT; i++) {
@@ -2181,27 +2313,22 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             const seg = document.createElement('div');
             seg.className = 'tape-seg';
             seg.style.setProperty('--seg-color', prize.color);
-            seg.innerHTML = `<span class="ts-icon">${prize.icon}</span><span class="ts-name">${prize.name}</span>`;
+            seg.innerHTML = `<span class="ts-icon">${escapeHtml(prize.icon)}</span><span class="ts-name">${escapeHtml(prize.name)}</span>`;
             strip.appendChild(seg);
         }
-
         const viewport = document.getElementById('tapeViewport');
         const viewportW = viewport.offsetWidth;
         const winCenter = WINNER_INDEX * SEG_WIDTH + SEG_WIDTH / 2;
         const randomOffset = (Math.random() - 0.5) * 70;
         const targetX = viewportW / 2 - winCenter + randomOffset;
-
         strip.style.transition = 'none';
         strip.style.transform = 'translateX(0px)';
         void strip.offsetWidth;
-
         strip.style.transition = 'transform 4.2s cubic-bezier(0.15, 0.85, 0.15, 1)';
         strip.style.transform = `translateX(${targetX}px)`;
-
         const spinBtn = document.getElementById('spinBtn');
         spinBtn.disabled = true;
         spinBtn.textContent = '⏳ КРУТИМ...';
-
         setTimeout(() => {
             spinning = false;
             spinBtn.disabled = false;
@@ -2214,27 +2341,25 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         const container = document.getElementById('spinResult');
         let msg = '', note = '';
         if (prize.bonus) {
-            currentUser.bonus += prize.bonus;
-            msg = `+${prize.bonus} БОНУСОВ`;
-            note = 'зачислено на бонусный счёт';
-        } else if (prize.id === 'shots') { msg = prize.name + ' ЗАБРАН!'; note = 'покажи экран бармену'; }
-        else if (prize.id === 'hookah') { msg = prize.name + ' В ПОДАРОК!'; note = 'покажи экран бармену'; }
-        else if (prize.id === 'redbull') { msg = prize.name; note = 'покажи экран бармену'; }
-        else if (prize.id === 'coffee') { msg = prize.name; note = 'покажи экран бармену'; }
+            currentUser.bonus = (parseInt(currentUser.bonus)||0) + prize.bonus;
+            msg = `+${prize.bonus} БОНУСОВ`; note = 'зачислено';
+        } else if (prize.id === 'shots') { msg = prize.name + ' ЗАБРАН!'; note = 'покажи бармену'; }
+        else if (prize.id === 'hookah') { msg = prize.name + ' В ПОДАРОК!'; note = 'покажи бармену'; }
+        else { msg = prize.name; note = 'покажи бармену'; }
 
         currentUser.wins = currentUser.wins || [];
         currentUser.wins.push({ prize: prize.id, time: Date.now() });
         saveUser();
 
-        container.innerHTML = `<div class="prize-win">${prize.icon} ${msg}<br><span style="font-size:0.65rem;opacity:0.8;">${note}</span></div>`;
+        container.innerHTML = `<div class="prize-win">${escapeHtml(prize.icon)} ${escapeHtml(msg)}<br><span style="font-size:0.65rem;opacity:0.8;">${escapeHtml(note)}</span></div>`;
         showToast(`🎰 ${msg}`, '#8aff8a');
     }
 
-    console.log('🌿 Зелёный Шум · v.1.0 загружен');
+    console.log('🌿 Зелёный Шум · v.1.1 loaded');
     console.log('🔑 Вход: Pavel / 1488');
-    console.log('🩸 Промокод клуба: 1111');
-    console.log('💱 Курс: 1 USDT = 1 GREENCOIN = ' + USDT_RUB_RATE + ' ₽');
-    console.log('💰 Комиссия платформы: ' + COMMISSION + '%');
+    console.log('🩸 Клуб: 1111');
+    console.log('💱 1 USDT = 1 GREENCOIN = ' + USDT_RUB_RATE + ' ₽ · Комиссия: ' + COMMISSION + '%');
+    console.log('📱 СБП: ' + SBP_PHONE + ' (' + SBP_BANK + ')');
 
 })();
 </script>
