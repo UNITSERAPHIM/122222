@@ -3,15 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-<!-- ===== БЕЗОПАСНОСТЬ: CSP ===== -->
 <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'self' 'unsafe-inline' https://accounts.google.com https://telegram.org https://cdn.jsdelivr.net;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
     img-src 'self' data: https:;
-    connect-src 'self' https://bandcamp.com https://accounts.google.com https://api.telegram.org;
+    connect-src 'self' https://accounts.google.com https://bandcamp.com https://ваш-бэкенд.onrender.com http://localhost:3000;
     frame-src https://accounts.google.com https://oauth.telegram.org https://bandcamp.com;
     form-action 'self';
     base-uri 'self';
@@ -19,11 +17,9 @@
 ">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta name="referrer" content="no-referrer">
-<meta name="robots" content="noindex, nofollow">
-
 <title>Зелёный Шум · киберпанк-бар</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" integrity="sha384-3zSEDfvllQohrq0PhL1fOXJuC/jSOO34H46tWaJIjh//q3NlqA8OIA/0XHqHXjIs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" crossorigin="anonymous"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
@@ -35,7 +31,7 @@ body { background:#0a0f0a; color:#b0ffb0; font-family:'Share Tech Mono',monospac
 .header { border:2px solid #2b5e2b; padding:20px 30px; margin-bottom:40px;
     display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center;
     background:#0e140e; box-shadow:0 0 20px rgba(0,255,0,0.08); position:relative; }
-.header::after { content:"// ЗЕЛЁНЫЙ ШУМ // v.1.1"; position:absolute; bottom:-12px; right:30px;
+.header::after { content:"// ЗЕЛЁНЫЙ ШУМ // v.1.2"; position:absolute; bottom:-12px; right:30px;
     background:#0a0f0a; padding:0 12px; font-size:10px; color:#3a7a3a; letter-spacing:2px; }
 .logo h1 { font-family:'Press Start 2P',monospace; font-size:1.8rem; color:#8aff8a;
     text-shadow:0 0 10px #00aa00,0 0 30px #003300; letter-spacing:4px; }
@@ -266,7 +262,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 .inv-item:hover { border-color:#5fdf5f; background:#1a2f1a; transform:translateX(3px); }
 .inv-item.selected { border-color:#7aff7a; background:#1a3a1a; box-shadow:0 0 12px rgba(0,255,0,0.15); }
 .inv-item .inv-icon { width:40px; height:40px; background:#0f1a0f; border:1px solid #2a5a2a;
-    display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; border-radius:2px; }
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; border-radius:2px; overflow:hidden; }
+.inv-item .inv-icon img { width:100%; height:100%; object-fit:contain; }
 .inv-item .inv-info { flex:1; min-width:0; }
 .inv-item .inv-name { color:#b0ffb0; font-size:0.72rem; font-weight:bold;
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -281,18 +278,18 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 .commission-row .fee { color:#df9f4f; }
 .trade-link-box { margin-top:10px; padding:10px; background:#050a05; border:1px solid #2a5a2a;
     border-radius:3px; }
-.sbp-qr-container { background:#fff; padding:16px; margin:14px auto; display:flex;
-    flex-direction:column; align-items:center; justify-content:center; border-radius:6px;
-    max-width:260px; box-shadow:0 0 30px rgba(0,255,0,0.15); }
-.sbp-qr-container #sbpQrCode { display:flex; justify-content:center; }
+.sbp-qr-container { background:#fff; padding:20px; margin:14px auto; display:flex;
+    flex-direction:column; align-items:center; justify-content:center; border-radius:8px;
+    max-width:300px; box-shadow:0 0 40px rgba(0,255,0,0.2); }
+.sbp-qr-container #sbpQrCode { display:flex; justify-content:center; padding:8px; background:#fff; }
 .sbp-qr-container .sbp-caption { color:#0a0f0a; font-family:'Share Tech Mono',monospace;
-    font-size:0.75rem; margin-top:10px; text-align:center; font-weight:bold; }
+    font-size:0.75rem; margin-top:12px; text-align:center; font-weight:bold; }
 .sbp-qr-container .sbp-amount { color:#0a4a0a; font-family:'Press Start 2P',monospace;
-    font-size:0.85rem; margin-top:4px; }
-.sbp-link-btn { display:inline-block; margin-top:10px; padding:12px 20px; background:#2a5a2a;
-    border:1px solid #5fdf5f; color:#b0ffb0; font-family:'Share Tech Mono',monospace;
-    text-decoration:none; border-radius:3px; transition:0.25s; letter-spacing:1px; font-size:0.8rem; }
-.sbp-link-btn:hover { background:#3a7a3a; box-shadow:0 0 25px rgba(0,255,0,0.3); color:#fff; }
+    font-size:0.9rem; margin-top:6px; }
+.sbp-status-badge { display:inline-block; padding:4px 12px; border-radius:20px;
+    font-size:0.7rem; letter-spacing:1px; margin-top:8px; }
+.sbp-status-badge.pending { background:rgba(223,159,79,0.2); color:#df9f4f; border:1px solid #df9f4f; }
+.sbp-status-badge.confirmed { background:rgba(95,223,95,0.2); color:#5fdf5f; border:1px solid #5fdf5f; }
 .currency-toggle { display:flex; gap:6px; margin-bottom:12px; }
 .currency-btn { flex:1; padding:8px; background:#0a140a; border:1px solid #2a5a2a;
     color:#7aaa7a; font-family:'Share Tech Mono',monospace; font-size:0.72rem;
@@ -389,7 +386,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     gap:10px; letter-spacing:1px; border-radius:3px; text-decoration:none; }
 .social-btn:hover { background:#1a2f1a; border-color:#5fdf5f; color:#ccffcc; transform:translateY(-2px); }
 .social-btn .sb-icon { font-size:1.1rem; }
-#g_id_onload { position:absolute; }
+.social-btn.steam-btn { background:#0a1a2a; border-color:#2a5a7a; color:#9acfdf; }
+.social-btn.steam-btn:hover { background:#1a2a3a; border-color:#5f9fdf; color:#ccecff; }
 .g_id_signin { display:flex; justify-content:center; margin:0; }
 .divider-or { display:flex; align-items:center; gap:10px; margin:14px 0; color:#3a6a3a; font-size:0.7rem; }
 .divider-or::before, .divider-or::after { content:""; flex:1; height:1px; background:#1f4f1f; }
@@ -499,6 +497,10 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     box-shadow:0 0 30px rgba(0,255,0,0.25); animation:toastIn 0.35s ease;
     max-width:320px; letter-spacing:1px; border-radius:3px; }
 @keyframes toastIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+.backend-badge { position:fixed; top:20px; right:20px; padding:5px 12px; border-radius:20px;
+    font-size:0.65rem; letter-spacing:1px; z-index:500; font-family:'Share Tech Mono',monospace; }
+.backend-badge.online { background:rgba(95,223,95,0.15); color:#5fdf5f; border:1px solid #5fdf5f; }
+.backend-badge.offline { background:rgba(223,159,79,0.15); color:#df9f4f; border:1px solid #df9f4f; }
 @media (max-width:900px) {
     .node { width:82px; height:82px; }
     .node .node-icon { font-size:0.85rem; }
@@ -515,6 +517,9 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 </style>
 </head>
 <body>
+
+<!-- Индикатор бэкенда -->
+<div class="backend-badge" id="backendBadge">// CONNECTING...</div>
 
 <div class="container">
     <header class="header">
@@ -550,7 +555,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             <h2 class="section-title">ВЕБ-РАДИО · BANDCAMP</h2>
             <p class="radio-note">Прямой эфир с альбома <em>UNIT:SERAPHIM 2 – THE PATIENT</em></p>
             <div class="radio-box">
-                <iframe src="https://bandcamp.com/EmbeddedPlayer/album=2239565531/size=large/bgcol=0a0f0a/linkcol=5fdf5f/tracklist=true/transparent=true/" seamless title="Bandcamp player"></iframe>
+                <iframe src="https://bandcamp.com/EmbeddedPlayer/album=2239565531/size=large/bgcol=0a0f0a/linkcol=5fdf5f/tracklist=true/transparent=true/" seamless title="Bandcamp"></iframe>
             </div>
         </section>
 
@@ -592,7 +597,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             <h2 class="section-title">ИСТОРИИ КОКТЕЙЛЕЙ</h2>
             <div class="story-card">
                 <h4>🍸 «Зелёный Шум»</h4>
-                <p style="color:#8aaa8a;font-size:0.85rem;">Джин, базилик, лайм и немного спрайта. Рождён в дождливый вечер 1998-го.</p>
+                <p style="color:#8aaa8a;font-size:0.85rem;">Джин, базилик, лайм и немного спрайта.</p>
                 <small>легенда бара</small>
             </div>
             <div class="story-card">
@@ -683,11 +688,10 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             <div class="switch-link" id="authSwitch">Нет аккаунта? Зарегистрироваться</div>
             <div class="error-msg" id="authError"></div>
 
-            <div class="divider-or">ИЛИ ВОЙТИ ЧЕРЕЗ</div>
+            <div class="divider-or">ИЛИ ЧЕРЕЗ</div>
 
-            <!-- Google Sign-In (GIS) -->
             <div id="g_id_onload"
-                 data-client_id="ВСТАВЬ_СВОЙ_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+                 data-client_id="ВСТАВЬ_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
                  data-callback="handleGoogleCredential"
                  data-auto_prompt="false">
             </div>
@@ -700,14 +704,14 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                  data-logo_alignment="left">
             </div>
 
-            <!-- Telegram Login Widget -->
             <div class="tg-widget-box">
                 <div id="tgLoginContainer"></div>
-                <div class="tg-note">
-                    Telegram-авторизация требует настройки бота через @BotFather<br>
-                    и указания домена сайта командой <em>/setdomain</em>
-                </div>
+                <div class="tg-note">Telegram-авторизация через @BotFather</div>
             </div>
+
+            <button class="social-btn steam-btn" id="steamLoginBtn" style="margin-top:8px;">
+                <span class="sb-icon">⚙</span><span>ВОЙТИ ЧЕРЕЗ STEAM</span>
+            </button>
 
             <div class="hint">Тестовый вход: Pavel / 1488</div>
         </div>
@@ -741,44 +745,86 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     'use strict';
 
     // ============================================================
-    // БЕЗОПАСНОСТЬ: ЭКРАНИРОВАНИЕ ПОЛЬЗОВАТЕЛЬСКИХ ДАННЫХ
+    // КОНФИГУРАЦИЯ
+    // ============================================================
+    // ЗАМЕНИТЕ на URL вашего бэкенда после деплоя на Render/Vercel
+    const BACKEND_URL = localStorage.getItem('greenNoiseBackend') || 'https://ваш-бэкенд.onrender.com';
+    const USE_BACKEND = !BACKEND_URL.includes('ваш-бэкенд');
+
+    const USDT_RUB_RATE = 92;
+    const GRN_USDT_RATE = 1;
+    const COMMISSION = 7.5;
+    const BNB_USDT_RATE = 570;
+
+    let backendOnline = false;
+
+    // ============================================================
+    // БЕЗОПАСНОСТЬ
     // ============================================================
     function escapeHtml(str) {
         if (str === null || str === undefined) return '';
         return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
-
-    // Валидация логина: только буквы, цифры, _ и - (3-32 символа)
-    function isValidLogin(login) {
-        return /^[a-zA-Z0-9_-]{3,32}$/.test(login);
-    }
-
-    // Минимальная длина пароля
-    function isValidPassword(pass) {
-        return typeof pass === 'string' && pass.length >= 4 && pass.length <= 128;
-    }
-
-    // Валидация суммы (только положительные числа)
+    function isValidLogin(login) { return /^[a-zA-Z0-9_-]{3,32}$/.test(login); }
+    function isValidPassword(pass) { return typeof pass === 'string' && pass.length >= 4 && pass.length <= 128; }
     function isValidAmount(val, min, max) {
         const n = parseFloat(val);
         return !isNaN(n) && n >= min && n <= max;
     }
 
     // ============================================================
-    // КОНСТАНТЫ
+    // HTTP-КЛИЕНТ С FALLBACK
     // ============================================================
-    const SBP_PHONE = '89081330869';           // Ваш номер для СБП
-    const SBP_BANK = 'Т-Банк';
-    const USDT_RUB_RATE = 92;
-    const GRN_USDT_RATE = 1;
-    const BNB_USDT_RATE = 570;
-    const COMMISSION = 7.5;
-    const BACKEND_URL = 'https://ваш-бэкенд.vercel.app'; // ← замените
+    async function apiCall(path, options = {}) {
+        if (!USE_BACKEND) return { ok: false, demo: true };
+        try {
+            const token = localStorage.getItem('greenNoiseToken');
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(options.headers || {})
+            };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 8000);
+
+            const res = await fetch(`${BACKEND_URL}${path}`, {
+                ...options,
+                headers,
+                signal: controller.signal
+            });
+            clearTimeout(timeout);
+            const data = await res.json().catch(() => ({}));
+            return { ok: res.ok, status: res.status, data };
+        } catch (e) {
+            console.warn('[API]', path, e.message);
+            return { ok: false, demo: true, error: e.message };
+        }
+    }
+
+    // Health-check бэкенда
+    async function checkBackend() {
+        const badge = document.getElementById('backendBadge');
+        if (!USE_BACKEND) {
+            badge.className = 'backend-badge offline';
+            badge.textContent = '// DEMO MODE';
+            return;
+        }
+        const res = await apiCall('/health');
+        if (res.ok && res.data?.ok) {
+            backendOnline = true;
+            badge.className = 'backend-badge online';
+            badge.textContent = '// BACKEND ONLINE';
+        } else {
+            backendOnline = false;
+            badge.className = 'backend-badge offline';
+            badge.textContent = '// DEMO MODE';
+        }
+    }
+    checkBackend();
+    setInterval(checkBackend, 30000);
 
     // ============================================================
     // УТИЛИТЫ
@@ -806,22 +852,12 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             localStorage.setItem('greenNoiseUser', JSON.stringify(currentUser));
             const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
             if (users[currentUser.login]) {
-                Object.assign(users[currentUser.login], {
-                    bonus: currentUser.bonus, usdt: currentUser.usdt, grn: currentUser.grn,
-                    promoUsed: currentUser.promoUsed, wins: currentUser.wins || [],
-                    testBonusGiven: currentUser.testBonusGiven,
-                    steamLinked: currentUser.steamLinked, steamInventory: currentUser.steamInventory,
-                    steamTradeLink: currentUser.steamTradeLink,
-                    clubMember: currentUser.clubMember,
-                    metaMaskAddress: currentUser.metaMaskAddress,
-                    authProvider: currentUser.authProvider
-                });
+                Object.assign(users[currentUser.login], currentUser);
                 localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
             }
         } catch (e) { console.error('Save error:', e); }
     }
 
-    // Инициализация пользователя Pavel
     try {
         const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
         if (!users.Pavel) {
@@ -831,7 +867,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     } catch(e) {}
 
     // ============================================================
-    // ГЛАВНАЯ СТРАНИЦА
+    // ГЛАВНАЯ
     // ============================================================
     document.querySelectorAll('.wall-tile').forEach(tile => {
         tile.addEventListener('click', function() {
@@ -875,7 +911,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         setTimeout(() => { orderBtn.textContent = '🛎 ЗАКАЗАТЬ ЭТОТ КОКТЕЙЛЬ'; }, 2500);
     });
 
-    // Календарь
     const calendarGrid = document.getElementById('calendarGrid');
     const eventInfo = document.getElementById('eventInfo');
     const daysInMonth = new Date(2026, 9, 0).getDate();
@@ -897,7 +932,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         calendarGrid.appendChild(dayDiv);
     }
 
-    // Шумомер
     const noiseFill = document.getElementById('noiseFill');
     const noiseLabel = document.getElementById('noiseLabel');
     function updateNoise() {
@@ -909,10 +943,9 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     updateNoise();
 
     document.getElementById('threeContainer').addEventListener('click', function() {
-        this.innerHTML = '<div class="coming">⚡ 3D-СЦЕНА ЗАГРУЖАЕТСЯ...<br><span style="font-size:0.65rem;color:#3f6f3f;">(Three.js + модель бара)</span></div>';
+        this.innerHTML = '<div class="coming">⚡ 3D-СЦЕНА ЗАГРУЖАЕТСЯ...<br><span style="font-size:0.65rem;color:#3f6f3f;">(Three.js)</span></div>';
     });
 
-    // Секретный раздел
     const secretInput = document.getElementById('secretInput');
     const secretMsg = document.getElementById('secretMessage');
     document.getElementById('secretBtn').addEventListener('click', function() {
@@ -921,9 +954,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         else if (pwd.toLowerCase() === 'шум' || pwd.toLowerCase() === 'shum') {
             secretMsg.textContent = '✅ Пароль верный, но для клуба нужен другой код.';
             secretMsg.style.color = '#8aff8a';
-        } else {
-            secretMsg.textContent = '❌ неверный пароль'; secretMsg.style.color = '#bf5f5f';
-        }
+        } else { secretMsg.textContent = '❌ неверный пароль'; secretMsg.style.color = '#bf5f5f'; }
     });
     secretInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('secretBtn').click(); });
 
@@ -936,9 +967,11 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     const dialogOverlay = document.getElementById('dialogOverlay');
 
     function startClubFlow() {
-        const hackOverlay = document.getElementById('hackOverlay');
-        hackOverlay.classList.add('active');
-        setTimeout(() => { hackOverlay.classList.remove('active'); setTimeout(showClubConfirm, 400); }, 3200);
+        document.getElementById('hackOverlay').classList.add('active');
+        setTimeout(() => {
+            document.getElementById('hackOverlay').classList.remove('active');
+            setTimeout(showClubConfirm, 400);
+        }, 3200);
     }
 
     function showClubConfirm() {
@@ -947,16 +980,12 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             <p style="text-align:center;font-size:1rem;color:#b0ffb0;">
                 Вы готовы стать частью <strong style="color:#ff5f5f;">закрытого клуба</strong>?
             </p>
-            <p style="text-align:center;color:#8aaa8a;font-size:0.8rem;">
-                Это не шутка. Доступ к закрытым событиям бара.
-            </p>
             <div class="club-btn-row">
                 <button class="club-btn-yes" id="clubYes">ДА</button>
                 <button class="btn-secondary" style="flex:1;" id="clubNo">НЕТ</button>
-            </div>
-        `;
+            </div>`;
         clubModal.classList.add('active');
-        document.getElementById('clubYes').addEventListener('click', () => showClubRules());
+        document.getElementById('clubYes').addEventListener('click', showClubRules);
         document.getElementById('clubNo').addEventListener('click', () => {
             clubModal.classList.remove('active');
             showToast('Отказано', '#bf5f5f');
@@ -977,9 +1006,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 <li>Драка длится до тех пор, пока не решат бойцы.</li>
                 <li>Если ты новичок — ты должен драться.</li>
             </ul>
-            <button class="club-btn-join" id="clubJoin">СТАТЬ ЧАСТЬЮ КЛУБА</button>
-        `;
-        document.getElementById('clubJoin').addEventListener('click', () => startHotlineMiami());
+            <button class="club-btn-join" id="clubJoin">СТАТЬ ЧАСТЬЮ КЛУБА</button>`;
+        document.getElementById('clubJoin').addEventListener('click', startHotlineMiami);
     }
 
     function startHotlineMiami() {
@@ -1070,13 +1098,15 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     let spinning = false;
     let currentTier = 100;
     let currentCurrency = 'rub';
+    let steamInventoryCache = [];
+    let steamInventoryEstimated = [];
 
     const BASE_PRIZES = [
         { id:'shots',   name:'СЕТ ШОТОВ',    icon:'🥃', weight:5,  color:'#c41f1f' },
         { id:'hookah',  name:'КАЛЬЯН',       icon:'💨', weight:1,  color:'#c46a1f' },
         { id:'b1',      name:'10 БОНУСОВ',   icon:'🎯', weight:60, color:'#1f7a3a', bonus:10 },
         { id:'b2',      name:'20 БОНУСОВ',   icon:'🎯', weight:50, color:'#1f6a5a', bonus:20 },
-        { id:'b3',      name:'50 БОНУСОВ',   icon:'🎯', weight:30, color:'#1f4a9a', bonus:50 },
+        { id:'b3',      name:'50 БОНУСОВ',   icon:'🎯', weight:50, color:'#1f4a9a', bonus:50 },
         { id:'b4',      name:'100 БОНУСОВ',  icon:'💎', weight:10, color:'#7a1f9a', bonus:100 },
         { id:'redbull', name:'RED BULL 0.25',icon:'🥤', weight:8,  color:'#1f2a9a' },
         { id:'coffee',  name:'АМЕРИКАНО',    icon:'☕', weight:10, color:'#5a3a1f' },
@@ -1094,17 +1124,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         });
     }
 
-    const MOCK_STEAM_INVENTORY = [
-        { id:'ak_redline',    name:'AK-47 | Redline',              wear:'Field-Tested', usd:15.50,  icon:'🔫', rarity:'Засекреченное', rarityColor:'#eb4b4b' },
-        { id:'awp_wildfire',  name:'AWP | Wildfire',               wear:'Minimal Wear', usd:95.00,  icon:'🎯', rarity:'Тайное',         rarityColor:'#eb4b4b' },
-        { id:'m4_neo',        name:'M4A4 | Neo-Noir',              wear:'Factory New',  usd:28.40,  icon:'🔫', rarity:'Тайное',         rarityColor:'#eb4b4b' },
-        { id:'karambit_dopp', name:'★ Karambit | Doppler',         wear:'Factory New',  usd:950.00, icon:'🗡', rarity:'★ Особое',        rarityColor:'#8650ac' },
-        { id:'usp_kill',      name:'USP-S | Kill Confirmed',       wear:'Field-Tested', usd:42.10,  icon:'🔫', rarity:'Тайное',         rarityColor:'#eb4b4b' },
-        { id:'glock_fade',    name:'Glock-18 | Fade',              wear:'Factory New',  usd:480.00, icon:'🔫', rarity:'Запрещённое',    rarityColor:'#8847ff' },
-        { id:'butterfly_sl',  name:'★ Butterfly Knife | Slaughter',wear:'Minimal Wear', usd:1400.00,icon:'🗡', rarity:'★ Особое',        rarityColor:'#8650ac' },
-        { id:'deagle_print',  name:'Desert Eagle | Printstream',   wear:'Minimal Wear', usd:65.80,  icon:'🔫', rarity:'Тайное',         rarityColor:'#eb4b4b' },
-    ];
-
     const BASE_NODES = [
         { id:'wallet',   icon:'💰', label:'КОШЕЛЕК',   sub:'USDT · GRN',    x:50,   y:12 },
         { id:'bonus',    icon:'🎯', label:'БОНУСЫ',    sub:'SABY CRM',      x:74,   y:21 },
@@ -1120,10 +1139,46 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     let NODES = [...BASE_NODES];
     const CENTER = { id:'profile', icon:'👤', label:'ВАШИ ДАННЫЕ', sub:'центр', x:50, y:50 };
 
+    async function loadProfileFromBackend() {
+        const res = await apiCall('/me', { method: 'GET' });
+        if (res.ok && res.data?.user) {
+            currentUser = res.data.user;
+            localStorage.setItem('greenNoiseUser', JSON.stringify(currentUser));
+            return true;
+        }
+        return false;
+    }
+
     function openCabinet() {
         overlay.classList.add('active');
         mainContent.classList.add('hidden');
         document.body.style.overflow = 'hidden';
+
+        // Проверяем URL-параметры (Steam redirect)
+        const params = new URLSearchParams(window.location.search);
+        const steamToken = params.get('steam_token');
+        const steamError = params.get('steam_error');
+        if (steamError) {
+            showToast('❌ Steam-авторизация не удалась', '#bf5f5f');
+            window.history.replaceState({}, '', window.location.pathname);
+        }
+        if (steamToken) {
+            localStorage.setItem('greenNoiseToken', steamToken);
+            loadProfileFromBackend().then(() => {
+                if (currentUser) {
+                    cabinetUserLabel.textContent = `// ${String(currentUser.login).toUpperCase()}`;
+                    authForm.style.display = 'none';
+                    nodesContainer.style.display = 'block';
+                    rebuildNodes();
+                    resizeCanvas();
+                    startAnimation();
+                    showToast('✅ Вход через Steam', '#8aff8a');
+                }
+            });
+            window.history.replaceState({}, '', window.location.pathname);
+            return;
+        }
+
         const saved = localStorage.getItem('greenNoiseUser');
         if (saved) {
             try {
@@ -1131,7 +1186,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 if (currentUser.usdt === undefined) currentUser.usdt = 0;
                 if (currentUser.grn === undefined) currentUser.grn = 0;
                 if (!currentUser.wins) currentUser.wins = [];
-                if (!currentUser.steamInventory) currentUser.steamInventory = [];
                 if (localStorage.getItem('clubPending') === '1' && !currentUser.clubMember) {
                     currentUser.clubMember = true;
                     localStorage.removeItem('clubPending');
@@ -1144,6 +1198,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 rebuildNodes();
                 resizeCanvas();
                 startAnimation();
+                // Обновляем с сервера в фоне
+                if (USE_BACKEND) loadProfileFromBackend().then(() => rebuildNodes());
                 return;
             } catch(e) { console.error(e); }
         }
@@ -1197,7 +1253,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 
     function loginAs(login, userData, provider) {
         if (!userData.testBonusGiven) {
-            userData.usdt = (userData.usdt || 0) + 1000;
+            userData.usdt = (parseFloat(userData.usdt)||0) + 1000;
             userData.testBonusGiven = true;
             const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
             if (users[login]) {
@@ -1212,11 +1268,13 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             promoUsed: userData.promoUsed || false, wins: userData.wins || [],
             testBonusGiven: userData.testBonusGiven || false,
             steamLinked: userData.steamLinked || false,
+            steamId: userData.steamId || null,
             steamInventory: userData.steamInventory || [],
             steamTradeLink: userData.steamTradeLink || '',
             clubMember: userData.clubMember || false,
             metaMaskAddress: userData.metaMaskAddress || '',
-            authProvider: provider || userData.authProvider || 'local'
+            authProvider: provider || userData.authProvider || 'local',
+            id: userData.id || null
         };
         if (localStorage.getItem('clubPending') === '1' && !currentUser.clubMember) {
             currentUser.clubMember = true;
@@ -1231,20 +1289,13 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         startAnimation();
     }
 
-    function doAuth() {
+    async function doAuth() {
         const login = authLogin.value.trim();
         const pass = authPassword.value.trim();
         authError.textContent = '';
-
         if (!login || !pass) { authError.textContent = 'Заполните все поля'; return; }
-        if (!isValidLogin(login)) {
-            authError.textContent = 'Логин: 3-32 символа (a-z, 0-9, _, -)';
-            return;
-        }
-        if (!isValidPassword(pass)) {
-            authError.textContent = 'Пароль: от 4 до 128 символов';
-            return;
-        }
+        if (!isValidLogin(login)) { authError.textContent = 'Логин: 3-32 символа (a-z, 0-9, _, -)'; return; }
+        if (!isValidPassword(pass)) { authError.textContent = 'Пароль: от 4 до 128 символов'; return; }
 
         try {
             const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
@@ -1268,27 +1319,39 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     );
 
     // ============================================================
-    // GOOGLE SIGN-IN (GIS)
+    // GOOGLE
     // ============================================================
-    window.handleGoogleCredential = function(response) {
+    window.handleGoogleCredential = async function(response) {
         try {
-            // Декодируем JWT от Google (только для извлечения данных)
+            // Если бэкенд онлайн — верифицируем на сервере
+            if (USE_BACKEND && backendOnline) {
+                const res = await apiCall('/auth/google', {
+                    method: 'POST',
+                    body: JSON.stringify({ credential: response.credential })
+                });
+                if (res.ok && res.data?.token && res.data?.user) {
+                    localStorage.setItem('greenNoiseToken', res.data.token);
+                    const u = res.data.user;
+                    loginAs(u.login, {
+                        bonus: u.balances.bonus, usdt: u.balances.usdt, grn: u.balances.grn,
+                        id: u.id, authProvider: 'google'
+                    }, 'google');
+                    showToast(`✅ Вход через Google (${escapeHtml(u.email || u.login)})`, '#8aff8a');
+                    return;
+                }
+            }
+            // Fallback: локально
             const payload = JSON.parse(atob(response.credential.split('.')[1]));
             const googleId = payload.sub;
             const email = payload.email;
-            const name = payload.name || email.split('@')[0];
-
-            // В реальном приложении здесь: отправка credential на бэкенд для верификации
-            // fetch(`${BACKEND_URL}/auth/google`, { method:'POST', body: JSON.stringify({ credential: response.credential }) })
-
             const login = 'google_' + String(googleId).slice(-8);
             const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
             if (!users[login]) {
                 users[login] = {
-                    password: 'oauth_' + crypto.getRandomValues(new Uint32Array(4)).join(''),
+                    password: 'oauth_' + Math.random().toString(36).slice(2),
                     bonus: 50, usdt: 100, grn: 0, promoUsed: false, wins: [],
                     clubMember: false, authProvider: 'google',
-                    email: email, displayName: name
+                    email, displayName: payload.name
                 };
                 localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
             }
@@ -1301,18 +1364,15 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     };
 
     // ============================================================
-    // TELEGRAM LOGIN WIDGET
+    // TELEGRAM
     // ============================================================
     function initAuthWidgets() {
-        // Telegram widget — инициализируется только если задан бот
         const tgContainer = document.getElementById('tgLoginContainer');
         if (!tgContainer || tgContainer.dataset.bound) return;
         tgContainer.dataset.bound = '1';
-        // ЗАМЕНИТЕ 'YOUR_BOT_USERNAME' на имя вашего бота (без @)
-        // Пример: если бот @GreenNoiseBarBot, то 'GreenNoiseBarBot'
         const BOT_USERNAME = 'YOUR_BOT_USERNAME';
         if (BOT_USERNAME === 'YOUR_BOT_USERNAME') {
-            tgContainer.innerHTML = '<div style="color:#7aaa7a;font-size:0.72rem;padding:10px;">⚠ Укажите имя бота в коде (initAuthWidgets)</div>';
+            tgContainer.innerHTML = '<div style="color:#7aaa7a;font-size:0.72rem;padding:10px;">⚠ Укажите имя бота в коде</div>';
             return;
         }
         const script = document.createElement('script');
@@ -1326,29 +1386,55 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         tgContainer.appendChild(script);
     }
 
-    window.handleTelegramAuth = function(user) {
+    window.handleTelegramAuth = async function(user) {
         try {
-            // В реальном приложении: отправка данных на бэкенд для проверки hash
-            // fetch(`${BACKEND_URL}/auth/telegram`, { method:'POST', body: JSON.stringify(user) })
+            if (USE_BACKEND && backendOnline) {
+                const res = await apiCall('/auth/telegram', {
+                    method: 'POST',
+                    body: JSON.stringify(user)
+                });
+                if (res.ok && res.data?.token && res.data?.user) {
+                    localStorage.setItem('greenNoiseToken', res.data.token);
+                    const u = res.data.user;
+                    loginAs(u.login, {
+                        bonus: u.balances.bonus, usdt: u.balances.usdt, grn: u.balances.grn,
+                        id: u.id, authProvider: 'telegram'
+                    }, 'telegram');
+                    showToast(`✅ Вход через Telegram`, '#8aff8a');
+                    return;
+                }
+            }
+            // Fallback
             const login = 'tg_' + String(user.id);
             const users = JSON.parse(localStorage.getItem('greenNoiseUsers') || '{}');
             if (!users[login]) {
                 users[login] = {
-                    password: 'oauth_' + crypto.getRandomValues(new Uint32Array(4)).join(''),
+                    password: 'oauth_' + Math.random().toString(36).slice(2),
                     bonus: 50, usdt: 100, grn: 0, promoUsed: false, wins: [],
                     clubMember: false, authProvider: 'telegram',
-                    displayName: user.first_name + (user.last_name ? ' ' + user.last_name : ''),
-                    tgUsername: user.username || ''
+                    displayName: user.first_name
                 };
                 localStorage.setItem('greenNoiseUsers', JSON.stringify(users));
             }
             loginAs(login, users[login], 'telegram');
-            showToast(`✅ Вход через Telegram (${escapeHtml(user.first_name || 'user')})`, '#8aff8a');
+            showToast(`✅ Вход через Telegram (${escapeHtml(user.first_name)})`, '#8aff8a');
         } catch (e) {
             console.error(e);
             showToast('❌ Ошибка Telegram-авторизации', '#bf5f5f');
         }
     };
+
+    // ============================================================
+    // STEAM REAL AUTH
+    // ============================================================
+    document.getElementById('steamLoginBtn').addEventListener('click', function() {
+        if (!USE_BACKEND) {
+            showToast('⚠ Настройте BACKEND_URL для Steam-входа', '#df9f4f');
+            return;
+        }
+        // Открываем Steam OpenID через бэкенд
+        window.location.href = `${BACKEND_URL}/auth/steam`;
+    });
 
     // ============================================================
     // NODES / NETWORK
@@ -1451,7 +1537,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                     <div class="panel-section"><div class="panel-label">// Бонусный баланс</div><div class="panel-value panel-value-big">${parseInt(currentUser.bonus)||0}</div></div>
                     <div class="panel-section"><div class="panel-label">// USDT баланс</div><div class="panel-value panel-value-big">${(parseFloat(currentUser.usdt)||0).toFixed(2)}</div></div>
                     <div class="panel-section"><div class="panel-label">// GREENCOIN</div><div class="panel-value panel-value-big">${(parseFloat(currentUser.grn)||0).toFixed(2)} GRN</div></div>
-                    ${currentUser.metaMaskAddress ? `<div class="panel-section"><div class="panel-label">// MetaMask</div><div class="panel-value" style="font-family:monospace;font-size:0.75rem;color:#8aff8a;">${safeMM}</div></div>` : ''}
+                    ${currentUser.steamId ? `<div class="panel-section"><div class="panel-label">// Steam ID</div><div class="panel-value" style="font-family:monospace;font-size:0.72rem;color:#8aff8a;">${escapeHtml(currentUser.steamId)}</div></div>` : ''}
+                    ${currentUser.metaMaskAddress ? `<div class="panel-section"><div class="panel-label">// MetaMask</div><div class="panel-value" style="font-family:monospace;font-size:0.72rem;color:#8aff8a;">${safeMM}</div></div>` : ''}
                     <div class="panel-note">Выход из аккаунта не предусмотрен. Ты здесь навсегда. 🩸</div>
                 `;
 
@@ -1462,8 +1549,8 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                     <div class="club-events-list">
                         <div class="club-event-card"><h4>ПОДВАЛЬНЫЙ ТУРНИР</h4><p>Закрытая встреча. 3 этаж, вход через чёрный ход.</p><div class="date">12.10 · 23:00</div></div>
                         <div class="club-event-card"><h4>НОЧЬ МОЛЧАНИЯ</h4><p>Без света. Без музыки. Дресс-код: черное.</p><div class="date">19.10 · 02:00</div></div>
-                        <div class="club-event-card"><h4>СЛЕПАЯ ДЕГУСТАЦИЯ</h4><p>10 неизвестных напитков. Угадаешь — забираешь бутылку.</p><div class="date">26.10 · 21:00</div></div>
-                        <div class="club-event-card"><h4>СЕТ PAVEL LAZAREV</h4><p>Живой сет только для участников клуба.</p><div class="date">02.11 · 22:30</div></div>
+                        <div class="club-event-card"><h4>СЛЕПАЯ ДЕГУСТАЦИЯ</h4><p>10 неизвестных напитков.</p><div class="date">26.10 · 21:00</div></div>
+                        <div class="club-event-card"><h4>СЕТ PAVEL LAZAREV</h4><p>Живой сет только для клуба.</p><div class="date">02.11 · 22:30</div></div>
                     </div>
                     <div class="panel-note" style="border-left-color:#7a2a2a;color:#c88a8a;">Никому не рассказывай.</div>
                 `;
@@ -1493,7 +1580,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                     <div class="tab-content" data-content="topup">
                         <div class="panel-label">// ПОПОЛНЕНИЕ ЧЕРЕЗ СБП</div>
                         <p style="font-size:0.75rem;color:#8aaa8a;margin-bottom:12px;line-height:1.6;">
-                            Оплата рублями на номер <strong style="color:#8aff8a;">${SBP_PHONE}</strong> (${SBP_BANK}).<br>
+                            Оплата через Систему Быстрых Платежей.<br>
                             Курс: <strong style="color:#8aff8a;">${USDT_RUB_RATE} ₽ = 1 USDT</strong> · Комиссия: <strong style="color:#df9f4f;">${COMMISSION}%</strong>
                         </p>
                         <input type="number" class="panel-input" id="sbpRubAmount" placeholder="Сумма в ₽" min="100" max="150000" step="100" />
@@ -1510,13 +1597,12 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                         <div id="sbpQr"></div>
                         <div id="sbpStatus" style="font-size:0.8rem;margin-top:8px;min-height:1.2em;"></div>
                         <div class="panel-note">
-                            <strong>Как оплатить через СБП:</strong><br>
+                            <strong>Как это работает:</strong><br>
                             1. Введите сумму и нажмите «Сгенерировать QR»<br>
-                            2. Откройте приложение банка (Т-Банк, Сбер, Альфа и др.)<br>
-                            3. Отсканируйте QR или откройте ссылку ниже<br>
-                            4. Подтвердите перевод на номер <strong>${SBP_PHONE}</strong><br>
-                            5. GREENCOIN зачислятся после подтверждения банком<br><br>
-                            <span style="color:#df9f4f;">⚠ Тестовый режим: реальное зачисление требует интеграции с API банка.</span>
+                            2. Откройте мобильный банк и отсканируйте QR<br>
+                            3. Подтвердите оплату<br>
+                            4. GREENCOIN зачислятся автоматически<br><br>
+                            Комиссия платформы <strong style="color:#df9f4f;">${COMMISSION}%</strong> удерживается с суммы пополнения.
                         </div>
                     </div>
 
@@ -1524,9 +1610,6 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                         <div class="panel-label">// ВЫБЕРИТЕ ВАЛЮТУ</div>
                         <div class="crypto-list">
                             <div class="crypto-option active" data-coin="usdt_trc"><span class="coin">₮ USDT</span><span class="coin-sub">TRC-20</span></div>
-                            <div class="crypto-option" data-coin="usdt_erc"><span class="coin">₮ USDT</span><span class="coin-sub">ERC-20</span></div>
-                            <div class="crypto-option" data-coin="btc"><span class="coin">₿ BTC</span><span class="coin-sub">Bitcoin</span></div>
-                            <div class="crypto-option" data-coin="eth"><span class="coin">Ξ ETH</span><span class="coin-sub">Ethereum</span></div>
                             <div class="crypto-option" data-coin="ton"><span class="coin">💎 TON</span><span class="coin-sub">Toncoin</span></div>
                         </div>
                         <div class="crypto-details" id="cryptoDetails"></div>
@@ -1537,23 +1620,21 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
 
                     <div class="tab-content" data-content="skins">
                         <div class="panel-label">// STEAM ИНВЕНТАРЬ → GREENCOIN</div>
-                        <div class="steam-connect-box ${currentUser.steamLinked?'connected':''}">
-                            <div class="steam-status ${currentUser.steamLinked?'':'off'}">
-                                ${currentUser.steamLinked ? '✓ STEAM ПОДКЛЮЧЁН' : '◯ STEAM НЕ ПОДКЛЮЧЁН'}
+                        ${currentUser.steamId ? `
+                            <div class="steam-connect-box connected">
+                                <div class="steam-status">✓ STEAM ПОДКЛЮЧЁН</div>
+                                <div style="font-size:0.7rem;color:#5f8f5f;font-family:monospace;margin-bottom:8px;">${escapeHtml(currentUser.steamId)}</div>
+                                <button class="panel-btn secondary" id="steamRefreshBtn">↻ ОБНОВИТЬ ИНВЕНТАРЬ</button>
                             </div>
-                            ${currentUser.steamLinked ? 
-                                `<button class="panel-btn secondary" id="steamRefreshBtn">↻ ОБНОВИТЬ</button>
-                                 <button class="panel-btn secondary" id="steamDisconnectBtn" style="border-color:#7a2a2a;color:#df9f9f;">✕ ОТКЛЮЧИТЬ STEAM</button>` :
-                                `<input type="text" class="panel-input" id="steamIdInput" placeholder="SteamID64 или ссылка" maxlength="128" />
-                                 <button class="panel-btn" id="steamConnectBtn">⚙ ПОДКЛЮЧИТЬ STEAM</button>`
-                            }
-                        </div>
-                        <div id="steamInvWrapper" style="display:${currentUser.steamLinked?'block':'none'};">
                             <div class="panel-label">// ВЫБЕРИТЕ СКИНЫ</div>
-                            <div class="steam-inventory" id="steamInvList"></div>
+                            <div class="steam-inventory" id="steamInvList">
+                                <div style="padding:20px;text-align:center;color:#5f8f5f;font-size:0.75rem;">
+                                    Нажмите «Обновить инвентарь» для загрузки
+                                </div>
+                            </div>
                             <div class="commission-box" id="commissionBox" style="display:none;">
                                 <div class="commission-row"><span>Оценка скинов</span><span id="commTotal">0 $</span></div>
-                                <div class="commission-row"><span>Комиссия</span><span class="fee" id="commFee">− ${COMMISSION}%</span></div>
+                                <div class="commission-row"><span>Комиссия ${COMMISSION}%</span><span class="fee" id="commFee">−0 $</span></div>
                                 <div class="commission-row total"><span>К зачислению</span><span id="commNet">0 GRN</span></div>
                             </div>
                             <div class="trade-link-box">
@@ -1562,7 +1643,16 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                             </div>
                             <button class="panel-btn" id="skinPayBtn" disabled>🤖 ОТПРАВИТЬ РОБОТУ</button>
                             <div id="skinStatus" style="font-size:0.8rem;margin-top:8px;min-height:1.2em;"></div>
-                        </div>
+                        ` : `
+                            <div class="steam-connect-box">
+                                <div class="steam-status off">◯ STEAM НЕ ПОДКЛЮЧЁН</div>
+                                <button class="panel-btn" id="steamConnectBtn2">⚙ ВОЙТИ ЧЕРЕЗ STEAM</button>
+                                <div style="font-size:0.7rem;color:#5f8f5f;margin-top:10px;line-height:1.6;">
+                                    Для приёма скинов необходимо войти через Steam.<br>
+                                    После входа откроется доступ к вашему инвентарю.
+                                </div>
+                            </div>
+                        `}
                     </div>
 
                     <div class="tab-content" data-content="token">
@@ -1630,7 +1720,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                     <div class="panel-section" style="margin-top:18px;">
                         <div class="panel-label">// ПРИЗЫ</div>
                         <div class="prize-list">
-                            ${BASE_PRIZES.map(p => `<div class="prize-row"><span class="pname">${p.icon} ${escapeHtml(p.name)}</span><span class="pchance">${(p.weight / TOTAL_WEIGHT * 100).toFixed(1)}%</span></div>`).join('')}
+                            ${BASE_PRIZES.map(p => `<div class="prize-row"><span class="pname">${escapeHtml(p.icon)} ${escapeHtml(p.name)}</span><span class="pchance">${(p.weight / TOTAL_WEIGHT * 100).toFixed(1)}%</span></div>`).join('')}
                         </div>
                     </div>
                 `;
@@ -1788,7 +1878,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     }
 
     // ============================================================
-    // СБП (СИСТЕМА БЫСТРЫХ ПЛАТЕЖЕЙ)
+    // СБП — РЕАЛЬНЫЙ ВЫЗОВ БЭКЕНДА + FALLBACK
     // ============================================================
     function initSbpPanel() {
         const input = document.getElementById('sbpRubAmount');
@@ -1798,24 +1888,21 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         function updateCalc() {
             const rub = parseFloat(input.value) || 0;
             if (rub <= 0) { calc.innerHTML = 'Введите сумму для расчёта'; return; }
-            if (rub < 100) { calc.innerHTML = '<span style="color:#bf5f5f;">Минимальная сумма: 100 ₽</span>'; return; }
+            if (rub < 100) { calc.innerHTML = '<span style="color:#bf5f5f;">Минимум: 100 ₽</span>'; return; }
             if (rub > 150000) { calc.innerHTML = '<span style="color:#bf5f5f;">Максимум: 150 000 ₽</span>'; return; }
             const usdtBefore = rub / USDT_RUB_RATE;
             const commission = usdtBefore * COMMISSION / 100;
-            const usdtAfter = usdtBefore - commission;
-            const grn = usdtAfter * GRN_USDT_RATE;
+            const grn = usdtBefore - commission;
             calc.innerHTML = `
                 По курсу: ${rub.toFixed(0)} ₽ ≈ ${usdtBefore.toFixed(2)} USDT<br>
                 Комиссия ${COMMISSION}%: <span style="color:#df9f4f;">−${commission.toFixed(2)} USDT</span><br>
                 К зачислению: <strong style="color:#8aff8a;">${grn.toFixed(2)} GREENCOIN</strong>
             `;
         }
-
         if (!input.dataset.bound) {
             input.dataset.bound = '1';
             input.addEventListener('input', updateCalc);
         }
-
         document.querySelectorAll('[data-rub]').forEach(b => {
             if (!b.dataset.bound) {
                 b.dataset.bound = '1';
@@ -1831,15 +1918,14 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         const status = document.getElementById('sbpStatus');
         if (genBtn && !genBtn.dataset.bound) {
             genBtn.dataset.bound = '1';
-            genBtn.addEventListener('click', function() {
+            genBtn.addEventListener('click', async function() {
                 const rub = parseFloat(input.value);
                 if (!isValidAmount(rub, 100, 150000)) {
                     status.textContent = '❌ Введите сумму от 100 до 150 000 ₽';
                     status.style.color = '#bf5f5f';
                     return;
                 }
-
-                status.textContent = '⏳ Генерация QR-кода...';
+                status.textContent = '⏳ Генерация QR...';
                 status.style.color = '#8aff8a';
                 qrEl.innerHTML = '';
 
@@ -1847,43 +1933,84 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 const commission = usdtBefore * COMMISSION / 100;
                 const grn = usdtBefore - commission;
 
-                // Формат СБП-ссылки, распознаваемый мобильными банками РФ
-                // В реальной интеграции здесь должен быть URL от банка через API
-                const sbpPayload = `https://qr.nspk.ru/AS1A${Date.now().toString(36).toUpperCase()}?type=02&bank=100000000111&sum=${Math.round(rub*100)}&cur=RUB&crc=RU&phone=${SBP_PHONE}`;
+                // ============================================
+                // 1. ПЫТАЕМСЯ ЧЕРЕЗ БЭКЕНД
+                // ============================================
+                if (USE_BACKEND && backendOnline) {
+                    const res = await apiCall('/sbp/create', {
+                        method: 'POST',
+                        body: JSON.stringify({ amountRub: rub })
+                    });
+                    if (res.ok && res.data) {
+                        const data = res.data;
+                        qrEl.innerHTML = `
+                            <div class="sbp-qr-container">
+                                <div id="sbpQrCode">${data.qrImage ? '' : '<div style="padding:20px;color:#666;">QR</div>'}</div>
+                                <div class="sbp-caption">СБП · Оплата</div>
+                                <div class="sbp-amount">${rub.toFixed(0)} ₽</div>
+                                <div class="sbp-caption" style="font-size:0.65rem;margin-top:6px;">+${(data.amountGrn || grn).toFixed(2)} GRN</div>
+                                <div class="sbp-status-badge pending" id="sbpBadge">⏳ Ожидание оплаты</div>
+                            </div>
+                        `;
+                        // Вставка SVG от банка
+                        if (data.qrImage) {
+                            const qrCode = document.getElementById('sbpQrCode');
+                            qrCode.innerHTML = data.qrImage;
+                        } else {
+                            new QRCode(document.getElementById('sbpQrCode'), {
+                                text: data.paymentUrl || 'https://qr.nspk.ru/AS1A',
+                                width: 240, height: 240,
+                                colorDark: '#0a0f0a', colorLight: '#ffffff',
+                                correctLevel: QRCode.CorrectLevel.M
+                            });
+                        }
+                        status.innerHTML = `✅ QR создан. Сканируйте в приложении банка.`;
+                        status.style.color = '#8aff8a';
+                        // Опрос статуса
+                        const orderId = data.orderId;
+                        const interval = setInterval(async () => {
+                            const s = await apiCall(`/sbp/status/${orderId}`);
+                            if (s.ok && s.data?.status === 'completed') {
+                                clearInterval(interval);
+                                const badge = document.getElementById('sbpBadge');
+                                if (badge) { badge.className = 'sbp-status-badge confirmed'; badge.textContent = '✅ Оплачено'; }
+                                currentUser.usdt = (parseFloat(currentUser.usdt)||0) + (s.data.amountUsdt || 0);
+                                currentUser.grn = (parseFloat(currentUser.grn)||0) + (s.data.amountGrn || 0);
+                                saveUser();
+                                status.innerHTML = `✅ Оплата получена! Зачислено ${(s.data.amountGrn || 0).toFixed(2)} GRN`;
+                                showToast(`💰 +${(s.data.amountGrn || 0).toFixed(2)} GRN`, '#8aff8a');
+                            }
+                        }, 3000);
+                        // Отменяем опрос через 10 минут
+                        setTimeout(() => clearInterval(interval), 600000);
+                        return;
+                    }
+                }
 
+                // ============================================
+                // 2. FALLBACK — демо-режим
+                // ============================================
+                const sbpPayload = `https://qr.nspk.ru/AS1A${Date.now().toString(36).toUpperCase()}?type=02&sum=${Math.round(rub*100)}&cur=RUB&crc=RU`;
                 setTimeout(() => {
                     qrEl.innerHTML = `
                         <div class="sbp-qr-container">
                             <div id="sbpQrCode"></div>
-                            <div class="sbp-caption">СБП · ${SBP_BANK}</div>
+                            <div class="sbp-caption">СБП · Оплата</div>
                             <div class="sbp-amount">${rub.toFixed(0)} ₽</div>
                             <div class="sbp-caption" style="font-size:0.65rem;margin-top:6px;">+${grn.toFixed(2)} GRN</div>
+                            <div class="sbp-status-badge pending" id="sbpBadge">⏳ Демо-режим</div>
                         </div>
-                        <a href="tel:${SBP_PHONE}" class="sbp-link-btn" rel="noopener noreferrer">📞 Позвонить для перевода</a>
                     `;
-                    // Генерация QR через qrcodejs
                     try {
                         new QRCode(document.getElementById('sbpQrCode'), {
-                            text: sbpPayload,
-                            width: 220,
-                            height: 220,
-                            colorDark: '#0a0f0a',
-                            colorLight: '#ffffff',
+                            text: sbpPayload, width: 240, height: 240,
+                            colorDark: '#0a0f0a', colorLight: '#ffffff',
                             correctLevel: QRCode.CorrectLevel.M
                         });
-                    } catch(e) {
-                        console.error('QR error:', e);
-                        document.getElementById('sbpQrCode').innerHTML = 
-                            '<div style="color:#000;font-size:0.7rem;padding:20px;text-align:center;">QR-код<br>недоступен</div>';
-                    }
-
-                    status.innerHTML = `✅ QR создан.<br>
-                        <strong>Сумма:</strong> ${rub.toFixed(0)} ₽<br>
-                        <strong>Получатель:</strong> ${SBP_PHONE} (${SBP_BANK})<br>
-                        <strong>Зачислится:</strong> ${grn.toFixed(2)} GRN<br>
-                        <span style="color:#df9f4f;font-size:0.7rem;">После оплаты GREENCOIN зачислятся автоматически (требуется сервер).</span>`;
-                    status.style.color = '#8aff8a';
-                }, 800);
+                    } catch(e) { console.error('QR:', e); }
+                    status.innerHTML = `⚠ Демо-режим (бэкенд недоступен).<br>После подключения бэкенда платежи будут реальными.`;
+                    status.style.color = '#df9f4f';
+                }, 600);
             });
         }
     }
@@ -1892,52 +2019,24 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     // STEAM
     // ============================================================
     function initSkinsPanel() {
-        const connectBtn = document.getElementById('steamConnectBtn');
-        const disconnectBtn = document.getElementById('steamDisconnectBtn');
-        const refreshBtn = document.getElementById('steamRefreshBtn');
-
-        if (connectBtn && !connectBtn.dataset.bound) {
-            connectBtn.dataset.bound = '1';
-            connectBtn.addEventListener('click', function() {
-                const sid = document.getElementById('steamIdInput').value.trim();
-                if (!/^[\w\-/\.:]{3,256}$/.test(sid)) {
-                    showToast('❌ Некорректный SteamID', '#bf5f5f');
+        // Кнопка входа через Steam для непривязанных
+        const connectBtn2 = document.getElementById('steamConnectBtn2');
+        if (connectBtn2 && !connectBtn2.dataset.bound) {
+            connectBtn2.dataset.bound = '1';
+            connectBtn2.addEventListener('click', function() {
+                if (!USE_BACKEND) {
+                    showToast('⚠ Настройте BACKEND_URL для Steam-входа', '#df9f4f');
                     return;
                 }
-                connectBtn.textContent = '⏳ ПОДКЛЮЧЕНИЕ...';
-                connectBtn.disabled = true;
-                setTimeout(() => {
-                    currentUser.steamLinked = true;
-                    currentUser.steamInventory = MOCK_STEAM_INVENTORY.map(s => ({...s, selected:false}));
-                    saveUser();
-                    showToast('⚙ Steam подключён', '#8aff8a');
-                    refreshSkinsPanel();
-                }, 1400);
+                window.location.href = `${BACKEND_URL}/auth/steam`;
             });
         }
 
-        if (disconnectBtn && !disconnectBtn.dataset.bound) {
-            disconnectBtn.dataset.bound = '1';
-            disconnectBtn.addEventListener('click', function() {
-                if (!confirm('Отключить Steam?')) return;
-                currentUser.steamLinked = false;
-                currentUser.steamInventory = [];
-                currentUser.steamTradeLink = '';
-                saveUser();
-                showToast('⚙ Steam отключён', '#df9f4f');
-                refreshSkinsPanel();
-            });
-        }
-
+        const refreshBtn = document.getElementById('steamRefreshBtn');
         if (refreshBtn && !refreshBtn.dataset.bound) {
             refreshBtn.dataset.bound = '1';
-            refreshBtn.addEventListener('click', function() {
-                showToast('↻ Инвентарь обновлён', '#8aff8a');
-                renderInventory();
-            });
+            refreshBtn.addEventListener('click', loadSteamInventory);
         }
-
-        if (currentUser.steamLinked) renderInventory();
 
         const tradeInput = document.getElementById('tradeLinkInput');
         if (tradeInput && !tradeInput.dataset.bound) {
@@ -1948,11 +2047,10 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 if (val === '' || val.startsWith('https://steamcommunity.com/tradeoffer/')) {
                     currentUser.steamTradeLink = val;
                     saveUser();
+                    this.style.borderColor = '#2a5a2a';
                 } else {
                     this.style.borderColor = '#bf5f5f';
-                    return;
                 }
-                this.style.borderColor = '#2a5a2a';
             });
         }
 
@@ -1963,32 +2061,76 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         }
     }
 
-    function refreshSkinsPanel() {
-        panelBody.innerHTML = getPanelContent('wallet');
-        attachPanelHandlers('wallet');
-        const skinsTab = document.querySelector('.panel-tabs .tab[data-tab="skins"]');
-        if (skinsTab) skinsTab.click();
+    async function loadSteamInventory() {
+        const invList = document.getElementById('steamInvList');
+        if (!invList) return;
+        invList.innerHTML = '<div style="padding:20px;text-align:center;color:#8aff8a;font-size:0.75rem;">⏳ Загрузка инвентаря из Steam...</div>';
+
+        // Через бэкенд
+        if (USE_BACKEND && backendOnline) {
+            const res = await apiCall('/skins/inventory', { method: 'POST' });
+            if (res.ok && res.data?.inventory) {
+                steamInventoryCache = res.data.inventory.map(i => ({ ...i, selected: false }));
+                // Получаем цены
+                const names = steamInventoryCache.filter(i => i.marketable).slice(0, 20).map(i => i.marketHashName);
+                if (names.length) {
+                    const estRes = await apiCall('/skins/estimate', {
+                        method: 'POST',
+                        body: JSON.stringify({ marketHashNames: names })
+                    });
+                    if (estRes.ok && estRes.data?.items) {
+                        steamInventoryEstimated = estRes.data.items;
+                    }
+                }
+                renderInventory();
+                showToast(`📦 Загружено ${steamInventoryCache.length} предметов`, '#8aff8a');
+                return;
+            }
+        }
+
+        // Демо-инвентарь
+        invList.innerHTML = '<div style="padding:20px;text-align:center;color:#df9f4f;font-size:0.75rem;">⚠ Демо-инвентарь (бэкенд недоступен)</div>';
+        const demo = [
+            { assetId:'1', name:'AK-47 | Redline', marketHashName:'AK-47 | Redline (Field-Tested)', icon:'🔫', rarity:'Засекреченное', tradable:true },
+            { assetId:'2', name:'AWP | Wildfire', marketHashName:'AWP | Wildfire (Minimal Wear)', icon:'🎯', rarity:'Тайное', tradable:true },
+            { assetId:'3', name:'M4A4 | Neo-Noir', marketHashName:'M4A4 | Neo-Noir (Factory New)', icon:'🔫', rarity:'Тайное', tradable:true },
+            { assetId:'4', name:'★ Karambit | Doppler', marketHashName:'★ Karambit | Doppler (Factory New)', icon:'🗡', rarity:'★ Особое', tradable:true },
+            { assetId:'5', name:'USP-S | Kill Confirmed', marketHashName:'USP-S | Kill Confirmed (Field-Tested)', icon:'🔫', rarity:'Тайное', tradable:true }
+        ];
+        steamInventoryCache = demo.map(i => ({ ...i, selected: false, priceUsd: 0, priceRub: 0 }));
+        steamInventoryEstimated = steamInventoryCache;
+        renderInventory();
     }
 
     function renderInventory() {
         const invList = document.getElementById('steamInvList');
         if (!invList) return;
-        if (!currentUser.steamLinked) { invList.innerHTML = ''; return; }
-        const inv = currentUser.steamInventory || [];
-        invList.innerHTML = inv.map(item => `
-            <div class="inv-item ${item.selected?'selected':''}" data-id="${escapeHtml(item.id)}" style="border-left:3px solid ${escapeHtml(item.rarityColor)};">
-                <div class="inv-icon">${escapeHtml(item.icon)}</div>
-                <div class="inv-info">
-                    <div class="inv-name">${escapeHtml(item.name)}</div>
-                    <div class="inv-price">${escapeHtml(item.wear)} · $${parseFloat(item.usd).toFixed(2)} · ${escapeHtml(item.rarity)}</div>
+        if (!steamInventoryCache.length) {
+            invList.innerHTML = '<div style="padding:20px;text-align:center;color:#5f8f5f;font-size:0.75rem;">Инвентарь пуст</div>';
+            return;
+        }
+        invList.innerHTML = steamInventoryCache.map(item => {
+            const est = steamInventoryEstimated.find(e => e.marketHashName === item.marketHashName);
+            const priceUsd = est ? (est.priceUsd || 0) : 0;
+            const priceRub = est ? (est.priceRub || 0) : 0;
+            const iconHtml = item.icon && item.icon.startsWith('http')
+                ? `<img src="${escapeHtml(item.icon)}" alt="" onerror="this.style.display='none'" />`
+                : escapeHtml(item.icon || '🎁');
+            return `
+                <div class="inv-item ${item.selected?'selected':''}" data-id="${escapeHtml(item.assetId)}">
+                    <div class="inv-icon">${iconHtml}</div>
+                    <div class="inv-info">
+                        <div class="inv-name">${escapeHtml(item.name)}</div>
+                        <div class="inv-price">${escapeHtml(item.rarity || '')} · $${priceUsd.toFixed(2)} · ${priceRub.toFixed(0)} ₽</div>
+                    </div>
+                    <div class="inv-check">✓</div>
                 </div>
-                <div class="inv-check">✓</div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
         invList.querySelectorAll('.inv-item').forEach(el => {
             el.addEventListener('click', function() {
                 const id = this.dataset.id;
-                const item = inv.find(i => i.id === id);
+                const item = steamInventoryCache.find(i => i.assetId === id);
                 if (item) {
                     item.selected = !item.selected;
                     this.classList.toggle('selected');
@@ -2000,8 +2142,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     }
 
     function updateCommission() {
-        const inv = currentUser.steamInventory || [];
-        const selected = inv.filter(i => i.selected);
+        const selected = steamInventoryCache.filter(i => i.selected);
         const box = document.getElementById('commissionBox');
         const skinBtn = document.getElementById('skinPayBtn');
         if (!selected.length) {
@@ -2009,60 +2150,83 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
             if (skinBtn) skinBtn.disabled = true;
             return;
         }
-        const totalUsd = selected.reduce((s, i) => s + parseFloat(i.usd || 0), 0);
+        const totalUsd = selected.reduce((s, i) => {
+            const est = steamInventoryEstimated.find(e => e.marketHashName === i.marketHashName);
+            return s + (est ? (est.priceUsd || 0) : 0);
+        }, 0);
         const feeUsd = totalUsd * COMMISSION / 100;
-        const netUsd = totalUsd - feeUsd;
-        const netGrn = netUsd * GRN_USDT_RATE;
+        const netGrn = (totalUsd - feeUsd) * GRN_USDT_RATE;
         if (box) box.style.display = 'block';
         const elTotal = document.getElementById('commTotal');
         const elFee = document.getElementById('commFee');
         const elNet = document.getElementById('commNet');
         if (elTotal) elTotal.textContent = `$${totalUsd.toFixed(2)}`;
-        if (elFee) elFee.textContent = `− ${COMMISSION}% ($${feeUsd.toFixed(2)})`;
+        if (elFee) elFee.textContent = `−$${feeUsd.toFixed(2)}`;
         if (elNet) elNet.textContent = `${netGrn.toFixed(2)} GRN`;
         if (skinBtn) skinBtn.disabled = false;
     }
 
-    function skinPayHandler() {
-        const inv = currentUser.steamInventory || [];
-        const selected = inv.filter(i => i.selected);
+    async function skinPayHandler() {
+        const selected = steamInventoryCache.filter(i => i.selected);
         const statusEl = document.getElementById('skinStatus');
         if (!selected.length) { if (statusEl) { statusEl.textContent = '❌ Выберите скины'; statusEl.style.color = '#bf5f5f'; } return; }
         if (!currentUser.steamTradeLink || !currentUser.steamTradeLink.startsWith('https://steamcommunity.com/tradeoffer/')) {
             if (statusEl) { statusEl.textContent = '❌ Укажите ссылку на обмен'; statusEl.style.color = '#bf5f5f'; }
             return;
         }
-        const totalUsd = selected.reduce((s, i) => s + parseFloat(i.usd || 0), 0);
-        const feeUsd = totalUsd * COMMISSION / 100;
-        const netGrn = (totalUsd - feeUsd) * GRN_USDT_RATE;
         const skinBtn = document.getElementById('skinPayBtn');
         skinBtn.disabled = true;
         statusEl.textContent = '🤖 Робот отправляет трейд-оффер...'; statusEl.style.color = '#8aff8a';
-        setTimeout(() => { statusEl.textContent = '📦 Робот принял скины. Оценка через оракул (Pricempire)...'; }, 1200);
-        setTimeout(() => { statusEl.textContent = '💱 Конвертация USD → USDT → GREENCOIN...'; }, 2400);
+
+        // Через бэкенд
+        if (USE_BACKEND && backendOnline) {
+            const names = selected.map(i => i.marketHashName);
+            const res = await apiCall('/skins/accept', {
+                method: 'POST',
+                body: JSON.stringify({ marketHashNames: names, tradeLink: currentUser.steamTradeLink })
+            });
+            if (res.ok && res.data) {
+                const d = res.data;
+                currentUser.grn = (parseFloat(currentUser.grn)||0) + d.netGrn;
+                saveUser();
+                statusEl.innerHTML = `✅ Принято!<br>Оценка: <strong>$${d.totalUsd.toFixed(2)}</strong><br>Комиссия: <span style="color:#df9f4f;">−$${d.commission.toFixed(2)}</span><br>Зачислено: <strong style="color:#8aff8a;">${d.netGrn.toFixed(2)} GRN</strong>`;
+                statusEl.style.color = '#8aff8a';
+                const gd1 = document.getElementById('grnDisplay');
+                if (gd1) gd1.textContent = currentUser.grn.toFixed(2);
+                showToast(`🤖 +${d.netGrn.toFixed(2)} GRN`, '#8aff8a');
+                steamInventoryCache = steamInventoryCache.filter(i => !i.selected);
+                renderInventory();
+                skinBtn.disabled = false;
+                return;
+            }
+        }
+
+        // Fallback демо
         setTimeout(() => {
+            const totalUsd = selected.reduce((s, i) => {
+                const est = steamInventoryEstimated.find(e => e.marketHashName === i.marketHashName);
+                return s + (est ? (est.priceUsd || 0) : 25);
+            }, 0) || 25 * selected.length;
+            const feeUsd = totalUsd * COMMISSION / 100;
+            const netGrn = totalUsd - feeUsd;
             currentUser.grn = (parseFloat(currentUser.grn)||0) + netGrn;
-            currentUser.steamInventory = inv.filter(i => !i.selected);
             saveUser();
-            statusEl.innerHTML = `✅ Робот принял скины!<br>Оценка: <strong>$${totalUsd.toFixed(2)}</strong><br>Комиссия: <span style="color:#df9f4f;">−$${feeUsd.toFixed(2)}</span><br>Зачислено: <strong style="color:#8aff8a;">${netGrn.toFixed(2)} GRN</strong>`;
+            statusEl.innerHTML = `✅ Демо-приём завершён!<br>Оценка: <strong>$${totalUsd.toFixed(2)}</strong><br>Комиссия: <span style="color:#df9f4f;">−$${feeUsd.toFixed(2)}</span><br>Зачислено: <strong style="color:#8aff8a;">${netGrn.toFixed(2)} GRN</strong>`;
             statusEl.style.color = '#8aff8a';
             const gd1 = document.getElementById('grnDisplay');
-            const gd2 = document.getElementById('grnDisplay2');
             if (gd1) gd1.textContent = currentUser.grn.toFixed(2);
-            if (gd2) gd2.textContent = currentUser.grn.toFixed(2);
-            showToast(`🤖 +${netGrn.toFixed(2)} GRN`, '#8aff8a');
+            showToast(`🤖 +${netGrn.toFixed(2)} GRN (демо)`, '#df9f4f');
+            steamInventoryCache = steamInventoryCache.filter(i => !i.selected);
             renderInventory();
-        }, 3600);
+            skinBtn.disabled = false;
+        }, 2500);
     }
 
     // ============================================================
-    // CRYPTO
+    // CRYPTO (TON и USDT)
     // ============================================================
     const CRYPTO_DATA = {
         usdt_trc: { name:'USDT (TRC-20)', icon:'₮', address:'TVz9aZ1sYqLs7B6fXrMPfWnQqThV8YdKM', network:'Tron (TRC-20)', confirm:'~1 мин' },
-        usdt_erc: { name:'USDT (ERC-20)', icon:'₮', address:'0x7a9F3cB2D4e1A8f6C5d0B3e9a2F1d8C7b4A5e6f3', network:'Ethereum', confirm:'~5 мин' },
-        btc: { name:'Bitcoin', icon:'₿', address:'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', network:'Bitcoin', confirm:'~30 мин' },
-        eth: { name:'Ethereum', icon:'Ξ', address:'0x4B2cF1aD7e3F9b8a5C6d1E0f4A2b9D7c3E8f1a5B', network:'Ethereum', confirm:'~5 мин' },
         ton: { name:'Toncoin', icon:'💎', address:'UQAbcD3fGh1JkLm9nOpQr2sTuVwXyZ4aBcDeFgHiJkLmNoPqRs', network:'TON', confirm:'~10 сек' }
     };
 
@@ -2149,7 +2313,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
     }
 
     // ============================================================
-    // GRN (BNB)
+    // GRN
     // ============================================================
     function initTokenPanel() {
         const input = document.getElementById('grnBnbAmount');
@@ -2186,7 +2350,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                 if (!currentUser.metaMaskAddress) { showToast('❌ Сначала подключите MetaMask', '#bf5f5f'); return; }
                 const bnb = parseFloat(input.value);
                 const status = document.getElementById('grnStatus');
-                if (!isValidAmount(bnb, 0.0001, 100)) { status.textContent = '❌ Некорректная сумма BNB'; status.style.color = '#bf5f5f'; return; }
+                if (!isValidAmount(bnb, 0.0001, 100)) { status.textContent = '❌ Некорректная сумма'; status.style.color = '#bf5f5f'; return; }
                 status.textContent = '⏳ Ожидание подтверждения в BSC...'; status.style.color = '#8aff8a';
                 buyBtn.disabled = true;
                 setTimeout(() => {
@@ -2196,9 +2360,7 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
                     status.innerHTML = `✅ +${grn.toFixed(2)} GRN → ${escapeHtml(currentUser.metaMaskAddress.slice(0,6))}...${escapeHtml(currentUser.metaMaskAddress.slice(-4))}`;
                     status.style.color = '#8aff8a';
                     const gd1 = document.getElementById('grnDisplay');
-                    const gd2 = document.getElementById('grnDisplay2');
                     if (gd1) gd1.textContent = currentUser.grn.toFixed(2);
-                    if (gd2) gd2.textContent = currentUser.grn.toFixed(2);
                     showToast(`🟢 +${grn.toFixed(2)} GRN`, '#8aff8a');
                     buyBtn.disabled = false;
                 }, 2200);
@@ -2293,15 +2455,14 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         const balance = currency === 'rub' ? (parseFloat(currentUser.usdt)||0) : (parseFloat(currentUser.grn)||0);
         if (balance < cost) { showToast(`❌ Недостаточно ${currency==='rub'?'₮':'GRN'}`, '#bf5f5f'); return; }
         spinning = true;
-
         if (currency === 'rub') currentUser.usdt = (parseFloat(currentUser.usdt)||0) - cost;
         else currentUser.grn = (parseFloat(currentUser.grn)||0) - cost;
         saveUser();
 
         const balEl = document.getElementById('balDisplay');
         const grnEl = document.getElementById('grnDisplay');
-        if (balEl) balEl.textContent = (currentUser.usdt||0).toFixed(2);
-        if (grnEl) grnEl.textContent = (currentUser.grn||0).toFixed(2);
+        if (balEl) balEl.textContent = (parseFloat(currentUser.usdt)||0).toFixed(2);
+        if (grnEl) grnEl.textContent = (parseFloat(currentUser.grn)||0).toFixed(2);
 
         const mult = currency === 'rub' ? cost / 100 : cost;
         const winner = pickWinner(mult);
@@ -2346,20 +2507,17 @@ section { margin-bottom:60px; border-left:3px solid #1f4f1f; padding-left:25px; 
         } else if (prize.id === 'shots') { msg = prize.name + ' ЗАБРАН!'; note = 'покажи бармену'; }
         else if (prize.id === 'hookah') { msg = prize.name + ' В ПОДАРОК!'; note = 'покажи бармену'; }
         else { msg = prize.name; note = 'покажи бармену'; }
-
         currentUser.wins = currentUser.wins || [];
         currentUser.wins.push({ prize: prize.id, time: Date.now() });
         saveUser();
-
         container.innerHTML = `<div class="prize-win">${escapeHtml(prize.icon)} ${escapeHtml(msg)}<br><span style="font-size:0.65rem;opacity:0.8;">${escapeHtml(note)}</span></div>`;
         showToast(`🎰 ${msg}`, '#8aff8a');
     }
 
-    console.log('🌿 Зелёный Шум · v.1.1 loaded');
-    console.log('🔑 Вход: Pavel / 1488');
-    console.log('🩸 Клуб: 1111');
+    console.log('🌿 Зелёный Шум · v.1.2 loaded');
+    console.log('🔑 Вход: Pavel / 1488 · Клуб: 1111');
     console.log('💱 1 USDT = 1 GREENCOIN = ' + USDT_RUB_RATE + ' ₽ · Комиссия: ' + COMMISSION + '%');
-    console.log('📱 СБП: ' + SBP_PHONE + ' (' + SBP_BANK + ')');
+    console.log('🔌 Backend:', USE_BACKEND ? BACKEND_URL : 'DEMO MODE');
 
 })();
 </script>
